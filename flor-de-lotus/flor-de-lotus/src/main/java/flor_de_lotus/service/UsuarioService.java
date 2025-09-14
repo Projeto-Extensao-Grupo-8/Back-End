@@ -1,11 +1,11 @@
-package flor_de_lotus.Service;
+package flor_de_lotus.service;
 
 
-import flor_de_lotus.Domain.Usuario;
-import flor_de_lotus.Repository.UsuarioRepository;
-import flor_de_lotus.Request.UsuarioLoginRequestBody;
-import flor_de_lotus.Request.UsuarioPostRequestBody;
-import flor_de_lotus.Request.UsuarioReplaceRequestBody;
+import flor_de_lotus.entity.Usuario;
+import flor_de_lotus.repository.UsuarioRepository;
+import flor_de_lotus.request.UsuarioLoginRequestBody;
+import flor_de_lotus.request.UsuarioPostRequestBody;
+import flor_de_lotus.request.UsuarioReplaceRequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

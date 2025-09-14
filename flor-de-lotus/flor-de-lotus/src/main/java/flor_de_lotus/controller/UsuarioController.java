@@ -1,11 +1,10 @@
-package flor_de_lotus.Controller;
+package flor_de_lotus.controller;
 
-import flor_de_lotus.Domain.Usuario;
-import flor_de_lotus.Repository.UsuarioRepository;
-import flor_de_lotus.Request.UsuarioLoginRequestBody;
-import flor_de_lotus.Request.UsuarioPostRequestBody;
-import flor_de_lotus.Request.UsuarioReplaceRequestBody;
-import flor_de_lotus.Service.UsuarioService;
+import flor_de_lotus.entity.Usuario;
+import flor_de_lotus.request.UsuarioLoginRequestBody;
+import flor_de_lotus.request.UsuarioPostRequestBody;
+import flor_de_lotus.request.UsuarioReplaceRequestBody;
+import flor_de_lotus.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

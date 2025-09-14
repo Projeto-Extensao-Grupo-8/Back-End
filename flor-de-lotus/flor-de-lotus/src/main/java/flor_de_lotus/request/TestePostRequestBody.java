@@ -1,4 +1,4 @@
-package flor_de_lotus.Request;
+package flor_de_lotus.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

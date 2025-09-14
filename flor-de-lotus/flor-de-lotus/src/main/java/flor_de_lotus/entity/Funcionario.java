@@ -1,4 +1,4 @@
-package flor_de_lotus.Domain;
+package flor_de_lotus.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,15 +15,12 @@ public class Funcionario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idFuncionario;
-    private String nome;
-    @Column(unique = true )
-    private String cpf;
     @Column(unique = true )
     private String crp;
     private String especialidade;
     private LocalDate dtAdmissao;
     @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean ativo;
-    private Integer fkUsuario;
+    private Usuario fkUsuario;
 
 }

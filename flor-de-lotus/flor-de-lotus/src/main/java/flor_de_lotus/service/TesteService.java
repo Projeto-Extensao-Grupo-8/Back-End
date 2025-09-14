@@ -1,10 +1,9 @@
-package flor_de_lotus.Service;
+package flor_de_lotus.service;
 
-import flor_de_lotus.Domain.Teste;
-import flor_de_lotus.Domain.Usuario;
-import flor_de_lotus.Repository.TesteRepository;
-import flor_de_lotus.Request.TestePatchRequestBody;
-import flor_de_lotus.Request.TestePostRequestBody;
+import flor_de_lotus.entity.Teste;
+import flor_de_lotus.repository.TesteRepository;
+import flor_de_lotus.request.TestePatchRequestBody;
+import flor_de_lotus.request.TestePostRequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

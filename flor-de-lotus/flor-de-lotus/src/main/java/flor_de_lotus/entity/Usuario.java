@@ -1,4 +1,4 @@
-package flor_de_lotus.Domain;
+package flor_de_lotus.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -20,7 +20,6 @@ public class Usuario {
     private String telefone;
     @Column(unique = true )
     private String cpf;
-    @Column(unique = true )
     private String senha;
     private String nivelPermissao;
     @OneToOne

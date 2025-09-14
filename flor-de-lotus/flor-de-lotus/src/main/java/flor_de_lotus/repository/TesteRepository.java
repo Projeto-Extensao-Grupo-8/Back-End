@@ -1,6 +1,6 @@
-package flor_de_lotus.Repository;
+package flor_de_lotus.repository;
 
-import flor_de_lotus.Domain.Teste;
+import flor_de_lotus.entity.Teste;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package flor_de_lotus.Domain;
+package flor_de_lotus.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

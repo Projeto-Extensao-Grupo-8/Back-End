@@ -1,10 +1,9 @@
-package flor_de_lotus.Controller;
+package flor_de_lotus.controller;
 
-import flor_de_lotus.Domain.Teste;
-import flor_de_lotus.Domain.Usuario;
-import flor_de_lotus.Request.TestePatchRequestBody;
-import flor_de_lotus.Request.TestePostRequestBody;
-import flor_de_lotus.Service.TesteService;
+import flor_de_lotus.entity.Teste;
+import flor_de_lotus.request.TestePatchRequestBody;
+import flor_de_lotus.request.TestePostRequestBody;
+import flor_de_lotus.service.TesteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,7 @@ public class TesteController {
     private final TesteService service;
 
     @PostMapping
-    public ResponseEntity<Teste> cadastrar(TestePostRequestBody body){
+    public ResponseEntity<Teste> cadastrar(@RequestBody TestePostRequestBody body){
         return ResponseEntity.status(201).body(service.cadastrar(body));
     }
 

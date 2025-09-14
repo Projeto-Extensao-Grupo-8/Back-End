@@ -1,6 +1,6 @@
-package flor_de_lotus.Request;
+package flor_de_lotus.request;
 
-import flor_de_lotus.Domain.Endereco;
+import flor_de_lotus.entity.Endereco;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +10,8 @@ import org.hibernate.validator.constraints.br.CPF;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UsuarioPostRequestBody {
+public class UsuarioReplaceRequestBody {
+    private Integer idUsuario;
     private String nome;
     @Email(message = "E-mail inválido")
     private String email;
