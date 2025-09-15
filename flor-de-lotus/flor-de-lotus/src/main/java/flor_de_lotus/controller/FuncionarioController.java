@@ -1,6 +1,7 @@
 package flor_de_lotus.controller;
 
 import flor_de_lotus.entity.Funcionario;
+import flor_de_lotus.request.FuncionarioPatchRequestBody;
 import flor_de_lotus.request.FuncionarioPostRequestBody;
 import flor_de_lotus.service.FuncionarioService;
 import jakarta.validation.Valid;
@@ -50,7 +51,9 @@ public class FuncionarioController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Funcionario> atualizarParcial(@PathVariable Integer id, @RequestBody )
+    public ResponseEntity<Funcionario> atualizarParcial(@PathVariable Integer id, @RequestBody FuncionarioPatchRequestBody body ){
+        return ResponseEntity.status(200).body(service.atualizarParcial(id,body));
+    }
 
 
 

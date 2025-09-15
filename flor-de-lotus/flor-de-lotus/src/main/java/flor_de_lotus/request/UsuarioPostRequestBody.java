@@ -18,6 +18,8 @@ public class UsuarioPostRequestBody {
     @CPF(message = "CPF inválido")
     private String cpf;
     private String senha;
-    private Endereco fkEndereco;
+    private String cep;
+    private String numero;
+    private String complemento;
 
 }

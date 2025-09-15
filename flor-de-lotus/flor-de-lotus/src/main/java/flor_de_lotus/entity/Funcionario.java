@@ -21,6 +21,7 @@ public class Funcionario {
     private LocalDate dtAdmissao;
     @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean ativo;
+    @OneToOne
     private Usuario fkUsuario;
 
 }

@@ -39,7 +39,7 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscarUsuario(@PathVariable Integer id){
-        return ResponseEntity.status(200).body(service.buscarPorId(id));
+        return ResponseEntity.status(200).body(service.buscarPorIdOuThrow(id));
     }
 
 

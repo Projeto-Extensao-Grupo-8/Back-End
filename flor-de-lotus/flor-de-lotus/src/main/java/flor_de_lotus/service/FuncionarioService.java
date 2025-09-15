@@ -3,6 +3,8 @@ package flor_de_lotus.service;
 import flor_de_lotus.entity.Funcionario;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.repository.FuncionarioRepository;
+import flor_de_lotus.repository.UsuarioRepository;
+import flor_de_lotus.request.FuncionarioPatchRequestBody;
 import flor_de_lotus.request.FuncionarioPostRequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FuncionarioService {
     private FuncionarioRepository repository;
+    private UsuarioRepository Usuariorepository;
+
 
     public Funcionario cadastrar(FuncionarioPostRequestBody dto){
         if (repository.existsByCrp(dto.getCrp())){
@@ -65,7 +69,13 @@ public class FuncionarioService {
 
     }
 
-    public Funcionario atualizar
+    public Funcionario atualizarParcial(Integer id, FuncionarioPatchRequestBody dto){
+       Funcionario funcionario = buscarPorIdOuThrow(id);
+       if (dto.getCrp() != null) funcionario.setCrp(dto.getCrp());
+       if (dto.getEspecialidade() != null) funcionario.setEspecialidade(dto.getEspecialidade());
+
+       return repository.save(funcionario);
+    }
 
 
 
