@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -126,6 +127,10 @@ public class UsuarioService {
 
         return repository.save(usuario);
 
+    }
+
+    public List<Usuario> listarTodos(){
+        return repository.findAll();
     }
 
 

@@ -24,7 +24,11 @@ public class FuncionarioController {
 
     @GetMapping
     public ResponseEntity<List<Funcionario>> listarTodos(){
-        return ResponseEntity.status(200).body(service.listarTodos());
+        List<Funcionario> listaTodos = service.listarTodos();
+        if (listaTodos.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(listaTodos);
     }
 
     @GetMapping("/{id}")

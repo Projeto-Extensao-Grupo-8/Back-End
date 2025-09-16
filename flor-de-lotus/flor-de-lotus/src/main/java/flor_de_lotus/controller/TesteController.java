@@ -1,5 +1,6 @@
 package flor_de_lotus.controller;
 
+import flor_de_lotus.entity.Funcionario;
 import flor_de_lotus.entity.Teste;
 import flor_de_lotus.request.TestePatchRequestBody;
 import flor_de_lotus.request.TestePostRequestBody;
@@ -39,16 +40,25 @@ public class TesteController {
 
     @GetMapping("/{categoria}")
     public ResponseEntity<List<Teste>> listarPorCategoria(@PathVariable String categoria){
-        return ResponseEntity.status(200).body(service.listarPorCategoria(categoria));
+        List<Teste> listaTodos = service.listarPorCategoria(categoria);
+        if (listaTodos.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(listaTodos);
     }
 
     @GetMapping("/{tipo}")
     public ResponseEntity<List<Teste>> listarPorTipo (@PathVariable String tipo){
-        return ResponseEntity.status(200).body(service.listarPorTipo(tipo));
+        List<Teste> listaTodos = service.listarPorTipo(tipo);
+        if (listaTodos.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(listaTodos);
     }
 
     @GetMapping("/validade")
     public ResponseEntity<Teste> buscarPorValidade(){
+        Teste testeEncontrado = service.buscarPorValidade();
         return ResponseEntity.status(200).body(service.buscarPorValidade());
     }
 

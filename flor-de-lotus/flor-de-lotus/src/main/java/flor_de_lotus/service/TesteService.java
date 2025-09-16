@@ -1,6 +1,7 @@
 package flor_de_lotus.service;
 
 import flor_de_lotus.entity.Teste;
+import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.repository.TesteRepository;
 import flor_de_lotus.request.TestePatchRequestBody;
 import flor_de_lotus.request.TestePostRequestBody;
@@ -55,17 +56,10 @@ public class TesteService {
     }
 
     public List<Teste> listarPorCategoria(String categoria){
-        if (repository.findByCategoria(categoria).isEmpty()){
-            throw new ResponseStatusException(HttpStatus.valueOf(204), "Lista vazia");
-        }
-
         return repository.findByCategoria(categoria);
     }
 
     public List<Teste> listarPorTipo(String tipo){
-        if (repository.findByTipo(tipo).isEmpty()){
-            throw new ResponseStatusException(HttpStatus.valueOf(204), "Lista vazia");
-        }
 
         return repository.findByCategoria(tipo);
     }
@@ -73,15 +67,18 @@ public class TesteService {
     public Teste buscarPorValidade(){
       Optional<Teste> testeOpt = repository.findTop1ByValidadeAfterOrderByValidadeAsc(LocalDate.now());
         if (testeOpt.isEmpty()){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(204), "Não possui testes");
+            throw new EntidadeNaoEncontradoException("Não foi encontrado");
         }
 
         return testeOpt.get();
     }
 
     public Teste buscarPorQtd(){
-        return repository.findTop1ByOrderByEstoqueAtualAsc()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(204), "Não possui testes"));
+        Optional<Teste> testeOpt =  repository.findTop1ByOrderByEstoqueAtualAsc();
+        if (testeOpt.isEmpty()) {
+            throw new EntidadeNaoEncontradoException("Teste não encontrado");
+        }
+        return testeOpt.get();
     }
 
     public Teste atualizarParcial(Integer id, TestePatchRequestBody dto){

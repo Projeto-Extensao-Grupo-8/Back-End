@@ -2,6 +2,7 @@ package flor_de_lotus.service;
 
 import flor_de_lotus.entity.Funcionario;
 import flor_de_lotus.exception.EntidadeConflitoException;
+import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.repository.FuncionarioRepository;
 import flor_de_lotus.repository.UsuarioRepository;
 import flor_de_lotus.request.FuncionarioPatchRequestBody;
@@ -45,7 +46,7 @@ public class FuncionarioService {
             return funcEncontrado.get();
         }
 
-        throw new EntidadeConflitoException("Funcionario não encontrado");
+        throw new EntidadeNaoEncontradoException("Funcionario não encontrado");
 
     }
 
