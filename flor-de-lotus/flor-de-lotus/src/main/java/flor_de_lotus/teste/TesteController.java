@@ -1,7 +1,7 @@
 package flor_de_lotus.teste;
 
-import flor_de_lotus.teste.dto.TestePatchRequestBody;
-import flor_de_lotus.teste.dto.TestePostRequestBody;
+import flor_de_lotus.teste.dto.TestePostRequest;
+import flor_de_lotus.teste.dto.TesteResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ public class TesteController {
     private final TesteService service;
 
     @PostMapping
-    public ResponseEntity<Teste> cadastrar(@RequestBody TestePostRequestBody body){
+    public ResponseEntity<TesteResponse> cadastrar(@RequestBody TestePostRequest body){
         return ResponseEntity.status(201).body(service.cadastrar(body));
     }
 
@@ -26,18 +26,24 @@ public class TesteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Teste> buscarPorId(@PathVariable Integer id){
+    public ResponseEntity<TesteResponse> buscarPorId(@PathVariable Integer id){
         return ResponseEntity.status(200).body(service.findByIdOrThrow(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<Teste>> listarTodos(){
-        return ResponseEntity.status(200).body(service.listarTodos());
+    public ResponseEntity<List<TesteResponse>> listarTodos(){
+        List<TesteResponse> lista = service.listarTodos();
+
+        if (lista.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+
+        return ResponseEntity.status(200).body(lista);
     }
 
     @GetMapping("/{categoria}")
-    public ResponseEntity<List<Teste>> listarPorCategoria(@PathVariable String categoria){
-        List<Teste> listaTodos = service.listarPorCategoria(categoria);
+    public ResponseEntity<List<TesteResponse>> listarPorCategoria(@PathVariable String categoria){
+        List<TesteResponse> listaTodos = service.listarPorCategoria(categoria);
         if (listaTodos.isEmpty()){
             return ResponseEntity.status(204).build();
         }
@@ -45,8 +51,8 @@ public class TesteController {
     }
 
     @GetMapping("/{tipo}")
-    public ResponseEntity<List<Teste>> listarPorTipo (@PathVariable String tipo){
-        List<Teste> listaTodos = service.listarPorTipo(tipo);
+    public ResponseEntity<List<TesteResponse>> listarPorTipo (@PathVariable String tipo){
+        List<TesteResponse> listaTodos = service.listarPorTipo(tipo);
         if (listaTodos.isEmpty()){
             return ResponseEntity.status(204).build();
         }
@@ -54,25 +60,15 @@ public class TesteController {
     }
 
     @GetMapping("/validade")
-    public ResponseEntity<Teste> buscarPorValidade(){
-        Teste testeEncontrado = service.buscarPorValidade();
-        return ResponseEntity.status(200).body(service.buscarPorValidade());
+    public ResponseEntity<TesteResponse> buscarPorValidade(){
+        TesteResponse testeEncontrado = service.buscarPorValidade();
+        return ResponseEntity.status(200).body(testeEncontrado);
     }
 
     @GetMapping("/quantidade")
-    public ResponseEntity<Teste> buscarPorQuantidade(){
+    public ResponseEntity<TesteResponse> buscarPorQuantidade(){
         return ResponseEntity.status(200).body(service.buscarPorQtd());
     }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<Teste> atualizarParcial(@PathVariable Integer id, @RequestBody TestePatchRequestBody body){
-        return ResponseEntity.status(200).body(service.atualizarParcial(id,body));
-    }
-
-
-
-
-
 
 
 

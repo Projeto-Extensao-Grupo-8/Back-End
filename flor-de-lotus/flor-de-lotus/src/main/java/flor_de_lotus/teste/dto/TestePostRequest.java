@@ -1,30 +1,31 @@
-package flor_de_lotus.teste;
+package flor_de_lotus.teste.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Entity
 @NoArgsConstructor
 @Getter
 @Setter
-public class Teste {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idTeste;
+public class TestePostRequest {
+    @NotBlank
     private String codigo;
-    private String nome;
+    @NotBlank
     private String categoria;
+    @NotBlank
     private String subCategoria;
+    @NotBlank
     private String editora;
+    @NotBlank
     private String tipo;
+    @NotBlank
     private Double preco;
+    @NotBlank
     private Integer estoqueMinimo;
+    @NotBlank
     private LocalDate validade;
+
 }

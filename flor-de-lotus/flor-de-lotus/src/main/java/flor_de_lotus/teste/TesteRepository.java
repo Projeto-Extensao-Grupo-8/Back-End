@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TesteRepository extends JpaRepository<Teste, Integer> {
-    boolean existsByLinkOrCodigo(String link, String codigo);
+    boolean existsByCodigo(String codigo);
     List<Teste> findByTipo(String tipo);
     List<Teste> findByCategoria(String categoria);
     Optional<Teste> findTop1ByValidadeAfterOrderByValidadeAsc(LocalDate hoje);
