@@ -1,5 +1,6 @@
 package flor_de_lotus.endereco;
 
+import flor_de_lotus.endereco.dto.EnderecoMapper;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.endereco.dto.EnderecoPatchRequestBody;
 import flor_de_lotus.endereco.dto.EnderecoResponse;
@@ -37,11 +38,7 @@ public class EnderecoService {
         Endereco enderecoSavo = buscarPorIdOrThrow(id);
         if (dto.getCep() != null){
            EnderecoResponse enderecoResponse = buscarCEP(dto.getCep());
-           enderecoSavo.setCep(enderecoResponse.getCep());
-           enderecoSavo.setCidade(enderecoResponse.getLocalidade());
-           enderecoSavo.setNumero(enderecoResponse.getBairro());
-           enderecoSavo.setLogradouro(enderecoResponse.getLogradouro());
-           enderecoSavo.setBairro(enderecoResponse.getBairro());
+           enderecoSavo = EnderecoMapper.toEntityPatch(dto);
            return repository.save(enderecoSavo);
         }
 

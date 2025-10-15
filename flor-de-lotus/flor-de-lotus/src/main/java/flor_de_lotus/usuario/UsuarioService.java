@@ -2,6 +2,7 @@ package flor_de_lotus.usuario;
 
 
 import flor_de_lotus.endereco.Endereco;
+import flor_de_lotus.endereco.dto.EnderecoMapper;
 import flor_de_lotus.exception.BadRequestException;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
@@ -29,19 +30,10 @@ public class UsuarioService {
     private final EnderecoRepository enderecoRepository;
 
 
-    public Endereco cadastrarEndereco(String cep, String numero, String completo){
+    public Endereco cadastrarEndereco(String cep, String numero, String complemento){
         Endereco endereco = new Endereco();
         EnderecoResponse enderecoConsultado = enderecoService.buscarCEP(cep);
-
-        endereco.setBairro(enderecoConsultado.getBairro());
-        endereco.setCep(enderecoConsultado.getCep());
-        endereco.setEstado(enderecoConsultado.getEstado());
-        endereco.setCidade(enderecoConsultado.getLocalidade());
-        endereco.setLogradouro(enderecoConsultado.getLogradouro());
-        endereco.setNumero(numero);
-        endereco.setComplemento(completo);
-
-
+        endereco = EnderecoMapper.toEntityPost(enderecoConsultado, numero, complemento);
 
         return enderecoRepository.save(endereco);
     }
