@@ -1,6 +1,7 @@
 package flor_de_lotus.usuario;
 
 
+import flor_de_lotus.config.GerenciadorTokenJwt;
 import flor_de_lotus.endereco.Endereco;
 import flor_de_lotus.endereco.dto.EnderecoMapper;
 import flor_de_lotus.exception.BadRequestException;
@@ -9,13 +10,18 @@ import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.exception.UnauthorizedException;
 import flor_de_lotus.endereco.EnderecoRepository;
 import flor_de_lotus.endereco.dto.EnderecoResponse;
-import flor_de_lotus.usuario.dto.UsuarioLoginRequestBody;
+import flor_de_lotus.usuario.dto.*;
 import flor_de_lotus.endereco.EnderecoService;
-import flor_de_lotus.usuario.dto.UsuarioPostRequestBody;
-import flor_de_lotus.usuario.dto.UsuarioReplaceRequestBody;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,10 +31,19 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class UsuarioService {
+
     public final UsuarioRepository repository;
     private final EnderecoService enderecoService;
     private final EnderecoRepository enderecoRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private GerenciadorTokenJwt gerenciadorTokenJwt;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     public Endereco cadastrarEndereco(String cep, String numero, String complemento){
         Endereco endereco = new Endereco();
@@ -38,21 +53,22 @@ public class UsuarioService {
         return enderecoRepository.save(endereco);
     }
 
-    public Usuario cadastrar(UsuarioPostRequestBody dto){
+    public UsuarioResponseBody cadastrar(UsuarioPostRequestBody dto){
+
         checarDuplicidade(dto.getEmail(), dto.getCpf());
         checarRegrasSenha(dto.getSenha());
 
+        String senhaCriptografada = passwordEncoder.encode(dto.getSenha());
+        dto.setSenha(senhaCriptografada);
+
         Endereco endereco = cadastrarEndereco(dto.getCep(), dto.getNumero(), dto.getComplemento());
 
-        Usuario usuario = new Usuario();
-        usuario.setNome(dto.getNome());
-        usuario.setEmail(dto.getEmail());
-        usuario.setCpf(dto.getCpf());
-        usuario.setTelefone(dto.getTelefone());
-        usuario.setSenha(dto.getSenha());
-        usuario.setFkEndereco(endereco);
+        Usuario usuario = UsuarioMapper.of(dto, endereco);
 
-        return repository.save(usuario);
+        UsuarioResponseBody usuarioResponseBody = UsuarioMapper.of(repository.save(usuario));
+
+        return usuarioResponseBody;
+
     }
 
     public void checarDuplicidade(String email, String cpf){
@@ -75,18 +91,22 @@ public class UsuarioService {
         }
     }
 
-    public Usuario login(UsuarioLoginRequestBody dto){
-        Optional<Usuario> userOpt = repository.findByEmail(dto.getEmail());
-       if (userOpt.isEmpty()){
-           throw new EntidadeNaoEncontradoException("Usuário não encontrado");
-       }
+    public UsuarioTokenResponseBody login(UsuarioLoginRequestBody dto){
 
-       Usuario save = userOpt.get();
-       if (!save.getSenha().equals(dto.getSenha())){
-           throw new UnauthorizedException("Senha inválida");
-       }
+        final UsernamePasswordAuthenticationToken credentials =
+                new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getSenha());
 
-       return save;
+        final Authentication authentication = this.authenticationManager.authenticate(credentials);
+
+        Usuario usuarioAutenticado = repository.findByEmail(dto.getEmail()).orElseThrow(
+                () -> new EntidadeNaoEncontradoException("Usuário não encontrado")
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        final String token = gerenciadorTokenJwt.generateToken(authentication);
+
+        return UsuarioMapper.of(usuarioAutenticado,token);
 
     }
 
@@ -115,15 +135,9 @@ public class UsuarioService {
 
     }
 
-    public List<Usuario> listarTodos(){
-        return repository.findAll();
+    public List<UsuarioResponseBody> listarTodos(){
+        List<Usuario> usuariosEncontrados = repository.findAll();
+        return usuariosEncontrados.stream().map(UsuarioMapper::of).toList();
     }
-
-
-
-
-
-
-
 
 }

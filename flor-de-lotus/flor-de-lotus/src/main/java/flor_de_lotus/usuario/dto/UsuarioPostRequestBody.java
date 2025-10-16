@@ -1,5 +1,7 @@
 package flor_de_lotus.usuario.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,15 +12,33 @@ import org.hibernate.validator.constraints.br.CPF;
 @Getter
 @Setter
 public class UsuarioPostRequestBody {
+    @Size(min = 1, max = 90)
+    @Schema(description = "Nome do usuário", example = "Luíza Oliveira")
     private String nome;
+
     @Email(message = "E-mail inválido")
+    @Schema(description = "Email do usuário", example = "luiza@oliveira.com")
     private String email;
+
+    @Size(min = 11, max = 11)
+    @Schema(description = "Número do usuário", example = "119xxxxxxxx")
     private String telefone;
+
     @CPF(message = "CPF inválido")
+    @Schema(description = "CPF do usuário", example = "04531164438")
     private String cpf;
+
+    @Schema(description = "Senha do usuário para cadastro, deve conter ao menos 8 caracteres e no máximo 32, 2 letras maiúsculas e uma minúscula, 1 dígito e apenas letras e números", example = "P4sSwOrdExAmPl3")
     private String senha;
+
+    @Size(min = 8, max = 8)
+    @Schema(description = "CEP do usuário", example = "01414001")
     private String cep;
+
+    @Schema(description = "Número do endereço", example = "595")
     private String numero;
+
+    @Schema(description = "Complemento do endereço",example = "Bloco A Apto 42")
     private String complemento;
 
 }
