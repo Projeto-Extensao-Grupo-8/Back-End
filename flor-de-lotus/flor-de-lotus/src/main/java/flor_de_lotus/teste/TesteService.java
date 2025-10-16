@@ -77,14 +77,14 @@ public class TesteService {
     }
 
     public TesteResponse buscarPorQtd(){
-        Optional<Teste> testeOpt =  repository.findTop1ByOrderByEstoqueAtualAsc();
-        if (testeOpt.isEmpty()) {
-            throw new EntidadeNaoEncontradoException("Teste não encontrado");
-        }
-        Teste teste = testeOpt.get();
-        TesteResponse testeResponse = TesteMapper.toResponse(teste);
+//        Optional<Teste> testeOpt =  repository.findTop1ByOrderByEstoqueAtualAsc();
+//        if (testeOpt.isEmpty()) {
+//            throw new EntidadeNaoEncontradoException("Teste não encontrado");
+//        }
+//        Teste teste = testeOpt.get();
+//        TesteResponse testeResponse = TesteMapper.toResponse(teste);
 
-        return testeResponse;
+        return new TesteResponse();
     }
 
 
