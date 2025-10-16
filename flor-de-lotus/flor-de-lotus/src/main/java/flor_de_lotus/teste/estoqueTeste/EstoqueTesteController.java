@@ -20,5 +20,7 @@ public class EstoqueTesteController {
     @PostMapping
     public ResponseEntity<EstoqueTesteResponse> cadastrar(@RequestBody EstoqueTesteRequest body ){
 
+        return null;
+
     }
 }

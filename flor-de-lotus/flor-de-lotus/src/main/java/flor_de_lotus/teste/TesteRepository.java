@@ -11,7 +11,7 @@ public interface TesteRepository extends JpaRepository<Teste, Integer> {
     List<Teste> findByTipo(String tipo);
     List<Teste> findByCategoria(String categoria);
     Optional<Teste> findTop1ByValidadeAfterOrderByValidadeAsc(LocalDate hoje);
-    Optional<Teste> findTop1ByOrderByEstoqueAtualAsc();
+    //Optional<Teste> findTop1ByOrderByEstoqueAtualAsc();
 
 
 }

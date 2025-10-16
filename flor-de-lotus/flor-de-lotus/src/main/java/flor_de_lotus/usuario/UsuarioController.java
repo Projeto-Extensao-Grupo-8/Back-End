@@ -1,8 +1,7 @@
 package flor_de_lotus.usuario;
 
-import flor_de_lotus.usuario.dto.UsuarioLoginRequestBody;
-import flor_de_lotus.usuario.dto.UsuarioPostRequestBody;
-import flor_de_lotus.usuario.dto.UsuarioReplaceRequestBody;
+import flor_de_lotus.usuario.dto.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +15,14 @@ import java.util.List;
 public class UsuarioController {
     private final UsuarioService service;
 
-    @PostMapping
-    public ResponseEntity<Usuario> cadastrar(@RequestBody @Valid UsuarioPostRequestBody body){
+    @PostMapping("/cadastro")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<UsuarioResponseBody> cadastrar(@RequestBody @Valid UsuarioPostRequestBody body){
         return ResponseEntity.status(201).body(service.cadastrar(body));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Usuario> login(@RequestBody @Valid UsuarioLoginRequestBody body){
+    public ResponseEntity<UsuarioTokenResponseBody> login(@RequestBody @Valid UsuarioLoginRequestBody body){
         return ResponseEntity.status(200).body(service.login(body));
     }
 
@@ -43,21 +43,11 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> listarTodos(){
-        List<Usuario> listarTodos = service.listarTodos();
-        if (listarTodos.isEmpty()){
-            return ResponseEntity.status(204).build();
-        }
+    public ResponseEntity<List<UsuarioResponseBody>> listarTodos(){
 
-        return ResponseEntity.status(200).body(listarTodos);
+        List<UsuarioResponseBody> lista = service.listarTodos();
+        return ResponseEntity.status(200).body(lista);
 
     }
-
-
-
-
-
-
-
 
 }
