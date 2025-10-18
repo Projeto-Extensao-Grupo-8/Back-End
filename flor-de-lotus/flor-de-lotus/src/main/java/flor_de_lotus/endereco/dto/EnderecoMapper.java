@@ -39,4 +39,22 @@ public class EnderecoMapper {
         return endereco;
     }
 
+    public static EnderecoResponsePatch toResponse(Endereco entity){
+        if (entity == null){
+            return null;
+        }
+
+        EnderecoResponsePatch endereco = new EnderecoResponsePatch();
+
+        endereco.setBairro(entity.getBairro());
+        endereco.setCep(entity.getCep());
+        endereco.setEstado(entity.getEstado());
+        endereco.setCidade(entity.getCidade());
+        endereco.setLogradouro(entity.getLogradouro());
+        endereco.setNumero(entity.getNumero());
+        endereco.setComplemento(entity.getComplemento());
+
+        return endereco;
+    }
+
 }

@@ -1,19 +1,18 @@
 package flor_de_lotus.teste.estoqueTeste.dto;
 
 import flor_de_lotus.teste.Teste;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+
 @NoArgsConstructor
 @Getter
 @Setter
-public class EstoqueTesteRequest {
-    @NotBlank
+public class EstoqueTesteResponseGet {
+    private Integer idEstoqueTeste;
     private Integer qtdAtual;
-    @NotBlank
-    private Integer fkTeste;
+    private LocalDate dtReferencia;
+    private Teste fkTeste;
 }

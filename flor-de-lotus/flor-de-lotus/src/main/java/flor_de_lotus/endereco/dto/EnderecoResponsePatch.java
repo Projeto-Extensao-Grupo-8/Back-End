@@ -1,18 +1,16 @@
 package flor_de_lotus.endereco.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-@AllArgsConstructor
 @Getter
-public class EnderecoResponse {
-    private String cep;
+@Setter
+public class EnderecoResponsePatch {
     private String logradouro;
+    private String numero;
+    private String complemento;
     private String bairro;
     private String cidade;
     private String estado;
-
+    private String cep;
 }

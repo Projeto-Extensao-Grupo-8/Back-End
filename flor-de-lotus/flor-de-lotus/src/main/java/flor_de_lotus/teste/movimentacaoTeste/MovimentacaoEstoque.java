@@ -1,6 +1,7 @@
 package flor_de_lotus.teste.movimentacaoTeste;
 
 import flor_de_lotus.funcionario.Funcionario;
+import flor_de_lotus.teste.Teste;
 import flor_de_lotus.teste.estoqueTeste.EstoqueTeste;
 import flor_de_lotus.usuario.Usuario;
 import jakarta.persistence.Entity;
@@ -26,10 +27,7 @@ public class MovimentacaoEstoque {
     private LocalDate dataMovimentacao;
     private String descricao;
     @ManyToOne
-    private Funcionario funcionario;
-    @ManyToOne
-    private Usuario usuario;
-    @ManyToOne
-    private EstoqueTeste estoqueTeste;
+    private Teste teste;
+
 
 }

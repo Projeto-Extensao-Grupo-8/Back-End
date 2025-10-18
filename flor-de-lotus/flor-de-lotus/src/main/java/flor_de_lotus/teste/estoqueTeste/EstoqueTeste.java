@@ -20,6 +20,7 @@ public class EstoqueTeste {
     private Integer qtdAtual;
     private LocalDate dtReferencia;
     @ManyToOne
+    @JoinColumn(name = "idTeste", nullable = false)
     private Teste fkTeste;
 
 

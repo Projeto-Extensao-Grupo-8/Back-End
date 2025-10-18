@@ -25,6 +25,25 @@ public class TesteMapper {
 
     }
 
+    public static Teste toEntity(TesteResponse dto){
+
+        if (dto == null){
+            return null;
+        }
+
+        Teste teste = new Teste();
+        teste.setCategoria(dto.getCategoria());
+        teste.setCodigo(dto.getCodigo());
+        teste.setEditora(dto.getEditora());
+        teste.setTipo(dto.getTipo());
+        teste.setPreco(dto.getPreco());
+        teste.setEstoqueMinimo(dto.getEstoqueMinimo());
+        teste.setValidade(dto.getValidade());
+
+        return teste;
+
+    }
+
     public static TesteResponse toResponse(Teste teste) {
 
         if (teste == null) {

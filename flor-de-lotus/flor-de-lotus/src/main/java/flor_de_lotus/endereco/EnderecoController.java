@@ -18,7 +18,7 @@ public class EnderecoController {
         return ResponseEntity.ok(service.buscarCEP(cep));
     }
 
-    @PatchMapping
+    @PatchMapping("/{id}")
     public ResponseEntity<Endereco> atualizarParcial(@PathVariable Integer id, @RequestBody EnderecoPatchRequestBody body){
         return ResponseEntity.status(200).body(service.atualizarParcial(id, body));
     }

@@ -2,6 +2,7 @@ package flor_de_lotus.teste;
 
 import flor_de_lotus.teste.dto.TestePostRequest;
 import flor_de_lotus.teste.dto.TesteResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class TesteController {
     private final TesteService service;
 
     @PostMapping
-    public ResponseEntity<TesteResponse> cadastrar(@RequestBody TestePostRequest body){
+    public ResponseEntity<TesteResponse> cadastrar(@RequestBody @Valid TestePostRequest body){
         return ResponseEntity.status(201).body(service.cadastrar(body));
     }
 
@@ -65,10 +66,7 @@ public class TesteController {
         return ResponseEntity.status(200).body(testeEncontrado);
     }
 
-    @GetMapping("/quantidade")
-    public ResponseEntity<TesteResponse> buscarPorQuantidade(){
-        return ResponseEntity.status(200).body(service.buscarPorQtd());
-    }
+
 
 
 

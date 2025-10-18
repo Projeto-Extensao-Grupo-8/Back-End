@@ -1,6 +1,7 @@
 package flor_de_lotus.endereco;
 
 import flor_de_lotus.endereco.dto.EnderecoMapper;
+import flor_de_lotus.endereco.dto.EnderecoResponsePatch;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.endereco.dto.EnderecoPatchRequestBody;
 import flor_de_lotus.endereco.dto.EnderecoResponse;
@@ -34,18 +35,23 @@ public class EnderecoService {
         throw new EntidadeNaoEncontradoException("Endereço não encontrado");
     }
 
-    public Endereco atualizarParcial(Integer id, EnderecoPatchRequestBody dto){
+    public EnderecoResponsePatch atualizarParcial(Integer id, EnderecoPatchRequestBody dto){
         Endereco enderecoSavo = buscarPorIdOrThrow(id);
+
         if (dto.getCep() != null){
-           EnderecoResponse enderecoResponse = buscarCEP(dto.getCep());
+           EnderecoResponse cepBusca = buscarCEP(dto.getCep());
            enderecoSavo = EnderecoMapper.toEntityPatch(dto);
-           return repository.save(enderecoSavo);
+           repository.save(enderecoSavo);
+           EnderecoResponsePatch enderecoResponse = EnderecoMapper.toResponse(enderecoSavo);
+
+           return  enderecoResponse;
         }
 
         if (dto.getComplemento() != null) enderecoSavo.setComplemento(dto.getComplemento());
         if (dto.getNumero() != null) enderecoSavo.setNumero(dto.getNumero());
-        return repository.save(enderecoSavo);
-
+        EnderecoResponsePatch enderecoResponse = EnderecoMapper.toResponse(enderecoSavo);
+        repository.save(enderecoSavo);
+        return  enderecoResponse;
 
     }
 
