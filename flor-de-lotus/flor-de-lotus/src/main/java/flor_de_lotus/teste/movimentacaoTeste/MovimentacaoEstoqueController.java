@@ -13,8 +13,5 @@ import org.springframework.web.bind.annotation.RestController;
 public class MovimentacaoEstoqueController {
     public final MovimentacaoEstoqueService service;
 
-    @PostMapping
-    public ResponseEntity<4> cadastrar(@RequestBody MovimentacaoEstoqueRequest body){
 
-    }
 }
