@@ -3,6 +3,7 @@ package flor_de_lotus.teste.estoqueTeste.dto;
 import flor_de_lotus.teste.Teste;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,8 +13,8 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class EstoqueTesteRequest {
-    @NotBlank
+    @NotNull
     private Integer qtdAtual;
-    @NotBlank
+    @NotNull
     private Integer fkTeste;
 }

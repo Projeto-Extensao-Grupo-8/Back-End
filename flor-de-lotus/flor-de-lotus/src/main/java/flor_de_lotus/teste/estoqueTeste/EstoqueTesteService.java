@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,16 +24,21 @@ import java.util.Optional;
 public class EstoqueTesteService {
     private final EstoqueTesteRespository respository;
     private final TesteService testeservice;
-    private final EstoqueTesteService estoqueTesteService;
 
     public EstoqueTesteResponse cadastrar(@RequestBody @Valid EstoqueTesteRequest body){
         TesteResponse testeResponse = testeservice.findByIdOrThrow(body.getFkTeste());
         Teste teste = TesteMapper.toEntity(testeResponse);
+        teste.setIdTeste(body.getFkTeste());
+
+        System.out.println(teste);
 
         EstoqueTeste estoqueTeste = EstoqueTesteMapper.toEntity(body);
+        estoqueTeste.setDtReferencia(LocalDate.now());
         estoqueTeste.setFkTeste(teste);
 
-        EstoqueTesteResponse estoqueTesteResponse = EstoqueTesteMapper.toResponse(estoqueTeste);
+        EstoqueTeste estoqueSalvo = respository.save(estoqueTeste);
+        EstoqueTesteResponse estoqueTesteResponse = EstoqueTesteMapper.toResponse(estoqueSalvo);
+
         return estoqueTesteResponse;
     }
 
@@ -48,8 +55,12 @@ public class EstoqueTesteService {
     }
 
     public EstoqueTesteResponse atualizarParcial(Integer id,EstoqueTesteRequest body){
-        EstoqueTesteResponse estoqueTesteResponse = estoqueTesteService.findByIdOrThrow(id);
+        EstoqueTesteResponse estoqueTesteResponse = findByIdOrThrow(id);
         EstoqueTeste estTeste = EstoqueTesteMapper.toEntity(estoqueTesteResponse);
+
+        Teste teste = TesteMapper.toEntity(testeservice.findByIdOrThrow(body.getFkTeste()));
+        teste.setIdTeste(body.getFkTeste());
+        estTeste.setFkTeste(teste);
 
         if (body.getQtdAtual() != null) estTeste.setQtdAtual(body.getQtdAtual());
         respository.save(estTeste);
@@ -64,8 +75,16 @@ public class EstoqueTesteService {
         respository.delete(estoqueTeste);
     }
 
+
+    public List<EstoqueTesteResponse> listarTodos (){
+        List<EstoqueTeste>  todos =  respository.findAll();
+        List<EstoqueTesteResponse> todosResponse = EstoqueTesteMapper.toResponseList(todos);
+
+        return todosResponse;
+    }
+
     public EstoqueTesteResponse buscarPorQtd(){
-        Optional<EstoqueTeste> testeEncontrado =  respository.findTop1ByOrderByqtdAtualAsc();
+        Optional<EstoqueTeste> testeEncontrado =  respository.findTop1ByOrderByQtdAtualAsc();
         if (testeEncontrado.isEmpty()) {
             throw new EntidadeNaoEncontradoException("Teste não encontrado");
         }

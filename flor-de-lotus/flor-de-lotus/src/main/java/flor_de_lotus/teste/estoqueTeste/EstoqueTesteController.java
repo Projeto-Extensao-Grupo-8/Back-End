@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/estoques")
 @RequiredArgsConstructor
@@ -23,6 +25,15 @@ public class EstoqueTesteController {
     @PatchMapping("/{id}")
     public ResponseEntity<EstoqueTesteResponse> atualizar(@PathVariable Integer id,@RequestBody @Valid EstoqueTesteRequest body){
         return ResponseEntity.status(201).body(service.atualizarParcial(id, body));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EstoqueTesteResponse>> buscarTodos(){
+        List<EstoqueTesteResponse> listaResponse = service.listarTodos();
+        if (listaResponse.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(listaResponse);
     }
 
     @GetMapping("/{id}")

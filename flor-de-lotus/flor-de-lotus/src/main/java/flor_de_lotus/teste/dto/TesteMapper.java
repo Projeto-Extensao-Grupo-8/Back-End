@@ -14,6 +14,8 @@ public class TesteMapper {
 
         Teste teste = new Teste();
         teste.setCategoria(dto.getCategoria());
+        teste.setSubCategoria(dto.getSubCategoria());
+        teste.setNome(dto.getNome());
         teste.setCodigo(dto.getCodigo());
         teste.setEditora(dto.getEditora());
         teste.setTipo(dto.getTipo());
@@ -33,6 +35,8 @@ public class TesteMapper {
 
         Teste teste = new Teste();
         teste.setCategoria(dto.getCategoria());
+        teste.setSubCategoria(dto.getSubCategoria());
+        teste.setNome(dto.getNome());
         teste.setCodigo(dto.getCodigo());
         teste.setEditora(dto.getEditora());
         teste.setTipo(dto.getTipo());
@@ -53,6 +57,8 @@ public class TesteMapper {
         TesteResponse testeResposta = new  TesteResponse();
         testeResposta.setIdTeste(teste.getIdTeste());
         testeResposta.setCategoria(teste.getCategoria());
+        testeResposta.setSubCategoria(teste.getSubCategoria());
+        testeResposta.setNome(teste.getNome());
         testeResposta.setCodigo(teste.getCodigo());
         testeResposta.setEditora(teste.getEditora());
         testeResposta.setTipo(teste.getTipo());

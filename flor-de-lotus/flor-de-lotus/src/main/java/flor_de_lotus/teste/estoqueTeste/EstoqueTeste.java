@@ -23,5 +23,4 @@ public class EstoqueTeste {
     @JoinColumn(name = "idTeste", nullable = false)
     private Teste fkTeste;
 
-
 }

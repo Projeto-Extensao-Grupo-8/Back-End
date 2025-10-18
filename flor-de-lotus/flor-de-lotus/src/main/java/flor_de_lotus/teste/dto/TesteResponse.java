@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public class TesteResponse {
     private Integer idTeste;
     private String codigo;
+    private String nome;
     private String categoria;
     private String subCategoria;
     private String editora;

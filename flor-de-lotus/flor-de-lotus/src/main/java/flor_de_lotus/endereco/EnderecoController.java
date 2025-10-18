@@ -2,6 +2,7 @@ package flor_de_lotus.endereco;
 
 import flor_de_lotus.endereco.dto.EnderecoPatchRequestBody;
 import flor_de_lotus.endereco.dto.EnderecoResponse;
+import flor_de_lotus.endereco.dto.EnderecoResponsePatch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class EnderecoController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Endereco> atualizarParcial(@PathVariable Integer id, @RequestBody EnderecoPatchRequestBody body){
+    public ResponseEntity<EnderecoResponsePatch> atualizarParcial(@PathVariable Integer id, @RequestBody EnderecoPatchRequestBody body){
         return ResponseEntity.status(200).body(service.atualizarParcial(id, body));
     }
 
