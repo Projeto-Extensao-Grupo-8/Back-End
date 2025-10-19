@@ -1,5 +1,6 @@
 package flor_de_lotus.teste;
 
+import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.teste.dto.TesteMapper;
 import flor_de_lotus.teste.dto.TestePostRequest;
@@ -21,7 +22,7 @@ public class TesteService {
 
     public TesteResponse cadastrar(TestePostRequest dto){
         if (repository.existsByCodigo(dto.getCodigo())){
-            throw new ResponseStatusException(HttpStatusCode.valueOf(409), "Teste já cadastrado");
+            throw new EntidadeConflitoException("Teste já cadastrado");
         }
         Teste teste = TesteMapper.toEntity(dto);
         Teste cadastrado = repository.save(teste);
@@ -32,7 +33,7 @@ public class TesteService {
     public TesteResponse findByIdOrThrow(Integer id){
         Optional<Teste> testeOpt = repository.findById(id);
         if (testeOpt.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.valueOf(404), "Teste não encontrado");
+            throw new EntidadeNaoEncontradoException("Teste não encontrado");
         }
         Teste teste =  testeOpt.get();
         TesteResponse testeResponse = TesteMapper.toResponse(teste);
@@ -60,15 +61,13 @@ public class TesteService {
 
     public List<TesteResponse> listarPorTipo(String tipo){
         List<Teste> lista = repository.findByTipo(tipo);
+
         List<TesteResponse> listaResponse = TesteMapper.toResponseList(lista);
         return listaResponse ;
     }
 
     public TesteResponse buscarPorValidade(){
       Optional<Teste> testeOpt = repository.findTop1ByValidadeAfterOrderByValidadeAsc(LocalDate.now());
-        if (testeOpt.isEmpty()){
-            throw new EntidadeNaoEncontradoException("Não foi encontrado");
-        }
 
         Teste teste = testeOpt.get();
         TesteResponse testeResponse = TesteMapper.toResponse(teste);

@@ -1,9 +1,10 @@
 package flor_de_lotus.teste.movimentacaoTeste.dto;
 
-import flor_de_lotus.consulta.Consulta;
 import flor_de_lotus.teste.Teste;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,14 +14,15 @@ import java.time.LocalDate;
 @Setter
 public class MovimentacaoEstoqueRequest {
     @NotBlank
-    private String tipoMovimentacao;
-    @NotBlank
+    @Positive
+    @Schema(description = "Quantidade de unidades movidas ou usadas na consulta")
     private Integer qtd;
     @NotBlank
+    @Schema(description = "Motivo ou tipo da movimentação")
     private String descricao;
-    @ManyToOne
     @NotBlank
-    private Integer fkTeste;
     @ManyToOne
-    private Integer fkConsulta;
+    @Schema(description = "Referência ao Teste Psicológico que foi movimentado.")
+    private Integer Fkteste;
+
 }

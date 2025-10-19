@@ -46,7 +46,7 @@ public class EstoqueTesteService {
         Optional<EstoqueTeste> estoqueTesteOpt = respository.findById(id);
 
         if (estoqueTesteOpt.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.valueOf(404), "EstoqueTeste não encontrado");
+            throw new EntidadeNaoEncontradoException("EstoqueTeste não encontrado");
         }
         EstoqueTeste estoqueTeste =  estoqueTesteOpt.get();
 
@@ -85,9 +85,7 @@ public class EstoqueTesteService {
 
     public EstoqueTesteResponse buscarPorQtd(){
         Optional<EstoqueTeste> testeEncontrado =  respository.findTop1ByOrderByQtdAtualAsc();
-        if (testeEncontrado.isEmpty()) {
-            throw new EntidadeNaoEncontradoException("Teste não encontrado");
-        }
+
         EstoqueTeste teste = testeEncontrado.get();
         EstoqueTesteResponse testeResponse = EstoqueTesteMapper.toResponse(teste);
 

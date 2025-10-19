@@ -1,6 +1,6 @@
 package flor_de_lotus.teste.movimentacaoTeste;
 
-import flor_de_lotus.consulta.Consulta;
+
 import flor_de_lotus.funcionario.Funcionario;
 import flor_de_lotus.teste.Teste;
 import flor_de_lotus.teste.estoqueTeste.EstoqueTeste;
@@ -26,6 +26,5 @@ public class MovimentacaoEstoque {
     @ManyToOne
     @JoinColumn(name = "idTeste")
     private Teste teste;
-
 
 }
