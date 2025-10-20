@@ -3,6 +3,7 @@ package flor_de_lotus.service;
 import flor_de_lotus.entity.Funcionario;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
+import flor_de_lotus.mapper.FuncionarioMapper;
 import flor_de_lotus.repository.FuncionarioRepository;
 import flor_de_lotus.repository.UsuarioRepository;
 import flor_de_lotus.request.FuncionarioPatchRequestBody;
@@ -26,12 +27,7 @@ public class FuncionarioService {
             throw new EntidadeConflitoException("Conflito no campo CRP");
         }
 
-        Funcionario funcionario = new Funcionario();
-        funcionario.setCrp(dto.getCrp());
-        funcionario.setEspecialidade(dto.getEspecialidade());
-        funcionario.setAtivo(dto.isAtivo());
-        funcionario.setDtAdmissao(LocalDate.now());
-        funcionario.setFkUsuario(dto.getFkUsuario());
+        Funcionario funcionario = FuncionarioMapper.toEntity(dto);
 
         return repository.save(funcionario);
     }
