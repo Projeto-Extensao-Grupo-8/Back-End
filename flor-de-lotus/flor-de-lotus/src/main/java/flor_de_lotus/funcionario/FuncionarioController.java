@@ -1,14 +1,11 @@
-package flor_de_lotus.controller;
+package flor_de_lotus.funcionario;
 
-import flor_de_lotus.entity.Funcionario;
-import flor_de_lotus.request.FuncionarioPatchRequestBody;
-import flor_de_lotus.request.FuncionarioPostRequestBody;
-import flor_de_lotus.service.FuncionarioService;
+import flor_de_lotus.funcionario.dto.FuncionarioPatchRequestBody;
+import flor_de_lotus.funcionario.dto.FuncionarioPostRequestBody;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RequiredArgsConstructor

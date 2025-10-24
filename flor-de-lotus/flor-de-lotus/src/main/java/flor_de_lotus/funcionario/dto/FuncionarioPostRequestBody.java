@@ -15,5 +15,5 @@ public class FuncionarioPostRequestBody {
     @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
     private boolean ativo;
     @OneToOne
-    private Usuario fkUsuario;
+    private Integer fkUsuario;
 }

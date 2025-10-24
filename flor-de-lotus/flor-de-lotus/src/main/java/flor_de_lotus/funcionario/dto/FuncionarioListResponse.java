@@ -1,4 +1,4 @@
-package flor_de_lotus.request;
+package flor_de_lotus.funcionario.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,33 +1,31 @@
-package flor_de_lotus.service;
+package flor_de_lotus.funcionario;
 
-import flor_de_lotus.entity.Funcionario;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
-import flor_de_lotus.mapper.FuncionarioMapper;
-import flor_de_lotus.repository.FuncionarioRepository;
-import flor_de_lotus.repository.UsuarioRepository;
-import flor_de_lotus.request.FuncionarioPatchRequestBody;
-import flor_de_lotus.request.FuncionarioPostRequestBody;
+import flor_de_lotus.funcionario.dto.FuncionarioPatchRequestBody;
+import flor_de_lotus.funcionario.dto.FuncionarioPostRequestBody;
+import flor_de_lotus.funcionario.mapper.FuncionarioMapper;
+import flor_de_lotus.usuario.Usuario;
+import flor_de_lotus.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class FuncionarioService {
-    private FuncionarioRepository repository;
-    private UsuarioRepository Usuariorepository;
-
+    private final FuncionarioRepository repository;
+    private final UsuarioService usuarioService;
 
     public Funcionario cadastrar(FuncionarioPostRequestBody dto){
+        Usuario usuario = usuarioService.buscarPorIdOuThrow(dto.getFkUsuario());
         if (repository.existsByCrp(dto.getCrp())){
             throw new EntidadeConflitoException("Conflito no campo CRP");
         }
 
-        Funcionario funcionario = FuncionarioMapper.toEntity(dto);
+        Funcionario funcionario = FuncionarioMapper.toEntity(dto, usuario);
 
         return repository.save(funcionario);
     }

@@ -1,15 +1,16 @@
-package flor_de_lotus.mapper;
+package flor_de_lotus.funcionario.mapper;
 
-import flor_de_lotus.entity.Funcionario;
-import flor_de_lotus.request.FuncionarioListResponse;
-import flor_de_lotus.request.FuncionarioPostRequestBody;
+import flor_de_lotus.funcionario.Funcionario;
+import flor_de_lotus.funcionario.dto.FuncionarioPostRequestBody;
+import flor_de_lotus.funcionario.dto.FuncionarioListResponse;
+import flor_de_lotus.usuario.Usuario;
+import flor_de_lotus.usuario.UsuarioService;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class FuncionarioMapper {
-
-    public static Funcionario toEntity(FuncionarioPostRequestBody dto) {
+    public static Funcionario toEntity(FuncionarioPostRequestBody dto, Usuario entity) {
         if(dto == null) {
             return null;
         }
@@ -20,7 +21,7 @@ public class FuncionarioMapper {
                 dto.getEspecialidade(),
                 LocalDate.now(),
                 true,
-                dto.getFkUsuario()
+                entity
                 );
     }
 
