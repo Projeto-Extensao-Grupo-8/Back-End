@@ -43,4 +43,12 @@ public class Usuario {
     @Schema(description = "Fk relacionado ao endereço", example = "1")
     private Endereco fkEndereco;
 
+    public Usuario(String nome, String email, String telefone, String cpf, String senha, String nivelPermissao) {
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.cpf = cpf;
+        this.senha = senha;
+        this.nivelPermissao = nivelPermissao;
+    }
 }

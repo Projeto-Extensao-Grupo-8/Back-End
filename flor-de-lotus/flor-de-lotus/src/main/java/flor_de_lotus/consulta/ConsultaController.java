@@ -98,7 +98,7 @@ public class ConsultaController {
     })
     @GetMapping("/paciente/{idPaciente}")
     public ResponseEntity<List<ConsultaResponseBody>> listarPorPaciente(@PathVariable Integer idPaciente) {
-        List<ConsultaResponseBody> lista = service.listarPorPaciente(idPaciente);
+        List<ConsultaResponseBody> lista = service.listarPorPacienteResponse(idPaciente);
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
@@ -112,7 +112,7 @@ public class ConsultaController {
     })
     @GetMapping("/funcionario/{idFuncionario}")
     public ResponseEntity<List<ConsultaResponseBody>> listarPorFuncionario(@PathVariable Integer idFuncionario) {
-        List<ConsultaResponseBody> lista = service.listarPorFuncionario(idFuncionario);
+        List<ConsultaResponseBody> lista = service.listarPorFuncionarioResponse(idFuncionario);
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }

@@ -50,6 +50,8 @@ public class SecurityConfiguracao {
             "/actuator/*",
             "/testes/*",
             "/estoques/*",
+            "/consultas/*",
+            "/movimentacoes/*",
             "/usuarios/login",
             "/usuarios/cadastro",
             "/h2-console/**",

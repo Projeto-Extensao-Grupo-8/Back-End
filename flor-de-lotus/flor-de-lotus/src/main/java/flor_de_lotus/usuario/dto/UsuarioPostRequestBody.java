@@ -41,4 +41,14 @@ public class UsuarioPostRequestBody {
     @Schema(description = "Complemento do endereço",example = "Bloco A Apto 42")
     private String complemento;
 
+    public UsuarioPostRequestBody(String nome, String email, String telefone, String cpf, String senha, String cep, String numero, String complemento) {
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.cpf = cpf;
+        this.senha = senha;
+        this.cep = cep;
+        this.numero = numero;
+        this.complemento = complemento;
+    }
 }

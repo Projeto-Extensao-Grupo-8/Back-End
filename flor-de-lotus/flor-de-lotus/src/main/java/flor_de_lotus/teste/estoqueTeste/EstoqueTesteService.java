@@ -26,9 +26,7 @@ public class EstoqueTesteService {
     private final TesteService testeservice;
 
     public EstoqueTesteResponse cadastrar(@RequestBody @Valid EstoqueTesteRequest body){
-        TesteResponse testeResponse = testeservice.findByIdOrThrow(body.getFkTeste());
-        Teste teste = TesteMapper.toEntity(testeResponse);
-        teste.setIdTeste(body.getFkTeste());
+        Teste teste = testeservice.findByIdOrThrow(body.getFkTeste());
 
         System.out.println(teste);
 
@@ -58,8 +56,7 @@ public class EstoqueTesteService {
         EstoqueTesteResponse estoqueTesteResponse = findByIdOrThrow(id);
         EstoqueTeste estTeste = EstoqueTesteMapper.toEntity(estoqueTesteResponse);
 
-        Teste teste = TesteMapper.toEntity(testeservice.findByIdOrThrow(body.getFkTeste()));
-        teste.setIdTeste(body.getFkTeste());
+        Teste teste = testeservice.findByIdOrThrow(body.getFkTeste());
         estTeste.setFkTeste(teste);
 
         if (body.getQtdAtual() != null) estTeste.setQtdAtual(body.getQtdAtual());

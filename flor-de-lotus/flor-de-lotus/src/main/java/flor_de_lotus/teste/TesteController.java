@@ -55,7 +55,7 @@ public class TesteController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<TesteResponse> buscarPorId(@PathVariable Integer id){
-        return ResponseEntity.status(200).body(service.findByIdOrThrow(id));
+        return ResponseEntity.status(200).body(service.findByIdOrThrowResponse(id));
     }
 
     @Operation(summary = "Buscar todos os testes cadastrado no Sistema")

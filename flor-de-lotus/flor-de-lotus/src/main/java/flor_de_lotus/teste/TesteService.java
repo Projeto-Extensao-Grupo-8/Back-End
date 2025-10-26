@@ -30,7 +30,7 @@ public class TesteService {
         return  testeResponse;
     }
 
-    public TesteResponse findByIdOrThrow(Integer id){
+    public TesteResponse findByIdOrThrowResponse(Integer id){
         Optional<Teste> testeOpt = repository.findById(id);
         if (testeOpt.isEmpty()){
             throw new EntidadeNaoEncontradoException("Teste não encontrado");
@@ -38,6 +38,15 @@ public class TesteService {
         Teste teste =  testeOpt.get();
         TesteResponse testeResponse = TesteMapper.toResponse(teste);
         return  testeResponse;
+    }
+
+    public Teste findByIdOrThrow(Integer id){
+        Optional<Teste> testeOpt = repository.findById(id);
+        if (testeOpt.isEmpty()){
+            throw new EntidadeNaoEncontradoException("Teste não encontrado");
+        }
+        Teste teste =  testeOpt.get();
+        return  teste;
     }
 
     public void deletarPorId(Integer id){

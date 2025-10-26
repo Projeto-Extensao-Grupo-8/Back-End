@@ -36,7 +36,7 @@ public class EstoqueTesteController {
         return ResponseEntity.status(201).body(service.cadastrar(body));
     }
 
-    @Operation(summary = "Atualizar novas entradas de testes no sistema")
+    @Operation(summary = "Atualizar testes no sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Estoque Atualizado com sucesso", content = {
                     @Content(schema = @Schema(implementation = TesteResponse.class))

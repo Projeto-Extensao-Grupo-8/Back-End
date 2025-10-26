@@ -100,7 +100,7 @@ public class ConsultaService {
         return ConsultaMapper.of(consultaAtualizada);
     }
 
-    public List<ConsultaResponseBody> listarPorPaciente(Integer idPaciente) {
+    public List<ConsultaResponseBody> listarPorPacienteResponse(Integer idPaciente) {
         Paciente paciente = pacienteService.buscarPorIdOuThrow(idPaciente);
         return repository.findAll().stream()
                 .filter(c -> c.getFkPaciente() != null && c.getFkPaciente().getIdPaciente().equals(paciente.getIdPaciente()))
@@ -108,12 +108,29 @@ public class ConsultaService {
                 .toList();
     }
 
-    public List<ConsultaResponseBody> listarPorFuncionario(Integer idFuncionario) {
+    public List<Consulta> listarPorPaciente(Integer idPaciente) {
+        Paciente paciente = pacienteService.buscarPorIdOuThrow(idPaciente);
+        return repository.findAll().stream()
+                .filter(c -> c.getFkPaciente() != null && c.getFkPaciente().getIdPaciente().equals(paciente.getIdPaciente()))
+                .toList();
+    }
+
+
+
+    public List<ConsultaResponseBody> listarPorFuncionarioResponse(Integer idFuncionario) {
         Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(idFuncionario);
         return repository.findAll().stream()
                 .filter(c -> c.getFkFuncionario() != null && c.getFkFuncionario().getIdFuncionario().equals(funcionario.getIdFuncionario()))
                 .map(ConsultaMapper::of)
                 .toList();
     }
+
+    public List<Consulta> listarPorFuncionario(Integer idFuncionario) {
+        Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(idFuncionario);
+        return repository.findAll().stream()
+                .filter(c -> c.getFkFuncionario() != null && c.getFkFuncionario().getIdFuncionario().equals(funcionario.getIdFuncionario()))
+                .toList();
+    }
+
 
 }
