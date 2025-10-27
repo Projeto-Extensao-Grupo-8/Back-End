@@ -15,13 +15,11 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 public class MovimentacaoEstoqueRequest {
-    @NotBlank
     @Positive
     @Schema(description = "Quantidade de unidades movidas ou usadas na consulta", example = "55")
     private Integer qtd;
     @Schema(description = "Descrição da movimentação", example = "Usada para avaliar novamente o paciente")
     private String descricao;
-    @NotBlank
     @ManyToOne
     @Schema(description = "Referência ao Teste Psicológico que foi movimentado.", example = "1")
     private Integer fkTeste;
