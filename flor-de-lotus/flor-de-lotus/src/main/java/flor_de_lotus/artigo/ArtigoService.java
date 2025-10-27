@@ -3,9 +3,12 @@ package flor_de_lotus.artigo;
 import flor_de_lotus.artigo.dto.ArtigoMapper;
 import flor_de_lotus.artigo.dto.ArtigoPostRequest;
 import flor_de_lotus.artigo.dto.ArtigoResponse;
+import flor_de_lotus.artigo.Event.ArtigoCreatedEvent;
 import flor_de_lotus.funcionario.Funcionario;
 import flor_de_lotus.funcionario.FuncionarioRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,7 @@ public class ArtigoService {
 
     private final ArtigoRepository artigoRepository;
     private final FuncionarioRepository funcionarioRepository;
+    private final ApplicationEventPublisher publisher;
 
     public List<ArtigoResponse> pesquisar(String termo) {
         if (termo == null || termo.trim().isEmpty()) {
@@ -25,14 +29,18 @@ public class ArtigoService {
         return ArtigoMapper.toResponseList(artigoRepository.pesquisar(termo));
     }
 
+    @Transactional
     public ArtigoResponse cadastrar(ArtigoPostRequest dto) {
         Funcionario autor = funcionarioRepository.findById(dto.getIdFuncionario())
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
-        Artigo artigo = ArtigoMapper.toEntity(dto);
 
+        Artigo artigo = ArtigoMapper.toEntity(dto);
         artigo.setFkFuncionario(autor);
 
         Artigo salvo = artigoRepository.save(artigo);
+
+        publisher.publishEvent(new ArtigoCreatedEvent(salvo));
+
         return ArtigoMapper.toResponse(salvo);
     }
 
