@@ -25,7 +25,7 @@ public class UsuarioPostRequestBody {
     private String telefone;
 
     @CPF(message = "CPF inválido")
-    @Schema(description = "CPF do usuário", example = "04531164438")
+    @Schema(description = "CPF do usuário", example = "23087793060")
     private String cpf;
 
     @Schema(description = "Senha do usuário para cadastro, deve conter ao menos 8 caracteres e no máximo 32, 2 letras maiúsculas e uma minúscula, 1 dígito e apenas letras e números", example = "P4sSwOrdExAmPl3")

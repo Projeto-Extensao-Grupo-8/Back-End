@@ -26,7 +26,7 @@ public class UsuarioReplaceRequestBody {
     @Schema(description = "Número do usuário", example = "119xxxxxxxx")
     private String telefone;
 
-    @Schema(description = "CPF do usuário", example = "04531164438")
+    @Schema(description = "CPF do usuário", example = "23087793060")
     @CPF(message = "CPF inválido")
     private String cpf;
 

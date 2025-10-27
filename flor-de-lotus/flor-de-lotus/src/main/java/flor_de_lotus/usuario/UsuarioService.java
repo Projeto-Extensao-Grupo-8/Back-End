@@ -110,7 +110,19 @@ public class UsuarioService {
 
     }
 
-    public Usuario buscarPorIdOuThrow(Integer id){
+    public UsuarioResponseBody buscarPorIdOuThrow(Integer id){
+        Optional<Usuario> userOpt = repository.findById(id);
+        if (userOpt.isEmpty()){
+            throw new EntidadeNaoEncontradoException("Usuário não encontrado");
+        }
+
+        UsuarioResponseBody usuario = UsuarioMapper.of(userOpt.get());
+
+        return usuario;
+
+    }
+
+    public Usuario buscarEntidadePorIdOuThrow(Integer id){
         Optional<Usuario> userOpt = repository.findById(id);
         if (userOpt.isEmpty()){
             throw new EntidadeNaoEncontradoException("Usuário não encontrado");
@@ -121,17 +133,19 @@ public class UsuarioService {
     }
 
     public void deletePorId(Integer id){
-        repository.delete(buscarPorIdOuThrow(id));
+        repository.delete(buscarEntidadePorIdOuThrow(id));
     }
 
-    public Usuario atulizarParcial(Integer id, UsuarioReplaceRequestBody body){
-        Usuario usuario = buscarPorIdOuThrow(id);
+    public UsuarioResponseBody atulizarParcial(Integer id, UsuarioReplaceRequestBody body){
+        Usuario usuario = buscarEntidadePorIdOuThrow(id);
         if (body.getEmail() != null) checarDuplicidade(body.getEmail(), null);usuario.setEmail(body.getEmail());
         if (body.getNome() != null) usuario.setNome(body.getNome());
         if (body.getSenha() != null) checarRegrasSenha(body.getSenha()); usuario.setSenha(body.getSenha());
         if (body.getTelefone() != null) usuario.setTelefone(body.getTelefone());
 
-        return repository.save(usuario);
+        UsuarioResponseBody usuarioAtualizado = UsuarioMapper.of(repository.save(usuario));
+
+        return usuarioAtualizado;
 
     }
 

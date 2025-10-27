@@ -20,7 +20,7 @@ public class PacienteService {
     private final UsuarioService usuarioService;
 
     public PacienteResponseBody cadastrar(PacientePostRequestBody dto) {
-        Usuario usuario = usuarioService.buscarPorIdOuThrow(dto.getFkUsuario());
+        Usuario usuario = usuarioService.buscarEntidadePorIdOuThrow(dto.getFkUsuario());
         Paciente paciente = PacienteMapper.of(dto, usuario);
         Paciente salvo = repository.save(paciente);
         return PacienteMapper.of(salvo);
@@ -41,7 +41,7 @@ public class PacienteService {
     public PacienteResponseBody atualizarParcial(Integer id, PacientePostRequestBody dto) {
         Paciente paciente = buscarPorIdOuThrow(id);
         if (dto.getFkUsuario() != null) {
-            Usuario usuario = usuarioService.buscarPorIdOuThrow(dto.getFkUsuario());
+            Usuario usuario = usuarioService.buscarEntidadePorIdOuThrow(dto.getFkUsuario());
             paciente.setFkUsuario(usuario);
         }
         Paciente atualizado = repository.save(paciente);

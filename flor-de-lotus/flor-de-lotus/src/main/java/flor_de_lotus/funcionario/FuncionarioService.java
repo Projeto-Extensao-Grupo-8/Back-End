@@ -20,7 +20,7 @@ public class FuncionarioService {
     private final UsuarioService usuarioService;
 
     public Funcionario cadastrar(FuncionarioPostRequestBody dto){
-        Usuario usuario = usuarioService.buscarPorIdOuThrow(dto.getFkUsuario());
+        Usuario usuario = usuarioService.buscarEntidadePorIdOuThrow(dto.getFkUsuario());
         if (repository.existsByCrp(dto.getCrp())){
             throw new EntidadeConflitoException("Conflito no campo CRP");
         }
