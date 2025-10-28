@@ -21,8 +21,10 @@ public class Consulta {
     private Double valorConsulta;
     private String especialidade;
     @ManyToOne
+    @JoinColumn(name = "fk_funcionario_id")
     private Funcionario fkFuncionario;
     @ManyToOne
+    @JoinColumn(name = "fk_paciente_id")
     private Paciente fkPaciente;
 
 }
