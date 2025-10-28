@@ -49,7 +49,6 @@ public class AgendamentoController {
         if (lista.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(lista);
     }
-
     @Operation(summary = "Listar agendamentos de um funcionário")
     @GetMapping("/funcionario/{idFuncionario}")
     public ResponseEntity<List<AgendamentoResponse>> listarPorFuncionario(@PathVariable Integer idFuncionario) {
