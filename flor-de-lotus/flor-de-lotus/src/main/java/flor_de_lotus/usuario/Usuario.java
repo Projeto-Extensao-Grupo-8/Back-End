@@ -33,6 +33,9 @@ public class Usuario {
     @Schema(description = "CPF do usuário", example = "04531164438")
     private String cpf;
 
+    @Schema(description = "O usuário aceita ou não receber informações do newsletter", example = "true")
+    private Boolean newsletter;
+
     @Schema(description = "Senha do usuário para cadastro, deve conter ao menos 8 caracteres e no máximo 32, 2 letras maiúsculas e uma minúscula, 1 dígito e apenas letras e números", example = "P4sSwOrdExAmPl3")
     private String senha;
 

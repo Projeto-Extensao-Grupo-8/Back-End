@@ -31,6 +31,9 @@ public class UsuarioPostRequestBody {
     @Schema(description = "Senha do usuário para cadastro, deve conter ao menos 8 caracteres e no máximo 32, 2 letras maiúsculas e uma minúscula, 1 dígito e apenas letras e números", example = "P4sSwOrdExAmPl3")
     private String senha;
 
+    @Schema(description = "O usuário aceita ou não receber informações do newsletter", example = "true")
+    private Boolean newsletter;
+
     @Size(min = 8, max = 8)
     @Schema(description = "CEP do usuário", example = "01414001")
     private String cep;

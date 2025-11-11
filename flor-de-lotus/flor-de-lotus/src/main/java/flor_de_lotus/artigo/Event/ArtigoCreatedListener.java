@@ -43,20 +43,24 @@ public class ArtigoCreatedListener {
 
         for (Usuario u : usuarios) {
             if (u == null) continue;
-            String email = u.getEmail();
-            if (email == null || email.isBlank()) {
-                log.debug("Usuário {} sem e-mail — pulando", u.getIdUsuario());
-                continue;
+
+            if (u.getNewsletter().booleanValue() == true) {
+                String email = u.getEmail();
+                if (email == null || email.isBlank()) {
+                    log.debug("Usuário {} sem e-mail — pulando", u.getIdUsuario());
+                    continue;
+                }
+
+                String corpo = buildCorpoEmail(u, artigo);
+
+                try {
+                    emailService.enviarEmailSimples(email, assunto, corpo);
+                    log.debug("E-mail enviado para {}", email);
+                } catch (Exception ex) {
+                    log.error("Falha ao enviar e-mail para {}: {}", email, ex.getMessage(), ex);
+                }
             }
 
-            String corpo = buildCorpoEmail(u, artigo);
-
-            try {
-                emailService.enviarEmailSimples(email, assunto, corpo);
-                log.debug("E-mail enviado para {}", email);
-            } catch (Exception ex) {
-                log.error("Falha ao enviar e-mail para {}: {}", email, ex.getMessage(), ex);
-            }
         }
 
         log.info("Processo de notificação finalizado para artigo id={}", artigo.getIdArtigo());

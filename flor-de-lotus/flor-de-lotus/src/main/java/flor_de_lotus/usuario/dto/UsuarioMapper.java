@@ -15,6 +15,7 @@ public class UsuarioMapper {
         entinty.setTelefone(dto.getTelefone());
         entinty.setSenha(dto.getSenha());
         entinty.setFkEndereco(endereco);
+        entinty.setNewsletter(dto.getNewsletter());
 
         return entinty;
 

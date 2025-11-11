@@ -10,11 +10,11 @@ VALUES
 -- ======================================
 -- TABELA: USUARIO
 -- ======================================
-INSERT INTO usuario (nome, email, telefone, cpf, senha, nivel_permissao, fk_endereco_id)
+INSERT INTO usuario (nome, email, newsletter, telefone, cpf, senha, nivel_permissao, fk_endereco_id)
 VALUES
-    ( 'Luíza Oliveira', 'luiza@oliveira.com', '11988887777', '38187355816', '$2a$10$wG.iHUxik1kGmMkce3tLwe0NoAwiu/p2KzW48ioLX8iYLeQ1iFjYC', '1', 1),
-    ( 'Carlos Almeida', 'carlos@almeida.com', '11999998888', '81663390800', '$2a$10$akQHCSovr2q5kSrrRZktte4LkJYFQCaK86XzRfdwX0Byc6So/HamS', '2', 2),
-    ( 'Marina Souza', 'marina@souza.com', '11977776666', '50010994807', '$2a$10$72vJ8sN0PpXtRrWZ9R5u5edD9Sg9jJvPpfVg3owcCwZf5X5Kj2a9C', '1', 3);
+    ( 'Luíza Oliveira', 'robert.souza@sptech.school', true, '11988887777', '38187355816', '$2a$10$wG.iHUxik1kGmMkce3tLwe0NoAwiu/p2KzW48ioLX8iYLeQ1iFjYC', '1', 1),
+    ( 'Carlos Almeida', 'gabriel.iwakura@sptech.school', false, '11999998888', '81663390800', '$2a$10$akQHCSovr2q5kSrrRZktte4LkJYFQCaK86XzRfdwX0Byc6So/HamS', '2', 2),
+    ( 'Marina Souza', 'maria.guilherme@sptech.school', true,'11977776666', '50010994807', '$2a$10$72vJ8sN0PpXtRrWZ9R5u5edD9Sg9jJvPpfVg3owcCwZf5X5Kj2a9C', '1', 3);
 
 -- ======================================
 -- TABELA: PACIENTE
