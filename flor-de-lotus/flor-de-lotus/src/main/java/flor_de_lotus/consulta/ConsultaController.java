@@ -35,7 +35,14 @@ public class ConsultaController {
     })
     @PostMapping
     public ResponseEntity<ConsultaResponseBody> cadastrar(@RequestBody @Valid ConsultaPostRequestBody body) {
-        return ResponseEntity.status(201).body(service.cadastrar(body));
+
+        Consulta consulta = ConsultaMapper.of(body);
+
+        Consulta cadastrada = service.cadastrar(consulta, body.getFkPaciente(), body.getFkFuncionario());
+
+        ConsultaResponseBody response = ConsultaMapper.of(cadastrada);
+
+        return ResponseEntity.status(201).body(response);
     }
 
     @Operation(summary = "Listar todas as consultas cadastradas no sistema")
@@ -45,7 +52,7 @@ public class ConsultaController {
     })
     @GetMapping
     public ResponseEntity<List<ConsultaResponseBody>> listarTodas() {
-        List<ConsultaResponseBody> lista = service.listarTodas();
+        List<ConsultaResponseBody> lista = service.listarTodas().stream().map(ConsultaMapper::of).toList();
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
@@ -88,7 +95,15 @@ public class ConsultaController {
     public ResponseEntity<ConsultaResponseBody> atualizarParcial(
             @PathVariable Integer id,
             @RequestBody @Valid ConsultaPostRequestBody body) {
-        return ResponseEntity.status(200).body(service.atualizarParcial(id, body));
+
+        Consulta atualizacao = ConsultaMapper.of(body);
+
+        Consulta consultaAtualizada = service.atualizarParcial(id, atualizacao, body.getFkFuncionario(), body.getFkPaciente());
+
+        ConsultaResponseBody response = ConsultaMapper.of(consultaAtualizada);
+
+        return ResponseEntity.status(200).body(response);
+
     }
 
     @Operation(summary = "Listar consultas de um paciente específico")

@@ -1,10 +1,7 @@
 package flor_de_lotus.teste.movimentacaoTeste;
 
 import flor_de_lotus.teste.dto.TesteResponse;
-import flor_de_lotus.teste.movimentacaoTeste.dto.MoviEstoqueResponseGet;
-import flor_de_lotus.teste.movimentacaoTeste.dto.MoviEstoqueResponseGetFunc;
-import flor_de_lotus.teste.movimentacaoTeste.dto.MovimentacaoEstoqueRequest;
-import flor_de_lotus.teste.movimentacaoTeste.dto.MovimentacaoEstoqueResponse;
+import flor_de_lotus.teste.movimentacaoTeste.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,7 +30,13 @@ public class MovimentacaoEstoqueController {
     })
     @PostMapping
     public ResponseEntity<MovimentacaoEstoqueResponse> cadastrar(@RequestBody @Valid MovimentacaoEstoqueRequest body){
-        return ResponseEntity.status(201).body(service.cadastrar(body));
+
+        MovimentacaoEstoque estoqueSalvar = MovimentacaoEstoqueMapper.toEntity(body);
+
+        MovimentacaoEstoqueResponse moviEstoqueResponse = MovimentacaoEstoqueMapper.toResponse(service.cadastrar(estoqueSalvar, body.getFkTeste(), body.getFkConsulta()));
+
+        return ResponseEntity.status(201).body(moviEstoqueResponse);
+
     }
 
     @Operation(summary = "Buscar todos as movimentações de testes cadastrado no Sistema")
@@ -43,14 +46,18 @@ public class MovimentacaoEstoqueController {
     })
     @GetMapping
     public ResponseEntity<List<MovimentacaoEstoqueResponse>> listar(){
-        List<MovimentacaoEstoqueResponse> todos = service.listar();
+        List<MovimentacaoEstoque> todos = service.listar();
 
         if (todos.isEmpty()){
             return ResponseEntity.status(204).build();
         }
 
-        return ResponseEntity.status(200).body(todos);
+        List<MovimentacaoEstoqueResponse> moviEstoqueResponse = MovimentacaoEstoqueMapper.toResponseList(todos);
+
+        return ResponseEntity.status(200).body(moviEstoqueResponse);
+
     }
+
     @Operation(summary = "Buscar todos os testes cadastrado no Sistema de seu respectivo paciente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de Testes buscada com Sucesso"),
@@ -58,13 +65,17 @@ public class MovimentacaoEstoqueController {
     })
     @GetMapping("/{idPaciente}")
     public ResponseEntity<List<MoviEstoqueResponseGet>> listarPorPaciente(@PathVariable Integer idPaciente){
-        List<MoviEstoqueResponseGet> listaTeste = service.listarPorPaciente(idPaciente);
-        if (listaTeste.isEmpty()){
+
+        List<MoviEstoqueResponseGet> listaResponseGet = MovimentacaoEstoqueMapper.toResponseListGet(service.listarPorPaciente(idPaciente));
+
+        if (listaResponseGet.isEmpty()){
             return ResponseEntity.status(204).build();
         }
 
-        return ResponseEntity.status(200).body(listaTeste);
+        return ResponseEntity.status(200).body(listaResponseGet);
+
     }
+
     @Operation(summary = "Buscar todos os testes cadastrado no Sistema de seu respectivo funcionario")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de Testes buscada com Sucesso"),
@@ -72,12 +83,15 @@ public class MovimentacaoEstoqueController {
     })
     @GetMapping("buscarPorFunc/{idFuncionario}")
     public ResponseEntity<List<MoviEstoqueResponseGetFunc>> listarPorFuncionario(@PathVariable Integer idFuncionario){
-        List<MoviEstoqueResponseGetFunc> listaTeste = service.listarPorFuncionario(idFuncionario);
-        if (listaTeste.isEmpty()){
+
+        List<MoviEstoqueResponseGetFunc> listaResponseGet = MovimentacaoEstoqueMapper.toResponseListGetFunc(service.listarPorFuncionario(idFuncionario));
+
+        if (listaResponseGet.isEmpty()){
             return ResponseEntity.status(204).build();
         }
 
-        return ResponseEntity.status(200).body(listaTeste);
+        return ResponseEntity.status(200).body(listaResponseGet);
+
     }
 
     @Operation(summary = "Atualizar Movimentação estoque no sistema")
@@ -88,7 +102,12 @@ public class MovimentacaoEstoqueController {
     })
     @PatchMapping("/{idMovi}")
     public ResponseEntity<MovimentacaoEstoqueResponse> atualizarMovimentacao(@PathVariable Integer idMovi,@RequestBody @Valid MovimentacaoEstoqueRequest body){
-        return ResponseEntity.status(200).body(service.atualizarParcial(idMovi,body));
+
+        MovimentacaoEstoque entity = MovimentacaoEstoqueMapper.toEntity(body);
+
+        MovimentacaoEstoqueResponse response = MovimentacaoEstoqueMapper.toResponse(service.atualizarParcial(idMovi, entity, body.getFkConsulta(), body.getFkTeste()));
+
+        return ResponseEntity.status(200).body(response);
     }
 
 }

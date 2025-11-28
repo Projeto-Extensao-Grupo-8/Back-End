@@ -3,17 +3,12 @@ package flor_de_lotus.teste.estoqueTeste;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.teste.Teste;
 import flor_de_lotus.teste.TesteService;
-import flor_de_lotus.teste.dto.TesteMapper;
-import flor_de_lotus.teste.dto.TesteResponse;
 import flor_de_lotus.teste.estoqueTeste.dto.EstoqueTesteMapper;
-import flor_de_lotus.teste.estoqueTeste.dto.EstoqueTesteRequest;
 import flor_de_lotus.teste.estoqueTeste.dto.EstoqueTesteResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,22 +20,18 @@ public class EstoqueTesteService {
     private final EstoqueTesteRespository respository;
     private final TesteService testeservice;
 
-    public EstoqueTesteResponse cadastrar(@RequestBody @Valid EstoqueTesteRequest body){
-        Teste teste = testeservice.findByIdOrThrow(body.getFkTeste());
+    public EstoqueTeste cadastrar(@RequestBody @Valid EstoqueTeste entity, Integer idTeste){
+        Teste teste = testeservice.findByIdOrThrow(idTeste);
 
-        System.out.println(teste);
+        entity.setDtReferencia(LocalDate.now());
+        entity.setFkTeste(teste);
 
-        EstoqueTeste estoqueTeste = EstoqueTesteMapper.toEntity(body);
-        estoqueTeste.setDtReferencia(LocalDate.now());
-        estoqueTeste.setFkTeste(teste);
+        EstoqueTeste estoqueSalvo = respository.save(entity);
 
-        EstoqueTeste estoqueSalvo = respository.save(estoqueTeste);
-        EstoqueTesteResponse estoqueTesteResponse = EstoqueTesteMapper.toResponse(estoqueSalvo);
-
-        return estoqueTesteResponse;
+        return estoqueSalvo;
     }
 
-    public EstoqueTesteResponse findByIdOrThrow(Integer id){
+    public EstoqueTeste findByIdOrThrow(Integer id){
         Optional<EstoqueTeste> estoqueTesteOpt = respository.findById(id);
 
         if (estoqueTesteOpt.isEmpty()){
@@ -48,45 +39,38 @@ public class EstoqueTesteService {
         }
         EstoqueTeste estoqueTeste =  estoqueTesteOpt.get();
 
-        EstoqueTesteResponse estoqueTesteResponse = EstoqueTesteMapper.toResponse(estoqueTeste);
-        return  estoqueTesteResponse;
+        return  estoqueTeste;
     }
 
-    public EstoqueTesteResponse atualizarParcial(Integer id,EstoqueTesteRequest body){
-        EstoqueTesteResponse estoqueTesteResponse = findByIdOrThrow(id);
-        EstoqueTeste estTeste = EstoqueTesteMapper.toEntity(estoqueTesteResponse);
+    public EstoqueTeste atualizarParcial(Integer id,EstoqueTeste entity, Integer idTeste){
+        EstoqueTeste estoqueTeste = findByIdOrThrow(id);
 
-        Teste teste = testeservice.findByIdOrThrow(body.getFkTeste());
-        estTeste.setFkTeste(teste);
+        Teste teste = testeservice.findByIdOrThrow(idTeste);
+        estoqueTeste.setFkTeste(teste);
 
-        if (body.getQtdAtual() != null) estTeste.setQtdAtual(body.getQtdAtual());
-        respository.save(estTeste);
+        if (entity.getQtdAtual() != null) estoqueTeste.setQtdAtual(entity.getQtdAtual());
 
-        EstoqueTesteResponse estTesteResponse = EstoqueTesteMapper.toResponse(estTeste);
-        return  estTesteResponse;
+        return respository.save(estoqueTeste);
+
     }
 
     public void deletar(Integer id){
-       EstoqueTesteResponse encontrarEstoqueTeste = findByIdOrThrow(id);
-       EstoqueTeste estoqueTeste = EstoqueTesteMapper.toEntity(encontrarEstoqueTeste);
-        respository.delete(estoqueTeste);
+        respository.delete(findByIdOrThrow(id));
     }
 
 
-    public List<EstoqueTesteResponse> listarTodos (){
+    public List<EstoqueTeste> listarTodos (){
         List<EstoqueTeste>  todos =  respository.findAll();
-        List<EstoqueTesteResponse> todosResponse = EstoqueTesteMapper.toResponseList(todos);
 
-        return todosResponse;
+        return todos;
     }
 
-    public EstoqueTesteResponse buscarPorQtd(){
+    public EstoqueTeste buscarPorQtd(){
         Optional<EstoqueTeste> testeEncontrado =  respository.findTop1ByOrderByQtdAtualAsc();
 
         EstoqueTeste teste = testeEncontrado.get();
-        EstoqueTesteResponse testeResponse = EstoqueTesteMapper.toResponse(teste);
 
-        return testeResponse;
+        return teste;
     }
 
 }

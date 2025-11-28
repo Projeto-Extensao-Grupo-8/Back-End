@@ -1,8 +1,6 @@
-package flor_de_lotus.avaliacao.mapper;
+package flor_de_lotus.avaliacao.dto;
 
 import flor_de_lotus.avaliacao.Avaliacao;
-import flor_de_lotus.avaliacao.dto.AvaliacaoListResponse;
-import flor_de_lotus.avaliacao.dto.AvaliacaoRequest;
 import flor_de_lotus.consulta.Consulta;
 
 import java.util.List;
@@ -16,24 +14,32 @@ public class AvaliacaoMapper {
             return new Avaliacao(null, dto.getDescricao(), dto.getEstrelas(), entity);
         }
 
-        public static AvaliacaoListResponse toListagemDto(Avaliacao entity) {
+        public static Avaliacao toEntity(AvaliacaoRequest dto) {
+            if(dto == null) {
+                return null;
+            }
+
+            return new Avaliacao(null, dto.getDescricao(), dto.getEstrelas(), null);
+        }
+
+        public static AvaliacaoResponse toDto(Avaliacao entity) {
             if (entity == null) {
                 return null;
             }
 
-            return new AvaliacaoListResponse(
+            return new AvaliacaoResponse(
                     entity.getDescricao(),
                     entity.getEstrelas(),
                     entity.getFkConsulta());
         }
 
-        public static List<AvaliacaoListResponse> toListagemDtos(List<Avaliacao> entities) {
+        public static List<AvaliacaoResponse> toDto(List<Avaliacao> entities) {
             if (entities == null) {
                 return null;
             }
 
             return entities.stream()
-                    .map(flor_de_lotus.avaliacao.mapper.AvaliacaoMapper::toListagemDto)
+                    .map(AvaliacaoMapper::toDto)
                     .toList();
         }
 }

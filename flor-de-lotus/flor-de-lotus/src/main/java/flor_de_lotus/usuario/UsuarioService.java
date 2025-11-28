@@ -7,7 +7,6 @@ import flor_de_lotus.endereco.dto.EnderecoMapper;
 import flor_de_lotus.exception.BadRequestException;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
-import flor_de_lotus.exception.UnauthorizedException;
 import flor_de_lotus.endereco.EnderecoRepository;
 import flor_de_lotus.endereco.dto.EnderecoResponse;
 import flor_de_lotus.usuario.dto.*;
@@ -21,9 +20,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,21 +53,19 @@ public class UsuarioService {
         return enderecoRepository.save(endereco);
     }
 
-    public UsuarioResponseBody cadastrar(UsuarioPostRequestBody dto){
+    public Usuario cadastrar(Usuario entity, String cep, String numero, String complemento){
 
-        checarDuplicidade(dto.getEmail(), dto.getCpf());
-        checarRegrasSenha(dto.getSenha());
+        checarDuplicidade(entity.getEmail(), entity.getCpf());
+        checarRegrasSenha(entity.getSenha());
 
-        String senhaCriptografada = passwordEncoder.encode(dto.getSenha());
-        dto.setSenha(senhaCriptografada);
+        String senhaCriptografada = passwordEncoder.encode(entity.getSenha());
+        entity.setSenha(senhaCriptografada);
 
-        Endereco endereco = cadastrarEndereco(dto.getCep(), dto.getNumero(), dto.getComplemento());
+        Endereco endereco = cadastrarEndereco(cep, numero, complemento);
 
-        Usuario usuario = UsuarioMapper.of(dto, endereco);
+        entity.setFkEndereco(endereco);
 
-        UsuarioResponseBody usuarioResponseBody = UsuarioMapper.of(repository.save(usuario));
-
-        return usuarioResponseBody;
+        return repository.save(entity);
 
     }
 
@@ -110,15 +108,13 @@ public class UsuarioService {
 
     }
 
-    public UsuarioResponseBody buscarPorIdOuThrow(Integer id){
+    public Usuario buscarPorIdOuThrow(Integer id){
         Optional<Usuario> userOpt = repository.findById(id);
         if (userOpt.isEmpty()){
             throw new EntidadeNaoEncontradoException("Usuário não encontrado");
         }
 
-        UsuarioResponseBody usuario = UsuarioMapper.of(userOpt.get());
-
-        return usuario;
+        return userOpt.get();
 
     }
 
@@ -136,22 +132,20 @@ public class UsuarioService {
         repository.delete(buscarEntidadePorIdOuThrow(id));
     }
 
-    public UsuarioResponseBody atulizarParcial(Integer id, UsuarioReplaceRequestBody body){
+    public Usuario atulizarParcial(Integer id, Usuario entity){
         Usuario usuario = buscarEntidadePorIdOuThrow(id);
-        if (body.getEmail() != null) checarDuplicidade(body.getEmail(), null);usuario.setEmail(body.getEmail());
-        if (body.getNome() != null) usuario.setNome(body.getNome());
-        if (body.getSenha() != null) checarRegrasSenha(body.getSenha()); usuario.setSenha(body.getSenha());
-        if (body.getTelefone() != null) usuario.setTelefone(body.getTelefone());
+        if (entity.getEmail() != null) checarDuplicidade(entity.getEmail(), null);usuario.setEmail(entity.getEmail());
+        if (entity.getNome() != null) usuario.setNome(entity.getNome());
+        if (entity.getSenha() != null) checarRegrasSenha(entity.getSenha()); usuario.setSenha(entity.getSenha());
+        if (entity.getTelefone() != null) usuario.setTelefone(entity.getTelefone());
 
-        UsuarioResponseBody usuarioAtualizado = UsuarioMapper.of(repository.save(usuario));
-
-        return usuarioAtualizado;
+        return repository.save(usuario);
 
     }
 
-    public List<UsuarioResponseBody> listarTodos(){
+    public List<Usuario> listarTodos(){
         List<Usuario> usuariosEncontrados = repository.findAll();
-        return usuariosEncontrados.stream().map(UsuarioMapper::of).toList();
+        return usuariosEncontrados;
     }
 
 }

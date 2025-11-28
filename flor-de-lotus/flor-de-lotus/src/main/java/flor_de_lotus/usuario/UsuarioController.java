@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -50,7 +51,12 @@ public class UsuarioController {
             )
     })
     public ResponseEntity<UsuarioResponseBody> cadastrar(@RequestBody @Valid UsuarioPostRequestBody body){
-        return ResponseEntity.status(201).body(service.cadastrar(body));
+
+        Usuario usuario = UsuarioMapper.of(body);
+
+        UsuarioResponseBody response = UsuarioMapper.of(service.cadastrar(usuario, body.getCep(), body.getNumero(), body.getComplemento()));
+
+        return ResponseEntity.status(201).body(response);
     }
 
     @PostMapping("/login")
@@ -125,7 +131,12 @@ public class UsuarioController {
     })
     @PatchMapping("/{id}")
     public ResponseEntity<UsuarioResponseBody> atualizarParcial(@PathVariable Integer id,@RequestBody @Valid UsuarioReplaceRequestBody body){
-        return ResponseEntity.status(200).body(service.atulizarParcial(id,body));
+
+        Usuario usuario = UsuarioMapper.of(body);
+
+        UsuarioResponseBody response = UsuarioMapper.of(service.atulizarParcial(id,usuario));
+
+        return ResponseEntity.status(200).body(response);
     }
 
     @Operation(
@@ -152,7 +163,10 @@ public class UsuarioController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseBody> buscarUsuario(@PathVariable Integer id){
-        return ResponseEntity.status(200).body(service.buscarPorIdOuThrow(id));
+
+        UsuarioResponseBody response = UsuarioMapper.of(service.buscarPorIdOuThrow(id));
+
+        return ResponseEntity.status(200).body(response);
     }
 
     @Operation(
@@ -174,7 +188,10 @@ public class UsuarioController {
     @GetMapping
     public ResponseEntity<List<UsuarioResponseBody>> listarTodos(){
 
-        List<UsuarioResponseBody> lista = service.listarTodos();
+        List<UsuarioResponseBody> lista = service.listarTodos()
+                                                        .stream()
+                                                            .map(UsuarioMapper::of)
+                                                                .toList();
         return ResponseEntity.status(200).body(lista);
 
     }

@@ -18,6 +18,18 @@ public class ConsultaMapper {
         return entity;
     }
 
+    public static Consulta of(ConsultaPostRequestBody dto) {
+        Consulta entity = new Consulta();
+
+        entity.setDataConsulta(dto.getDataConsulta());
+        entity.setValorConsulta(dto.getValorConsulta());
+        entity.setEspecialidade(dto.getEspecialidade());
+        entity.setFkFuncionario(null);
+        entity.setFkPaciente(null);
+
+        return entity;
+    }
+
     public static ConsultaResponseBody of(Consulta consulta) {
         ConsultaResponseBody response = new ConsultaResponseBody();
 

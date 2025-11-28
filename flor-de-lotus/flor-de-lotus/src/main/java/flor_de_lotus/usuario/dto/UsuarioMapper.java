@@ -21,6 +21,48 @@ public class UsuarioMapper {
 
     }
 
+    public static Usuario of(UsuarioPostRequestBody dto) {
+
+        Usuario entinty = new Usuario();
+
+        entinty.setNome(dto.getNome());
+        entinty.setEmail(dto.getEmail());
+        entinty.setCpf(dto.getCpf());
+        entinty.setTelefone(dto.getTelefone());
+        entinty.setSenha(dto.getSenha());
+        entinty.setNewsletter(dto.getNewsletter());
+
+        return entinty;
+
+    }
+
+    public static Usuario of(UsuarioReplaceRequestBody dto) {
+
+        Usuario entinty = new Usuario();
+
+        entinty.setNome(dto.getNome());
+        entinty.setEmail(dto.getEmail());
+        entinty.setCpf(dto.getCpf());
+        entinty.setTelefone(dto.getTelefone());
+        entinty.setSenha(dto.getSenha());
+        entinty.setFkEndereco(dto.getFkEndereco());
+        entinty.setNewsletter(dto.getNewsletter());
+
+        return entinty;
+
+    }
+
+    public static Usuario of(UsuarioLoginRequestBody dto) {
+
+        Usuario entinty = new Usuario();
+
+        entinty.setEmail(dto.getEmail());
+        entinty.setSenha(dto.getSenha());
+
+        return entinty;
+
+    }
+
     public static UsuarioResponseBody of(Usuario usuario) {
 
         UsuarioResponseBody usuarioResponseBody = new UsuarioResponseBody();

@@ -3,11 +3,9 @@ package flor_de_lotus.teste;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.teste.dto.TesteMapper;
-import flor_de_lotus.teste.dto.TestePostRequest;
 import flor_de_lotus.teste.dto.TesteResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,24 +18,23 @@ import java.util.Optional;
 public class TesteService {
     public final TesteRepository repository;
 
-    public TesteResponse cadastrar(TestePostRequest dto){
-        if (repository.existsByCodigo(dto.getCodigo())){
+    public Teste cadastrar(Teste entity){
+        if (repository.existsByCodigo(entity.getCodigo())){
             throw new EntidadeConflitoException("Teste já cadastrado");
         }
-        Teste teste = TesteMapper.toEntity(dto);
-        Teste cadastrado = repository.save(teste);
-        TesteResponse testeResponse = TesteMapper.toResponse(cadastrado);
-        return  testeResponse;
+        Teste cadastrado = repository.save(entity);
+
+        return cadastrado;
+
     }
 
-    public TesteResponse findByIdOrThrowResponse(Integer id){
+    public Teste findByIdOrThrowResponse(Integer id){
         Optional<Teste> testeOpt = repository.findById(id);
         if (testeOpt.isEmpty()){
             throw new EntidadeNaoEncontradoException("Teste não encontrado");
         }
         Teste teste =  testeOpt.get();
-        TesteResponse testeResponse = TesteMapper.toResponse(teste);
-        return  testeResponse;
+        return teste;
     }
 
     public Teste findByIdOrThrow(Integer id){
@@ -56,38 +53,35 @@ public class TesteService {
 
     }
 
-    public List<TesteResponse> listarTodos(){
+    public List<Teste> listarTodos(){
         List<Teste> testesLista = repository.findAll();
-        List<TesteResponse> listaResponse = TesteMapper.toResponseList(testesLista);
-        return listaResponse;
+        return testesLista;
     }
 
-    public List<TesteResponse> listarPorCategoria(String categoria){
+    public List<Teste> listarPorCategoria(String categoria){
         List<Teste> lista = repository.findByCategoria(categoria);
-        List<TesteResponse> listaResponse= TesteMapper.toResponseList(lista);
-        return listaResponse;
+        return lista;
     }
 
-    public List<TesteResponse> listarPorTipo(String tipo){
+    public List<Teste> listarPorTipo(String tipo){
         List<Teste> lista = repository.findByTipo(tipo);
-
-        List<TesteResponse> listaResponse = TesteMapper.toResponseList(lista);
-        return listaResponse ;
+        return lista;
     }
 
-    public TesteResponse buscarPorValidade(){
+    public Teste buscarPorValidade(){
       Optional<Teste> testeOpt = repository.findTop1ByValidadeAfterOrderByValidadeAsc(LocalDate.now());
 
         Teste teste = testeOpt.get();
-        TesteResponse testeResponse = TesteMapper.toResponse(teste);
 
-        return testeResponse;
+        return teste;
     }
 
+    public Teste buscarPorValidade(LocalDate dataPersonalizada){
+        Optional<Teste> testeOpt = repository.findTop1ByValidadeAfterOrderByValidadeAsc(dataPersonalizada);
 
+        Teste teste = testeOpt.get();
 
-
-
-
+        return teste;
+    }
 
 }

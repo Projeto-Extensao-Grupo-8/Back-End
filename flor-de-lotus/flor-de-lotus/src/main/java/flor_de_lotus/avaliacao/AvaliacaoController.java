@@ -1,6 +1,8 @@
 package flor_de_lotus.avaliacao;
 
 import flor_de_lotus.avaliacao.dto.AvaliacaoRequest;
+import flor_de_lotus.avaliacao.dto.AvaliacaoResponse;
+import flor_de_lotus.avaliacao.dto.AvaliacaoMapper;
 import flor_de_lotus.funcionario.Funcionario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,8 +30,15 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)
     })
     @PostMapping
-    public ResponseEntity<Avaliacao> cadastrar(@RequestBody @Valid AvaliacaoRequest body){
-        return ResponseEntity.status(201).body(service.cadastrar(body));
+    public ResponseEntity<AvaliacaoResponse> cadastrar(@RequestBody @Valid AvaliacaoRequest body){
+
+        Avaliacao avaliacao = AvaliacaoMapper.toEntity(body);
+
+        Avaliacao avaliacaoCadastrada = service.cadastrar(avaliacao, body.getFkConsulta());
+
+        AvaliacaoResponse response = AvaliacaoMapper.toDto(avaliacaoCadastrada);
+
+        return ResponseEntity.status(201).body(response);
     }
 
     @Operation(summary = "Listar todos as avaliações", description = "Retorna uma lista de todas as avaliações registradas.")
@@ -39,12 +48,16 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "204", description = "Nenhuma avaliação encontrada", content = @Content)
     })
     @GetMapping
-    public ResponseEntity<List<Avaliacao>> listarTodos(){
+    public ResponseEntity<List<AvaliacaoResponse>> listarTodos(){
         List<Avaliacao> listaTodos = service.listarTodos();
+
         if (listaTodos.isEmpty()){
             return ResponseEntity.status(204).build();
         }
-        return ResponseEntity.status(200).body(listaTodos);
+
+        List<AvaliacaoResponse> response = AvaliacaoMapper.toDto(listaTodos);
+
+        return ResponseEntity.status(200).body(response);
     }
 
 }

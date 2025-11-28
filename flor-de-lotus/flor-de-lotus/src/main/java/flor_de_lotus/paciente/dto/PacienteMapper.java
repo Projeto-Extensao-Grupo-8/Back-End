@@ -12,6 +12,12 @@ public class PacienteMapper {
         return paciente;
     }
 
+    public static Paciente of(PacientePostRequestBody dto) {
+        Paciente paciente = new Paciente();
+        paciente.setAtivo('S');
+        return paciente;
+    }
+
     public static PacienteResponseBody of(Paciente paciente) {
         PacienteResponseBody response = new PacienteResponseBody();
         response.setIdPaciente(paciente.getIdPaciente());

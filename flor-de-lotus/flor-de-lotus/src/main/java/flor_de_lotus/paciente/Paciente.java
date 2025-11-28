@@ -31,4 +31,5 @@ public class Paciente {
     public Integer getIdUsuario() {
         return fkUsuario != null ? fkUsuario.getIdUsuario() : null;
     }
+
 }

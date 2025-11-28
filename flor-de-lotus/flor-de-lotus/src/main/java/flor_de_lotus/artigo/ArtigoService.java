@@ -1,7 +1,6 @@
 package flor_de_lotus.artigo;
 
 import flor_de_lotus.artigo.dto.ArtigoMapper;
-import flor_de_lotus.artigo.dto.ArtigoPostRequest;
 import flor_de_lotus.artigo.dto.ArtigoResponse;
 import flor_de_lotus.artigo.Event.ArtigoCreatedEvent;
 import flor_de_lotus.funcionario.Funcionario;
@@ -22,49 +21,48 @@ public class ArtigoService {
     private final FuncionarioRepository funcionarioRepository;
     private final ApplicationEventPublisher publisher;
 
-    public List<ArtigoResponse> pesquisar(String termo) {
+    public List<Artigo> pesquisar(String termo) {
         if (termo == null || termo.trim().isEmpty()) {
-            return ArtigoMapper.toResponseList(artigoRepository.findAll());
+            return artigoRepository.findAll();
         }
-        return ArtigoMapper.toResponseList(artigoRepository.pesquisar(termo));
+        return artigoRepository.pesquisar(termo);
     }
 
     @Transactional
-    public ArtigoResponse cadastrar(ArtigoPostRequest dto) {
-        Funcionario autor = funcionarioRepository.findById(dto.getIdFuncionario())
+    public Artigo cadastrar(Artigo entity, Integer idFunc) {
+        Funcionario autor = funcionarioRepository.findById(idFunc)
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
-        Artigo artigo = ArtigoMapper.toEntity(dto);
-        artigo.setFkFuncionario(autor);
+        entity.setFkFuncionario(autor);
 
-        Artigo salvo = artigoRepository.save(artigo);
+        Artigo salvo = artigoRepository.save(entity);
 
         publisher.publishEvent(new ArtigoCreatedEvent(salvo));
 
-        return ArtigoMapper.toResponse(salvo);
+        return salvo;
     }
 
-    public List<ArtigoResponse> listarTodos() {
-        return ArtigoMapper.toResponseList(artigoRepository.findAll());
+    public List<Artigo> listarTodos() {
+        return artigoRepository.findAll();
     }
 
-    public Optional<ArtigoResponse> buscarPorId(Integer id) {
-        return artigoRepository.findById(id).map(ArtigoMapper::toResponse);
+    public Optional<Artigo> buscarPorId(Integer id) {
+        return artigoRepository.findById(id);
     }
 
-    public Optional<ArtigoResponse> atualizar(Integer id, ArtigoPostRequest dto) {
-        Funcionario autor = funcionarioRepository.findById(dto.getIdFuncionario())
+    public Optional<Artigo> atualizar(Integer id, Artigo entity, Integer idFunc) {
+        Funcionario autor = funcionarioRepository.findById(idFunc)
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
         return artigoRepository.findById(id)
                 .map(existing -> {
-                    existing.setTitulo(dto.getTitulo());
-                    existing.setDescricao(dto.getDescricao());
-                    existing.setDtPublicacao(dto.getDtPublicacao());
+                    existing.setTitulo(entity.getTitulo());
+                    existing.setDescricao(entity.getDescricao());
+                    existing.setDtPublicacao(entity.getDtPublicacao());
                     existing.setFkFuncionario(autor);
 
                     Artigo salvo = artigoRepository.save(existing);
-                    return ArtigoMapper.toResponse(salvo);
+                    return salvo;
                 });
     }
 

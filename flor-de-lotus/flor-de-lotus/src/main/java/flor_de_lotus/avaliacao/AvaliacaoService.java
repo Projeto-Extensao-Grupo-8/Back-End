@@ -1,7 +1,6 @@
 package flor_de_lotus.avaliacao;
 
-import flor_de_lotus.avaliacao.dto.AvaliacaoRequest;
-import flor_de_lotus.avaliacao.mapper.AvaliacaoMapper;
+import flor_de_lotus.avaliacao.dto.AvaliacaoMapper;
 import flor_de_lotus.consulta.Consulta;
 import flor_de_lotus.consulta.ConsultaService;
 import flor_de_lotus.exception.EntidadeConflitoException;
@@ -19,15 +18,15 @@ public class AvaliacaoService {
     private final AvaliacaoRepository repository;
     private final ConsultaService consultaService;
 
-    public Avaliacao cadastrar(AvaliacaoRequest dto){
-        Consulta consulta = consultaService.buscarPorIdOuThrow(dto.getFkConsulta());
-        if (repository.existsById(dto.getFkConsulta())){
+    public Avaliacao cadastrar(Avaliacao entity, Integer idConsulta){
+        Consulta consulta = consultaService.buscarPorIdOuThrow(idConsulta);
+        if (repository.existsById(idConsulta)){
             throw new EntidadeConflitoException("Conflito no campo consulta");
         }
 
-        Avaliacao avaliacao = AvaliacaoMapper.toEntity(dto, consulta);
+        entity.setFkConsulta(consulta);
 
-        return repository.save(avaliacao);
+        return repository.save(entity);
     }
 
     public List<Avaliacao> listarTodos(){

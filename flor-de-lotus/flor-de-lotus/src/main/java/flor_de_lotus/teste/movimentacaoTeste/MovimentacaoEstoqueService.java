@@ -20,25 +20,21 @@ public class MovimentacaoEstoqueService {
     private final TesteService testeService;
     private final ConsultaService consultaService;
 
+    public MovimentacaoEstoque cadastrar(MovimentacaoEstoque entity, Integer idTeste, Integer idConsulta){
+        Teste teste = testeService.findByIdOrThrow(idTeste);
+        Consulta consulta = consultaService.buscarPorIdOuThrow(idConsulta);
 
+        entity.setConsulta(consulta);
+        entity.setTeste(teste);
+        entity.setDataMovimentacao(consulta.getDataConsulta());
 
-    public MovimentacaoEstoqueResponse cadastrar(MovimentacaoEstoqueRequest dto){
-        Teste teste = testeService.findByIdOrThrow(dto.getFkTeste());
-        Consulta consulta = consultaService.buscarPorIdOuThrow(dto.getFkConsulta());
-        MovimentacaoEstoque moviEstoque = MovimentacaoEstoqueMapper.toEntity(dto, teste, consulta);
-        repository.save(moviEstoque);
-
-        MovimentacaoEstoqueResponse moviEstoqueResponse = MovimentacaoEstoqueMapper.toResponse(moviEstoque);
-
-        return moviEstoqueResponse;
+        return repository.save(entity);
 
     }
 
-    public List<MovimentacaoEstoqueResponse> listar(){
+    public List<MovimentacaoEstoque> listar(){
         List<MovimentacaoEstoque> listaTodos = repository.findAll();
-        List<MovimentacaoEstoqueResponse> moviEstoqueResponse = MovimentacaoEstoqueMapper.toResponseList(listaTodos);
-
-        return moviEstoqueResponse;
+        return listaTodos;
     }
 
     public MovimentacaoEstoque buscarPorIdOuThrow(Integer id) {
@@ -49,53 +45,49 @@ public class MovimentacaoEstoqueService {
         return MoviEstoqueOpt.get();
     }
 
-
-    public List<MoviEstoqueResponseGet> listarPorPaciente(Integer idPaciente) {
+    public List<MovimentacaoEstoque> listarPorPaciente(Integer idPaciente) {
         List<Consulta> listaConsulta = consultaService.listarPorPaciente(idPaciente);
-        List<MoviEstoqueResponseGet> movimentacoes = new ArrayList<>();
+        List<MovimentacaoEstoque> movimentacoes = new ArrayList<>();
 
         for (Consulta c:listaConsulta){
             List<MovimentacaoEstoque> moviConsult = repository.findAllByConsultaIdConsulta(c.getIdConsulta());
-            List<MoviEstoqueResponseGet> listaResponseGet = MovimentacaoEstoqueMapper.toResponseListGet(moviConsult);
-
-            movimentacoes.addAll(listaResponseGet);
+            movimentacoes.addAll(moviConsult);
         }
 
         return movimentacoes;
+
     }
 
-    public List<MoviEstoqueResponseGetFunc> listarPorFuncionario(Integer idFuncionario) {
+    public List<MovimentacaoEstoque> listarPorFuncionario(Integer idFuncionario) {
         List<Consulta> listaConsulta = consultaService.listarPorFuncionario(idFuncionario);
-        List<MoviEstoqueResponseGetFunc> movimentacoes = new ArrayList<>();
+        List<MovimentacaoEstoque> movimentacoes = new ArrayList<>();
 
         for (Consulta c:listaConsulta){
             List<MovimentacaoEstoque> moviConsult = repository.findAllByConsultaIdConsulta(c.getIdConsulta());
-            List<MoviEstoqueResponseGetFunc> listaResponseGet = MovimentacaoEstoqueMapper.toResponseListGetFunc(moviConsult);
 
-            movimentacoes.addAll(listaResponseGet);
+            movimentacoes.addAll(moviConsult);
         }
 
         return movimentacoes;
     }
 
-    public MovimentacaoEstoqueResponse atualizarParcial(Integer idMovi, MovimentacaoEstoqueRequest dto) {
+    public MovimentacaoEstoque atualizarParcial(Integer idMovi, MovimentacaoEstoque entity, Integer idConsulta, Integer idTeste) {
         MovimentacaoEstoque movimentacaoEstoque = buscarPorIdOuThrow(idMovi);
-        if (dto.getFkTeste() != null){
-            Teste fkTeste = testeService.findByIdOrThrow(dto.getFkTeste());
+        if (idTeste != null){
+            Teste fkTeste = testeService.findByIdOrThrow(idTeste);
             movimentacaoEstoque.setTeste(fkTeste);
         }
 
-        if (dto.getFkConsulta() != null){
-            Consulta fkConsulta = consultaService.buscarPorIdOuThrow(dto.getFkConsulta());
+        if (idConsulta != null){
+            Consulta fkConsulta = consultaService.buscarPorIdOuThrow(idConsulta);
             movimentacaoEstoque.setConsulta(fkConsulta);
         }
 
-        if(dto.getQtd() != null) movimentacaoEstoque.setQtd(dto.getQtd());
-        if(dto.getDescricao() != null) movimentacaoEstoque.setDescricao(dto.getDescricao());
+        if(entity.getQtd() != null) movimentacaoEstoque.setQtd(entity.getQtd());
+        if(entity.getDescricao() != null) movimentacaoEstoque.setDescricao(entity.getDescricao());
 
-        repository.save(movimentacaoEstoque);
-
-        return MovimentacaoEstoqueMapper.toResponse(movimentacaoEstoque);
+        return repository.save(movimentacaoEstoque);
 
     }
+
 }

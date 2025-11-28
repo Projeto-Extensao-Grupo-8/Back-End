@@ -19,15 +19,16 @@ public class AgendamentoService {
     private final AgendamentoRepository repository;
     private final FuncionarioRepository funcionarioRepository;
 
-    public AgendamentoResponse publicar(AgendamentoPostRequest dto) {
-        Funcionario funcionario = funcionarioRepository.findById(dto.getIdFuncionario())
+    public Agendamento publicar(Agendamento entity, Integer idFunc) {
+        Funcionario funcionario = funcionarioRepository.findById(idFunc)
                 .orElseThrow(() -> new EntidadeNaoEncontradoException("Funcionário não encontrado"));
 
         // Verifica sobreposição de horários
-        validarDisponibilidade(funcionario.getIdFuncionario(), dto.getInicioTempo(), dto.getFinalTempo(), dto.getDataDia());
+        validarDisponibilidade(funcionario.getIdFuncionario(), entity.getInicioTempo(), entity.getFinalTempo(), entity.getDataDia());
 
-        Agendamento agendamento = AgendamentoMapper.of(dto, funcionario);
-        return AgendamentoMapper.of(repository.save(agendamento));
+        entity.setFkFuncionario(funcionario);
+
+        return repository.save(entity);
     }
 
     private void validarDisponibilidade(Integer idFuncionario, LocalTime inicio, LocalTime fim, java.time.LocalDate dataDia) {
@@ -46,12 +47,12 @@ public class AgendamentoService {
         repository.delete(agendamento);
     }
 
-    public List<AgendamentoResponse> listarTodos() {
-        return repository.findAll().stream().map(AgendamentoMapper::of).collect(Collectors.toList());
+    public List<Agendamento> listarTodos() {
+        return repository.findAll();
     }
 
-    public List<AgendamentoResponse> listarPorFuncionario(Integer idFuncionario) {
+    public List<Agendamento> listarPorFuncionario(Integer idFuncionario) {
         List<Agendamento> lista = repository.findByFkFuncionario_IdFuncionarioAndDataDia(idFuncionario, java.time.LocalDate.now());
-        return lista.stream().map(AgendamentoMapper::of).collect(Collectors.toList());
+        return lista;
     }
 }

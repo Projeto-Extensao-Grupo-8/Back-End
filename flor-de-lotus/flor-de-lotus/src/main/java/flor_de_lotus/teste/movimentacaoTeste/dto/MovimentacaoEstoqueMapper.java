@@ -11,7 +11,7 @@ import java.util.List;
 
 public class MovimentacaoEstoqueMapper {
 
-    public static MovimentacaoEstoque toEntity (MovimentacaoEstoqueRequest dto, Teste teste, Consulta consulta){
+    public static MovimentacaoEstoque toEntity (MovimentacaoEstoqueRequest dto){
         if (dto == null){
             return null;
         }
@@ -19,9 +19,6 @@ public class MovimentacaoEstoqueMapper {
         MovimentacaoEstoque movimentacaoEstoque = new MovimentacaoEstoque();
         movimentacaoEstoque.setQtd(dto.getQtd());
         movimentacaoEstoque.setDescricao(dto.getDescricao());
-        movimentacaoEstoque.setDataMovimentacao(consulta.getDataConsulta());
-        movimentacaoEstoque.setConsulta(consulta);
-        movimentacaoEstoque.setTeste(teste);
 
         return movimentacaoEstoque;
     }

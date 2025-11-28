@@ -16,6 +16,16 @@ public class AgendamentoMapper {
         return agendamento;
     }
 
+    public static Agendamento of(AgendamentoPostRequest dto) {
+        Agendamento agendamento = new Agendamento();
+
+        agendamento.setInicioTempo(dto.getInicioTempo());
+        agendamento.setFinalTempo(dto.getFinalTempo());
+        agendamento.setDataDia(dto.getDataDia());
+
+        return agendamento;
+    }
+
     public static AgendamentoResponse of(Agendamento entity) {
         AgendamentoResponse response = new AgendamentoResponse();
 

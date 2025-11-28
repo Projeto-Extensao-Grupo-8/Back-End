@@ -15,8 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@RestController
-@RequestMapping("/endereco")
+//@RestController
+//@RequestMapping("/endereco")
 @Tag(name = "Endereços", description = "Endpoints utilizados para gerenciar os endereços")
 public class EnderecoController {
     private final EnderecoService service;

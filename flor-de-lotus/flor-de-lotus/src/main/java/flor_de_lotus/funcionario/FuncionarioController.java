@@ -102,7 +102,4 @@ public class FuncionarioController {
         return ResponseEntity.status(200).body(service.atualizarParcial(id,body));
     }
 
-
-
-
 }

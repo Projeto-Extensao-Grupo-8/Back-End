@@ -33,6 +33,9 @@ public class UsuarioReplaceRequestBody {
     @Schema(description = "Senha do usuário para cadastro, deve conter ao menos 8 caracteres e no máximo 32, 2 letras maiúsculas e uma minúscula, 1 dígito e apenas letras e números", example = "P4sSwOrdExAmPl3")
     private String senha;
 
+    @Schema(description = "O usuário aceita ou não receber informações do newsletter", example = "true")
+    private Boolean newsletter;
+
     @Schema(description = "Fk relacionado ao endereço", example = "1")
     private Endereco fkEndereco;
 

@@ -3,6 +3,7 @@ package flor_de_lotus.teste.estoqueTeste;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.teste.TesteService;
 import flor_de_lotus.teste.dto.TesteResponse;
+import flor_de_lotus.teste.estoqueTeste.dto.EstoqueTesteMapper;
 import flor_de_lotus.teste.estoqueTeste.dto.EstoqueTesteRequest;
 import flor_de_lotus.teste.estoqueTeste.dto.EstoqueTesteResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +34,12 @@ public class EstoqueTesteController {
     })
     @PostMapping
     public ResponseEntity<EstoqueTesteResponse> cadastrar(@RequestBody EstoqueTesteRequest body ){
-        return ResponseEntity.status(201).body(service.cadastrar(body));
+
+        EstoqueTeste cadastrar = EstoqueTesteMapper.toEntity(body);
+
+        EstoqueTesteResponse response = EstoqueTesteMapper.toResponse(service.cadastrar(cadastrar, body.getFkTeste()));
+
+        return ResponseEntity.status(201).body(response);
     }
 
     @Operation(summary = "Atualizar testes no sistema")
@@ -44,7 +50,13 @@ public class EstoqueTesteController {
     })
     @PatchMapping("/{id}")
     public ResponseEntity<EstoqueTesteResponse> atualizar(@PathVariable Integer id,@RequestBody @Valid EstoqueTesteRequest body){
-        return ResponseEntity.status(200).body(service.atualizarParcial(id, body));
+
+        EstoqueTeste entity = EstoqueTesteMapper.toEntity(body);
+
+        EstoqueTesteResponse response = EstoqueTesteMapper.toResponse(service.atualizarParcial(id, entity, body.getFkTeste()));
+
+        return ResponseEntity.status(200).body(response);
+
     }
 
     @Operation(summary = "Buscar todos os testes cadastrado no Sistema")
@@ -54,11 +66,12 @@ public class EstoqueTesteController {
     })
     @GetMapping
     public ResponseEntity<List<EstoqueTesteResponse>> buscarTodos(){
-        List<EstoqueTesteResponse> listaResponse = service.listarTodos();
-        if (listaResponse.isEmpty()){
+        List<EstoqueTesteResponse> todosResponse = EstoqueTesteMapper.toResponseList(service.listarTodos());
+
+        if (todosResponse.isEmpty()){
             return ResponseEntity.status(204).build();
         }
-        return ResponseEntity.status(200).body(listaResponse);
+        return ResponseEntity.status(200).body(todosResponse);
     }
 
     @Operation(summary = "Buscar estoque via ID")
@@ -68,7 +81,11 @@ public class EstoqueTesteController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<EstoqueTesteResponse> buscarID(@PathVariable Integer id){
-        return ResponseEntity.status(200).body(service.findByIdOrThrow(id));
+
+        EstoqueTesteResponse response = EstoqueTesteMapper.toResponse(service.findByIdOrThrow(id));
+
+        return ResponseEntity.status(200).body(response);
+
     }
 
     @Operation(summary = "Deletar Estoque teste via ID")
@@ -83,14 +100,13 @@ public class EstoqueTesteController {
         return ResponseEntity.status(200).build();
     }
 
-
     @Operation(summary = "Buscar o teste cadastrado no Sistema com menor quantidade ")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Teste buscada com Sucesso")
     })
     @GetMapping("/quantidade")
     public ResponseEntity<EstoqueTesteResponse> buscarPorQuantidade(){
-        EstoqueTesteResponse estoqueTeste = service.buscarPorQtd();
+        EstoqueTesteResponse estoqueTeste = EstoqueTesteMapper.toResponse(service.buscarPorQtd());
         if (estoqueTeste == null){
             return ResponseEntity.status(204).build();
         }

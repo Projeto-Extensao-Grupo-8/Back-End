@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +31,14 @@ public class PacienteController {
     })
     @PostMapping
     public ResponseEntity<PacienteResponseBody> cadastrar(@RequestBody @Valid PacientePostRequestBody body) {
-        return ResponseEntity.status(201).body(service.cadastrar(body));
+
+        Paciente pacienteCadastrar = PacienteMapper.of(body);
+
+        Paciente pacienteCadastrado = service.cadastrar(pacienteCadastrar,body.getFkUsuario());
+
+        PacienteResponseBody response = PacienteMapper.of(pacienteCadastrado);
+
+        return ResponseEntity.status(201).body(response);
     }
 
     @Operation(summary = "Listar todos os pacientes")
@@ -40,7 +48,7 @@ public class PacienteController {
     })
     @GetMapping
     public ResponseEntity<List<PacienteResponseBody>> listarTodos() {
-        List<PacienteResponseBody> lista = service.listarTodos();
+        List<PacienteResponseBody> lista = service.listarTodos().stream().map(PacienteMapper::of).toList();
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
@@ -58,7 +66,13 @@ public class PacienteController {
     public ResponseEntity<PacienteResponseBody> atualizarParcial(
             @PathVariable Integer id,
             @RequestBody @Valid PacientePostRequestBody body) {
-        return ResponseEntity.status(200).body(service.atualizarParcial(id, body));
+
+        Paciente atualizacao = PacienteMapper.of(body);
+
+        PacienteResponseBody atualizado = PacienteMapper.of(service.atualizarParcial(id, atualizacao, body.getFkUsuario()));
+
+        return ResponseEntity.status(200).body(atualizado);
+
     }
 
     @Operation(summary = "Deletar paciente por ID")
@@ -67,4 +81,5 @@ public class PacienteController {
         service.deletarPorId(id);
         return ResponseEntity.status(200).build();
     }
+
 }

@@ -1,7 +1,6 @@
 package flor_de_lotus.consulta;
 
 import flor_de_lotus.consulta.dto.ConsultaMapper;
-import flor_de_lotus.consulta.dto.ConsultaPostRequestBody;
 import flor_de_lotus.consulta.dto.ConsultaResponseBody;
 import flor_de_lotus.exception.BadRequestException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
@@ -9,6 +8,7 @@ import flor_de_lotus.funcionario.Funcionario;
 import flor_de_lotus.funcionario.FuncionarioService;
 import flor_de_lotus.paciente.Paciente;
 import flor_de_lotus.paciente.PacienteService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,21 +24,22 @@ public class ConsultaService {
     private final FuncionarioService funcionarioService;
     private final PacienteService pacienteService;
 
+    public Consulta cadastrar(Consulta entity, Integer idPaciente, Integer idFuncionario) {
 
-    public ConsultaResponseBody cadastrar(ConsultaPostRequestBody dto) {
+        Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(idFuncionario);
+        Paciente paciente = pacienteService.buscarPorIdOuThrow(idPaciente);
 
-        Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(dto.getFkFuncionario());
-        Paciente paciente = pacienteService.buscarPorIdOuThrow(dto.getFkPaciente());
+        checarData(entity.getDataConsulta());
+        checarValor(entity.getValorConsulta());
 
-        checarData(dto.getDataConsulta());
-        checarValor(dto.getValorConsulta());
+        entity.setFkFuncionario(funcionario);
+        entity.setFkPaciente(paciente);
 
-        Consulta consulta = ConsultaMapper.of(dto, funcionario, paciente);
-        Consulta consultaSalva = repository.save(consulta);
+        Consulta consultaSalva = repository.save(entity);
 
-        return ConsultaMapper.of(consultaSalva);
+        return consultaSalva;
+
     }
-
 
     private void checarData(LocalDate dataConsulta) {
         if (dataConsulta == null || dataConsulta.isBefore(LocalDate.now())) {
@@ -52,8 +53,8 @@ public class ConsultaService {
         }
     }
 
-    public List<ConsultaResponseBody> listarTodas() {
-        return repository.findAll().stream().map(ConsultaMapper::of).toList();
+    public List<Consulta> listarTodas() {
+        return repository.findAll();
     }
 
     public Consulta buscarPorIdOuThrow(Integer id) {
@@ -64,40 +65,42 @@ public class ConsultaService {
         return consultaOpt.get();
     }
 
-
     public void deletarPorId(Integer id) {
         repository.delete(buscarPorIdOuThrow(id));
     }
 
-    public ConsultaResponseBody atualizarParcial(Integer id, ConsultaPostRequestBody body) {
+    public Consulta atualizarParcial(Integer id, Consulta entity, Integer idFuncionario, Integer idPaciente) {
+
         Consulta consulta = buscarPorIdOuThrow(id);
 
-        if (body.getDataConsulta() != null) {
-            checarData(body.getDataConsulta());
-            consulta.setDataConsulta(body.getDataConsulta());
+        if (entity.getDataConsulta() != null) {
+            checarData(entity.getDataConsulta());
+            consulta.setDataConsulta(entity.getDataConsulta());
         }
 
-        if (body.getValorConsulta() != null) {
-            checarValor(body.getValorConsulta());
-            consulta.setValorConsulta(body.getValorConsulta());
+        if (entity.getValorConsulta() != null) {
+            checarValor(entity.getValorConsulta());
+            consulta.setValorConsulta(entity.getValorConsulta());
         }
 
-        if (body.getEspecialidade() != null) {
-            consulta.setEspecialidade(body.getEspecialidade());
+        if (entity.getEspecialidade() != null) {
+            consulta.setEspecialidade(entity.getEspecialidade());
         }
 
-        if (body.getFkFuncionario() != null) {
-            Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(body.getFkFuncionario());
+        if (entity.getFkFuncionario() != null) {
+            Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(idFuncionario);
             consulta.setFkFuncionario(funcionario);
         }
 
-        if (body.getFkPaciente() != null) {
-            Paciente paciente = pacienteService.buscarPorIdOuThrow(body.getFkPaciente());
+        if (entity.getFkPaciente() != null) {
+            Paciente paciente = pacienteService.buscarPorIdOuThrow(idPaciente);
             consulta.setFkPaciente(paciente);
         }
 
         Consulta consultaAtualizada = repository.save(consulta);
-        return ConsultaMapper.of(consultaAtualizada);
+
+        return consultaAtualizada;
+
     }
 
     public List<ConsultaResponseBody> listarPorPacienteResponse(Integer idPaciente) {
@@ -115,8 +118,6 @@ public class ConsultaService {
                 .toList();
     }
 
-
-
     public List<ConsultaResponseBody> listarPorFuncionarioResponse(Integer idFuncionario) {
         Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(idFuncionario);
         return repository.findAll().stream()
@@ -131,6 +132,5 @@ public class ConsultaService {
                 .filter(c -> c.getFkFuncionario() != null && c.getFkFuncionario().getIdFuncionario().equals(funcionario.getIdFuncionario()))
                 .toList();
     }
-
 
 }

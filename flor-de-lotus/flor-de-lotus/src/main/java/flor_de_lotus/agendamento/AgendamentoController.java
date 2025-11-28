@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/agendamentos")
@@ -28,7 +29,13 @@ public class AgendamentoController {
     })
     @PostMapping
     public ResponseEntity<AgendamentoResponse> publicar(@RequestBody @Valid AgendamentoPostRequest dto) {
-        return ResponseEntity.status(201).body(service.publicar(dto));
+
+        Agendamento agendamento = AgendamentoMapper.of(dto);
+
+        AgendamentoResponse response = AgendamentoMapper.of(service.publicar(agendamento,dto.getIdFuncionario()));
+
+        return ResponseEntity.status(201).body(response);
+
     }
 
     @Operation(summary = "Remover um agendamento")
@@ -45,14 +52,18 @@ public class AgendamentoController {
     @Operation(summary = "Listar todos os agendamentos")
     @GetMapping
     public ResponseEntity<List<AgendamentoResponse>> listarTodos() {
-        List<AgendamentoResponse> lista = service.listarTodos();
+        List<AgendamentoResponse> lista = service.listarTodos()
+                                                            .stream()
+                                                                    .map(AgendamentoMapper::of)
+                                                                        .collect(Collectors.toList());
         if (lista.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(lista);
     }
+
     @Operation(summary = "Listar agendamentos de um funcionário")
     @GetMapping("/funcionario/{idFuncionario}")
     public ResponseEntity<List<AgendamentoResponse>> listarPorFuncionario(@PathVariable Integer idFuncionario) {
-        List<AgendamentoResponse> lista = service.listarPorFuncionario(idFuncionario);
+        List<AgendamentoResponse> lista = service.listarPorFuncionario(idFuncionario).stream().map(AgendamentoMapper::of).collect(Collectors.toList());;
         if (lista.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(lista);
     }
