@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 class FuncionarioServiceTest {
@@ -47,7 +48,7 @@ class FuncionarioServiceTest {
 
             Usuario usuarioEsperado = serviceU.buscarEntidadePorIdOuThrow(usuario.getIdUsuario());
 
-            Mockito.when(repository.existsByCrp())
+            Mockito.when(repository.existsByCrp(any(String.class)));
 
 
         }
