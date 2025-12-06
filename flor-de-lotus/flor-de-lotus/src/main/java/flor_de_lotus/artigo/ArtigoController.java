@@ -3,6 +3,7 @@ package flor_de_lotus.artigo;
 import flor_de_lotus.artigo.dto.ArtigoMapper;
 import flor_de_lotus.artigo.dto.ArtigoPostRequest;
 import flor_de_lotus.artigo.dto.ArtigoResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -20,18 +21,20 @@ import java.util.Optional;
 public class ArtigoController {
 
     private final ArtigoService artigoService;
-
+    @Operation(summary = "Listar Todos Artigos")
     @GetMapping
     public ResponseEntity<List<ArtigoResponse>> listarTodos() {
         return ResponseEntity.ok(ArtigoMapper.toResponseList(artigoService.listarTodos()));
     }
 
+    @Operation(summary = "Procurar artigo por palavra")
     @GetMapping("/pesquisar")
     public ResponseEntity<List<ArtigoResponse>> pesquisar(
             @RequestParam(value = "termo", required = false) String termo) {
         return ResponseEntity.ok(ArtigoMapper.toResponseList(artigoService.pesquisar(termo)));
     }
 
+    @Operation(summary = "Procurar Artigo por Id")
     @GetMapping("/{id}")
     public ResponseEntity<ArtigoResponse> buscarPorId(@PathVariable Integer id) {
 
@@ -42,6 +45,7 @@ public class ArtigoController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Cadastrar novos artigos no sistema")
     @PostMapping
     public ResponseEntity<ArtigoResponse> cadastrar(@Valid @RequestBody ArtigoPostRequest dto) {
 
@@ -57,6 +61,7 @@ public class ArtigoController {
 
     }
 
+    @Operation(summary = "Atualizar Artigo por ID")
     @PutMapping("/{id}")
     public ResponseEntity<ArtigoResponse> atualizar(
             @PathVariable Integer id,
@@ -71,6 +76,7 @@ public class ArtigoController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Deletar Artigo por ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         artigoService.deletar(id);
