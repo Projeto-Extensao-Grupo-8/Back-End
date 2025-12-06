@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -66,7 +65,7 @@ public class TesteController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<TesteResponse> buscarPorId(@PathVariable Integer id){
-        return ResponseEntity.status(200).body(TesteMapper.toResponse(service.findByIdOrThrowResponse(id)));
+        return ResponseEntity.status(200).body(TesteMapper.toResponse(service.findByIdOrThrow(id)));
     }
 
     @Operation(summary = "Buscar todos os testes cadastrado no Sistema")
@@ -132,33 +131,13 @@ public class TesteController {
 
     })
     @GetMapping("/validade")
-    public ResponseEntity<TesteResponse> buscarPorValidade(){
-        Teste testeEncontrado = service.buscarPorValidade();
-        if (testeEncontrado == null){
+    public ResponseEntity<Integer> buscarPorValidade(){
+        Integer qtdTesteEncontrado = service.buscarQtdTesteComValidadeProxima();
+        if (qtdTesteEncontrado == null){
             return ResponseEntity.status(204).build();
         }
 
-        TesteResponse testeResponse = TesteMapper.toResponse(testeEncontrado);
-
-        return ResponseEntity.status(200).body(testeResponse);
-    }
-
-    @Operation(summary = "Buscar o testes cadastrado no Sistema com validade mais próxima")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de Testes buscada com Sucesso"),
-            @ApiResponse(responseCode = "204", description = "Não possui testes próximo da validade")
-
-    })
-    @GetMapping("/validade/{data}")
-    public ResponseEntity<TesteResponse> buscarPorValidade(@PathVariable LocalDate data){
-        Teste testeEncontrado = service.buscarPorValidade(data);
-        if (testeEncontrado == null){
-            return ResponseEntity.status(204).build();
-        }
-
-        TesteResponse testeResponse = TesteMapper.toResponse(testeEncontrado);
-
-        return ResponseEntity.status(200).body(testeResponse);
+        return ResponseEntity.status(200).body(qtdTesteEncontrado);
     }
 
 }

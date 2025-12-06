@@ -10,7 +10,7 @@ public interface TesteRepository extends JpaRepository<Teste, Integer> {
     boolean existsByCodigo(String codigo);
     List<Teste> findByTipo(String tipo);
     List<Teste> findByCategoria(String categoria);
-    Optional<Teste> findTop1ByValidadeAfterOrderByValidadeAsc(LocalDate hoje);
+    Integer countByValidadeBetween(LocalDate dataInicial, LocalDate dataFinal);
 
 
 

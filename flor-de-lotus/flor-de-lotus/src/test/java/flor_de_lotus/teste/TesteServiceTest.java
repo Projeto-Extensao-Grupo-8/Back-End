@@ -4,13 +4,17 @@ import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -62,12 +66,13 @@ class TesteServiceTest {
         Assertions.assertEquals(testeDesejado.getIdTeste(), testeResultado.getIdTeste());
         Assertions.assertEquals(testeDesejado.getCodigo(), testeResultado.getCodigo());
 
-        verify(repository.existsByCodigo(any(String.class)), times(1));
-        verify(repository.save(any(Teste.class)), times(1));
+        verify(repository, times(1)).existsByCodigo(any(String.class));
+        verify(repository, times(1)).save(any(Teste.class));
 
     }
 
     @Test
+    @DisplayName("Deve buscar por Id quando acionado com Id invalido deve lançar exceção")
     void deveRetornarExceptionAoTentarCadastrarTesteExistente() {
         when(repository.existsByCodigo(testeEnvio.getCodigo())).thenReturn(true);
 
@@ -78,41 +83,135 @@ class TesteServiceTest {
 
         Assertions.assertEquals("Teste já cadastrado", exceptionResultado.getMessage());
 
-        verify(repository.existsByCodigo(any(String.class)), times(1));
-        verify(repository.save(any(Teste.class)), times(0));
-        verify(repository.save(any(Teste.class)), never());
+        verify(repository, times(1)).existsByCodigo(any(String.class));
+        verify(repository, times(0)).save(any(Teste.class));
+        verify(repository, never()).save(any(Teste.class));
     }
 
-    @Test
-    void findByIdOrThrowResponse() {
-
-    }
 
     @Test
+    @DisplayName("Deve buscar por Id quando acionado com Id valido deve devolver teste")
     void findByIdOrThrow() {
+        Mockito.when(repository.findById(Mockito.anyInt())).thenReturn(Optional.of(testeEnvio));
+        Teste resultado = this.service.findByIdOrThrow(1);
+        Assertions.assertEquals(testeEnvio.getNome(), resultado.getNome());
     }
 
     @Test
-    void deletarPorId() {
+    @DisplayName("Deve buscar por Id quando acionado com Id invalido deve lançar exceção")
+    void deveLancarExcecaoQuandoIdForInvalido() {
+        Mockito.when(this.repository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        EntidadeNaoEncontradoException exception = Assertions.assertThrows(EntidadeNaoEncontradoException.class, () -> this.service.findByIdOrThrow(200), "Devera lançar exceção se o id não existir");
+        Assertions.assertEquals("Teste não encontrado", exception.getMessage());
     }
 
     @Test
-    void listarTodos() {
+    @DisplayName("Deve trazer a lista cheia")
+    void deveListarTudoTest() {
+        List<Teste> listaMockada = List.of(new Teste());
+        Mockito.when(repository.findAll()).thenReturn(listaMockada);
+        List<Teste> resultado = this.service.listarTodos();
+        Assertions.assertEquals(1, resultado.size());
     }
 
     @Test
-    void listarPorCategoria() {
+    @DisplayName("Deve retornar a lista de empresas vazia")
+    void deveRetornarListaVaziaTest() {
+        Mockito.when(this.repository.findAll()).thenReturn(List.of());
+        List<Teste> resultado = this.service.listarTodos();
+        Assertions.assertTrue(resultado.isEmpty());
+    }
+
+    // CORREÇÃO PARA O MÉTODO "deveLancarExcecaoEntidadeNaoEncontradaExceptionSeNaoEncontrarTest"
+
+    @Test
+    @DisplayName("Deve lançar exceção se tentar excluir e nao existir id")
+    void deveLancarExcecaoEntidadeNaoEncontradaExceptionSeNaoEncontrarTest() {
+        final Integer ID_INVALIDO = 200;
+
+        Mockito.when(this.repository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        EntidadeNaoEncontradoException exception = Assertions.assertThrows(EntidadeNaoEncontradoException.class,
+                () -> this.service.deletarPorId(ID_INVALIDO), "Devera lançar exceção se o id não existir");
+
+
+        Assertions.assertEquals("Teste não encontrado", exception.getMessage());
+        verify(repository, never()).delete(any(Teste.class));
+    }
+
+
+
+    @Test
+    @DisplayName("Deve trazer a lista de testes cheia por categoria")
+    void deveListarPorCategoriaTest() {
+        Teste testeComCategoria = new Teste();
+        testeComCategoria.setCategoria("TDAH");
+
+        List<Teste> listaMockada = List.of(testeComCategoria, testeDesejado);
+        Mockito.when(repository.findByCategoria(Mockito.anyString())).thenReturn(listaMockada);
+
+        List<Teste> resultado = this.service.listarPorCategoria("TDAH");
+
+        Assertions.assertEquals(2, resultado.size());
+        verify(repository, times(1)).findByCategoria(anyString());
     }
 
     @Test
-    void listarPorTipo() {
+    @DisplayName("Deve retornar a lista de testes vazia por categoria")
+    void deveRetornarListaVaziaPorCategoriaTest() {
+        Mockito.when(this.repository.findByCategoria(Mockito.anyString())).thenReturn(List.of());
+        List<Teste> resultado = this.service.listarPorCategoria("NaoExistente");
+        Assertions.assertTrue(resultado.isEmpty());
+        verify(repository, times(1)).findByCategoria(anyString());
     }
 
     @Test
-    void buscarPorValidade() {
+    @DisplayName("Deve trazer a lista de testes cheia por tipo")
+    void deveListarPorTipoTest() {
+        Teste testeComTipo = new Teste();
+        testeComTipo.setTipo("Teste Digital");
+        List<Teste> listaMockada = List.of(testeComTipo, testeDesejado);
+        Mockito.when(repository.findByTipo(Mockito.anyString())).thenReturn(listaMockada);
+
+        List<Teste> resultado = this.service.listarPorTipo("Teste Digital");
+
+        Assertions.assertEquals(2, resultado.size());
+        verify(repository, times(1)).findByTipo(anyString());
     }
 
     @Test
-    void testBuscarPorValidade() {
+    @DisplayName("Deve retornar a lista de testes vazia por tipo")
+    void deveRetornarListaVaziaPorTipoTest() {
+        Mockito.when(this.repository.findByTipo(Mockito.anyString())).thenReturn(List.of());
+
+        List<Teste> resultado = this.service.listarPorTipo("NaoExistente");
+        Assertions.assertTrue(resultado.isEmpty());
+        verify(repository, times(1)).findByTipo(anyString());
+    }
+
+    @Test
+    @DisplayName("Deve retornar a contagem de testes que vencem no mes atual")
+    void contarTestesAVencerNoMesAtualTest() {
+        Integer esperado = 3;
+
+        when(repository.countByValidadeBetween(any(LocalDate.class), any(LocalDate.class)))
+                .thenReturn(esperado);
+
+        Integer resultado = this.service.buscarQtdTesteComValidadeProxima();
+        Assertions.assertEquals(esperado, resultado);
+
+        verify(repository, times(1)).countByValidadeBetween(any(LocalDate.class), any(LocalDate.class));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 0 se não houver testes com validade no mes atual")
+    void contarTestesAVencerNoMesAtualRetornaZeroTest() {
+        Integer esperado = 0;
+
+        when(repository.countByValidadeBetween(any(LocalDate.class), any(LocalDate.class)))
+                .thenReturn(esperado);
+        Integer resultado = this.service.buscarQtdTesteComValidadeProxima();
+
+        Assertions.assertEquals(esperado, resultado);
+        verify(repository, times(1)).countByValidadeBetween(any(LocalDate.class), any(LocalDate.class));
     }
 }

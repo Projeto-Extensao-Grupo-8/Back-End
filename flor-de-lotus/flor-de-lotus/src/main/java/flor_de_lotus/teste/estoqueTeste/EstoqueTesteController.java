@@ -88,17 +88,17 @@ public class EstoqueTesteController {
 
     }
 
-    @Operation(summary = "Deletar Estoque teste via ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Deletado com Sucesso"),
-            @ApiResponse(responseCode = "404", description = "Estoque não encontrado no sistema",
-                    content = @Content(schema = @Schema(implementation = EntidadeConflitoException.class)))
-    })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id){
-        service.deletar(id);
-        return ResponseEntity.status(200).build();
-    }
+//    @Operation(summary = "Deletar Estoque teste via ID")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Deletado com Sucesso"),
+//            @ApiResponse(responseCode = "404", description = "Estoque não encontrado no sistema",
+//                    content = @Content(schema = @Schema(implementation = EntidadeConflitoException.class)))
+//    })
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deletar(@PathVariable Integer id){
+//        service.deletar(id);
+//        return ResponseEntity.status(200).build();
+//    }
 
     @Operation(summary = "Buscar o teste cadastrado no Sistema com menor quantidade ")
     @ApiResponses(value = {

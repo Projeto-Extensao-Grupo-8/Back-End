@@ -2,12 +2,8 @@ package flor_de_lotus.teste;
 
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
-import flor_de_lotus.teste.dto.TesteMapper;
-import flor_de_lotus.teste.dto.TesteResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,16 +23,6 @@ public class TesteService {
         return cadastrado;
 
     }
-
-    public Teste findByIdOrThrowResponse(Integer id){
-        Optional<Teste> testeOpt = repository.findById(id);
-        if (testeOpt.isEmpty()){
-            throw new EntidadeNaoEncontradoException("Teste não encontrado");
-        }
-        Teste teste =  testeOpt.get();
-        return teste;
-    }
-
     public Teste findByIdOrThrow(Integer id){
         Optional<Teste> testeOpt = repository.findById(id);
         if (testeOpt.isEmpty()){
@@ -48,7 +34,7 @@ public class TesteService {
 
     public void deletarPorId(Integer id){
         Teste teste = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.valueOf(404), "Teste não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoEncontradoException("Teste não encontrado"));
         repository.delete(teste);
 
     }
@@ -68,20 +54,11 @@ public class TesteService {
         return lista;
     }
 
-    public Teste buscarPorValidade(){
-      Optional<Teste> testeOpt = repository.findTop1ByValidadeAfterOrderByValidadeAsc(LocalDate.now());
-
-        Teste teste = testeOpt.get();
-
-        return teste;
-    }
-
-    public Teste buscarPorValidade(LocalDate dataPersonalizada){
-        Optional<Teste> testeOpt = repository.findTop1ByValidadeAfterOrderByValidadeAsc(dataPersonalizada);
-
-        Teste teste = testeOpt.get();
-
-        return teste;
+    public Integer buscarQtdTesteComValidadeProxima() {
+        LocalDate hoje = LocalDate.now();
+        LocalDate primeiroDiaDoMes = hoje.withDayOfMonth(1);
+        LocalDate ultimoDiaDoMes = hoje.withDayOfMonth(hoje.lengthOfMonth());
+        return repository.countByValidadeBetween(primeiroDiaDoMes, ultimoDiaDoMes);
     }
 
 }

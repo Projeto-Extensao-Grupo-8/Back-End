@@ -54,10 +54,6 @@ public class EstoqueTesteService {
 
     }
 
-    public void deletar(Integer id){
-        respository.delete(findByIdOrThrow(id));
-    }
-
 
     public List<EstoqueTeste> listarTodos (){
         List<EstoqueTeste>  todos =  respository.findAll();
@@ -72,5 +68,9 @@ public class EstoqueTesteService {
 
         return teste;
     }
+
+//    public void deletar(Integer id){
+////        respository.delete(findByIdOrThrow(id));
+////    }
 
 }
