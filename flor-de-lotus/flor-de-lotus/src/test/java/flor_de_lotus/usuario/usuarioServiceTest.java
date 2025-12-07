@@ -51,9 +51,6 @@ class UsuarioServiceTest {
         SecurityContextHolder.clearContext();
     }
 
-    // ---------------------------------------------------------------------
-    // cadastrarEndereco
-    // ---------------------------------------------------------------------
     @Test
     @DisplayName("Deve cadastrar endereço com sucesso")
     void deveCadastrarEndereco() {
@@ -77,9 +74,6 @@ class UsuarioServiceTest {
         verify(enderecoRepository).save(any());
     }
 
-    // ---------------------------------------------------------------------
-    // cadastrar usuário
-    // ---------------------------------------------------------------------
     @Test
     @DisplayName("Deve cadastrar usuário com sucesso")
     void deveCadastrarUsuarioComSucesso() {
@@ -130,9 +124,6 @@ class UsuarioServiceTest {
         verify(repository, never()).save(any());
     }
 
-    // ---------------------------------------------------------------------
-    // regras de senha
-    // ---------------------------------------------------------------------
     @Test
     @DisplayName("Deve aceitar senha válida")
     void deveAceitarSenhaValida() {
@@ -146,9 +137,6 @@ class UsuarioServiceTest {
                 () -> service.checarRegrasSenha("123"));
     }
 
-    // ---------------------------------------------------------------------
-    // login
-    // ---------------------------------------------------------------------
     @Test
     @DisplayName("Deve realizar login com sucesso gerando token")
     void deveFazerLogin() {
@@ -172,9 +160,6 @@ class UsuarioServiceTest {
         assertEquals("TOKEN-TESTE", result.getToken());
     }
 
-    // ---------------------------------------------------------------------
-    // buscar por id
-    // ---------------------------------------------------------------------
     @Test
     @DisplayName("Deve buscar usuário por ID com sucesso")
     void deveBuscarPorId() {
@@ -197,9 +182,6 @@ class UsuarioServiceTest {
                 () -> service.buscarPorIdOuThrow(999));
     }
 
-    // ---------------------------------------------------------------------
-    // delete
-    // ---------------------------------------------------------------------
     @Test
     @DisplayName("Deve deletar usuário com sucesso")
     void deveDeletarUsuario() {
@@ -212,9 +194,6 @@ class UsuarioServiceTest {
         verify(repository).delete(u);
     }
 
-    // ---------------------------------------------------------------------
-    // atualizar parcial
-    // ---------------------------------------------------------------------
     @Test
     @DisplayName("Deve atualizar parcialmente o usuário")
     void deveAtualizarParcial() {
@@ -234,9 +213,6 @@ class UsuarioServiceTest {
         assertEquals("novo@mail.com", result.getEmail());
     }
 
-    // ---------------------------------------------------------------------
-    // listar todos
-    // ---------------------------------------------------------------------
     @Test
     @DisplayName("Deve listar todos os usuários")
     void deveListarTodos() {
