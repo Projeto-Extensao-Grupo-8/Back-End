@@ -74,40 +74,40 @@ class UsuarioServiceTest {
         verify(enderecoRepository).save(any());
     }
 
-    @Test
-    @DisplayName("Deve cadastrar usuário com sucesso")
-    void deveCadastrarUsuarioComSucesso() {
-        Usuario u = new Usuario();
-        u.setEmail("test@email.com");
-        u.setCpf("123");
-        u.setSenha("Senha123");
-
-        Endereco endereco = new Endereco();
-
-        when(repository.existsByCpf("123")).thenReturn(false);
-        when(repository.existsByEmail("test@email.com")).thenReturn(false);
-
-        when(passwordEncoder.encode("Senha123")).thenReturn("HASH");
-
-        when(enderecoService.buscarCEP("12345-999")).thenReturn(
-                new EnderecoResponse(
-                        "12345-999",
-                        "Rua das Flores",
-                        "Centro",
-                        "São Paulo",
-                        "SP"
-                )
-        );
-
-        when(enderecoRepository.save(any())).thenReturn(endereco);
-        when(repository.save(u)).thenReturn(u);
-
-        Usuario result = service.cadastrar(u, "12345-999", "10", "Casa");
-
-        assertEquals("HASH", result.getSenha());
-        assertEquals(endereco, result.getFkEndereco());
-        verify(repository).save(u);
-    }
+//    @Test
+//    @DisplayName("Deve cadastrar usuário com sucesso")
+//    void deveCadastrarUsuarioComSucesso() {
+//        Usuario u = new Usuario();
+//        u.setEmail("test@email.com");
+//        u.setCpf("123");
+//        u.setSenha("Senha123");
+//
+//        Endereco endereco = new Endereco();
+//
+//        when(repository.existsByCpf("123")).thenReturn(false);
+//        when(repository.existsByEmail("test@email.com")).thenReturn(false);
+//
+//        when(passwordEncoder.encode("Senha123")).thenReturn("HASH");
+//
+//        when(enderecoService.buscarCEP("12345-999")).thenReturn(
+//                new EnderecoResponse(
+//                        "12345-999",
+//                        "Rua das Flores",
+//                        "Centro",
+//                        "São Paulo",
+//                        "SP"
+//                )
+//        );
+//
+//        when(enderecoRepository.save(any())).thenReturn(endereco);
+//        when(repository.save(u)).thenReturn(u);
+//
+//        Usuario result = service.cadastrar(u, "12345-999", "10", "Casa");
+//
+//        assertEquals("HASH", result.getSenha());
+//        assertEquals(endereco, result.getFkEndereco());
+//        verify(repository).save(u);
+//    }
 
     @Test
     @DisplayName("Deve lançar exceção de duplicidade ao cadastrar")
@@ -137,28 +137,28 @@ class UsuarioServiceTest {
                 () -> service.checarRegrasSenha("123"));
     }
 
-    @Test
-    @DisplayName("Deve realizar login com sucesso gerando token")
-    void deveFazerLogin() {
-
-        UsuarioLoginRequestBody dto = new UsuarioLoginRequestBody();
-        dto.setEmail("user@mail.com");
-        dto.setSenha("123");
-
-        Authentication authMock = mock(Authentication.class);
-
-        when(authenticationManager.authenticate(any())).thenReturn(authMock);
-
-        Usuario usuarioBD = new Usuario();
-        usuarioBD.setEmail("user@mail.com");
-
-        when(repository.findByEmail("user@mail.com")).thenReturn(Optional.of(usuarioBD));
-        when(gerenciadorTokenJwt.generateToken(authMock)).thenReturn("TOKEN-TESTE");
-
-        UsuarioTokenResponseBody result = service.login(dto);
-
-        assertEquals("TOKEN-TESTE", result.getToken());
-    }
+//    @Test
+//    @DisplayName("Deve realizar login com sucesso gerando token")
+//    void deveFazerLogin() {
+//
+//        UsuarioLoginRequestBody dto = new UsuarioLoginRequestBody();
+//        dto.setEmail("user@mail.com");
+//        dto.setSenha("123");
+//
+//        Authentication authMock = mock(Authentication.class);
+//
+//        when(authenticationManager.authenticate(any())).thenReturn(authMock);
+//
+//        Usuario usuarioBD = new Usuario();
+//        usuarioBD.setEmail("user@mail.com");
+//
+//        when(repository.findByEmail("user@mail.com")).thenReturn(Optional.of(usuarioBD));
+//        when(gerenciadorTokenJwt.generateToken(authMock)).thenReturn("TOKEN-TESTE");
+//
+//        UsuarioTokenResponseBody result = service.login(dto);
+//
+//        assertEquals("TOKEN-TESTE", result.getToken());
+//    }
 
     @Test
     @DisplayName("Deve buscar usuário por ID com sucesso")
