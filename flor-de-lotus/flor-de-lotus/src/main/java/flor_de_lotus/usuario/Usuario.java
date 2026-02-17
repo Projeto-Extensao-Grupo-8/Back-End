@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,6 +34,9 @@ public class Usuario {
     @Schema(description = "Número do usuário", example = "119xxxxxxxx")
     private String telefone;
 
+    @Schema(description = "Data de nascimento do usuário", example = "2025-10-10")
+    private LocalDate dataNascimento;
+
     @Column(unique = true )
     @Schema(description = "CPF do usuário", example = "04531164438")
     private String cpf;
@@ -49,9 +55,10 @@ public class Usuario {
     @JoinColumn(name = "fk_endereco_id")
     private Endereco fkEndereco;
 
-    public Usuario(String nome, String email, String telefone, String cpf, String senha, String nivelPermissao) {
+    public Usuario(String nome, String email, LocalDate dataNascimento, String telefone, String cpf, String senha, String nivelPermissao) {
         this.nome = nome;
         this.email = email;
+        this.dataNascimento = dataNascimento;
         this.telefone = telefone;
         this.cpf = cpf;
         this.senha = senha;

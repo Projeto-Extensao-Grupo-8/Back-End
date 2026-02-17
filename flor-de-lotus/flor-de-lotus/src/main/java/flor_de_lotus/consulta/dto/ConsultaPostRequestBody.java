@@ -11,13 +11,13 @@ public class ConsultaPostRequestBody {
     private Double valorConsulta;
     private String especialidade;
     private Integer fkFuncionario;
-    private Integer fkPaciente;
+    private Integer fkUsuario;
 
-    public ConsultaPostRequestBody(LocalDate dataConsulta, Double valorConsulta, String especialidade, Integer fkFuncionario, Integer fkPaciente) {
+    public ConsultaPostRequestBody(LocalDate dataConsulta, Double valorConsulta, String especialidade, Integer fkFuncionario, Integer fkUsuario) {
         this.dataConsulta = dataConsulta;
         this.valorConsulta = valorConsulta;
         this.especialidade = especialidade;
         this.fkFuncionario = fkFuncionario;
-        this.fkPaciente = fkPaciente;
+        this.fkUsuario = fkUsuario;
     }
 }

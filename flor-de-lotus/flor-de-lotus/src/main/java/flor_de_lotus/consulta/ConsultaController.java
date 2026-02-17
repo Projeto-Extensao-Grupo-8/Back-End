@@ -38,7 +38,7 @@ public class ConsultaController {
 
         Consulta consulta = ConsultaMapper.of(body);
 
-        Consulta cadastrada = service.cadastrar(consulta, body.getFkPaciente(), body.getFkFuncionario());
+        Consulta cadastrada = service.cadastrar(consulta, body.getFkUsuario(), body.getFkFuncionario());
 
         ConsultaResponseBody response = ConsultaMapper.of(cadastrada);
 
@@ -98,7 +98,7 @@ public class ConsultaController {
 
         Consulta atualizacao = ConsultaMapper.of(body);
 
-        Consulta consultaAtualizada = service.atualizarParcial(id, atualizacao, body.getFkFuncionario(), body.getFkPaciente());
+        Consulta consultaAtualizada = service.atualizarParcial(id, atualizacao, body.getFkFuncionario(), body.getFkUsuario());
 
         ConsultaResponseBody response = ConsultaMapper.of(consultaAtualizada);
 

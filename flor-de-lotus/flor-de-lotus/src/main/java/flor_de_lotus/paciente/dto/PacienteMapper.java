@@ -5,7 +5,7 @@ import flor_de_lotus.usuario.Usuario;
 
 public class PacienteMapper {
 
-    public static Paciente of(PacientePostRequestBody dto, Usuario usuario) {
+    public static Paciente of(Usuario usuario) {
         Paciente paciente = new Paciente();
         paciente.setFkUsuario(usuario);
         paciente.setAtivo('S');

@@ -1,6 +1,7 @@
 package flor_de_lotus.usuario.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,10 @@ public class UsuarioResponseBody {
 
     @Schema(description = "Email do usuário", example = "luiza@oliveira.con")
     private String email;
+
+    @Column(unique = true )
+    @Schema(description = "Número do usuário", example = "119xxxxxxxx")
+    private String telefone;
 
     @Schema(description = "Nível de permissão", example = "1")
     private String nivelPermissao;

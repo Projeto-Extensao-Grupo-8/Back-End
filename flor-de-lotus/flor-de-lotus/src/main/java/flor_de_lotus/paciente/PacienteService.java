@@ -4,6 +4,7 @@ import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.paciente.dto.PacienteMapper;
 import flor_de_lotus.paciente.dto.PacienteResponseBody;
 import flor_de_lotus.usuario.Usuario;
+import flor_de_lotus.usuario.UsuarioRepository;
 import flor_de_lotus.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,19 +15,20 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class PacienteService {
-
+    private final UsuarioRepository userRepository;
     private final PacienteRepository repository;
     private final UsuarioService usuarioService;
 
-    public Paciente cadastrar(Paciente entity, Integer idUsuario) {
+    public Paciente cadastrar(Integer idUsuario) {
+
         Usuario usuario = usuarioService.buscarEntidadePorIdOuThrow(idUsuario);
 
+        usuario.setNivelPermissao("2");
+        userRepository.save(usuario);
+        Paciente entity = new Paciente();
         entity.setFkUsuario(usuario);
 
-        Paciente salvo = repository.save(entity);
-
-        return salvo;
-
+        return repository.save(entity);
     }
 
     public List<Paciente> listarTodos() {

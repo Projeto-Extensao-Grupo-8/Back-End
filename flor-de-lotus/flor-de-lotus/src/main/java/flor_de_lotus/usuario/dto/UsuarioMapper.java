@@ -11,6 +11,7 @@ public class UsuarioMapper {
 
         entinty.setNome(dto.getNome());
         entinty.setEmail(dto.getEmail());
+        entinty.setDataNascimento(dto.getDataNascimento());
         entinty.setCpf(dto.getCpf());
         entinty.setTelefone(dto.getTelefone());
         entinty.setSenha(dto.getSenha());
@@ -28,6 +29,7 @@ public class UsuarioMapper {
         entinty.setNome(dto.getNome());
         entinty.setEmail(dto.getEmail());
         entinty.setCpf(dto.getCpf());
+        entinty.setDataNascimento(dto.getDataNascimento());
         entinty.setTelefone(dto.getTelefone());
         entinty.setSenha(dto.getSenha());
         entinty.setNewsletter(dto.getNewsletter());

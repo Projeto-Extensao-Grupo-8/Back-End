@@ -8,6 +8,9 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.br.CPF;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -19,6 +22,9 @@ public class UsuarioPostRequestBody {
     @Email(message = "E-mail inválido")
     @Schema(description = "Email do usuário", example = "luiza@oliveira.com")
     private String email;
+
+    @Schema(description = "Data de nascimento do usuário", example = "2025-10-10")
+    private LocalDate dataNascimento;
 
     @Size(min = 11, max = 11)
     @Schema(description = "Número do usuário", example = "119xxxxxxxx")

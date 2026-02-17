@@ -7,7 +7,11 @@ import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.funcionario.Funcionario;
 import flor_de_lotus.funcionario.FuncionarioService;
 import flor_de_lotus.paciente.Paciente;
+import flor_de_lotus.paciente.PacienteRepository;
 import flor_de_lotus.paciente.PacienteService;
+import flor_de_lotus.paciente.dto.PacienteMapper;
+import flor_de_lotus.usuario.Usuario;
+import flor_de_lotus.usuario.UsuarioService;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,13 +25,21 @@ import java.util.Optional;
 public class ConsultaService {
 
     private final ConsultaRepository repository;
+    private final PacienteRepository repositoryPac;
     private final FuncionarioService funcionarioService;
     private final PacienteService pacienteService;
+    private final UsuarioService usuarioService;
 
-    public Consulta cadastrar(Consulta entity, Integer idPaciente, Integer idFuncionario) {
-
+    public Consulta cadastrar(Consulta entity, Integer idUsuario, Integer idFuncionario) {
+        Paciente paciente = null;
         Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(idFuncionario);
-        Paciente paciente = pacienteService.buscarPorIdOuThrow(idPaciente);
+
+        if (repositoryPac.existsByFkUsuario_IdUsuario(idUsuario)){
+            paciente = pacienteService.buscarPorIdOuThrow(idUsuario);
+        }else {
+            usuarioService.buscarEntidadePorIdOuThrow(idUsuario);
+            paciente = pacienteService.cadastrar(idUsuario);
+        }
 
         checarData(entity.getDataConsulta());
         checarValor(entity.getValorConsulta());

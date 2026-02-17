@@ -34,7 +34,7 @@ public class PacienteController {
 
         Paciente pacienteCadastrar = PacienteMapper.of(body);
 
-        Paciente pacienteCadastrado = service.cadastrar(pacienteCadastrar,body.getFkUsuario());
+        Paciente pacienteCadastrado = service.cadastrar(body.getFkUsuario());
 
         PacienteResponseBody response = PacienteMapper.of(pacienteCadastrado);
 

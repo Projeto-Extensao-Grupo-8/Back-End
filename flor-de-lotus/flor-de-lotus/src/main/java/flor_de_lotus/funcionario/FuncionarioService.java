@@ -6,6 +6,7 @@ import flor_de_lotus.funcionario.dto.FuncionarioPatchRequestBody;
 import flor_de_lotus.funcionario.dto.FuncionarioPostRequestBody;
 import flor_de_lotus.funcionario.mapper.FuncionarioMapper;
 import flor_de_lotus.usuario.Usuario;
+import flor_de_lotus.usuario.UsuarioRepository;
 import flor_de_lotus.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,16 +19,21 @@ import java.util.Optional;
 public class FuncionarioService {
     private final FuncionarioRepository repository;
     private final UsuarioService usuarioService;
+    private final UsuarioRepository usuarioRepository;
 
-    public Funcionario cadastrar(FuncionarioPostRequestBody dto){
-        Usuario usuario = usuarioService.buscarEntidadePorIdOuThrow(dto.getFkUsuario());
-        if (repository.existsByCrp(dto.getCrp())){
+    public Funcionario cadastrar(Funcionario body, Usuario usuario) {
+        Usuario usuarioCa = usuarioService.buscarEntidadePorIdOuThrow(usuario.getIdUsuario());
+
+        if (repository.existsByCrp(body.getCrp())) {
             throw new EntidadeConflitoException("Conflito no campo CRP");
         }
 
-        Funcionario funcionario = FuncionarioMapper.toEntity(dto, usuario);
+        usuarioCa.setNivelPermissao("3");
 
-        return repository.save(funcionario);
+        usuarioRepository.save(usuarioCa);
+
+        body.setFkUsuario(usuarioCa);
+        return repository.save(body);
     }
 
     public List<Funcionario> listarTodos(){

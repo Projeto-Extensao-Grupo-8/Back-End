@@ -2,6 +2,9 @@ package flor_de_lotus.funcionario;
 
 import flor_de_lotus.funcionario.dto.FuncionarioPatchRequestBody;
 import flor_de_lotus.funcionario.dto.FuncionarioPostRequestBody;
+import flor_de_lotus.funcionario.mapper.FuncionarioMapper;
+import flor_de_lotus.usuario.Usuario;
+import flor_de_lotus.usuario.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +23,7 @@ import java.util.List;
 @RequestMapping("/funcionarios")
 public class FuncionarioController {
     public final FuncionarioService service;
+    public final UsuarioService usuarioService;
 
     @Operation(summary = "Cadastrar funcionário", description = "Cria um novo registro de funcionário no sistema.")
     @ApiResponses({
@@ -29,7 +33,10 @@ public class FuncionarioController {
     })
     @PostMapping
     public ResponseEntity<Funcionario> cadastrar(@RequestBody @Valid FuncionarioPostRequestBody body){
-        return ResponseEntity.status(201).body(service.cadastrar(body));
+        Usuario usuario = usuarioService.buscarEntidadePorIdOuThrow(body.getFkUsuario());
+        Funcionario funcionario = FuncionarioMapper.toEntity(body, usuario);
+
+        return ResponseEntity.status(201).body(service.cadastrar(funcionario, usuario));
     }
 
     @Operation(summary = "Listar todos os funcionários", description = "Retorna uma lista de todos os funcionários cadastrados.")
