@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)
     })
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Funcionario> cadastrar(@RequestBody @Valid FuncionarioPostRequestBody body){
         Usuario usuario = usuarioService.buscarEntidadePorIdOuThrow(body.getFkUsuario());
         Funcionario funcionario = FuncionarioMapper.toEntity(body, usuario);
@@ -46,6 +48,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "204", description = "Nenhum funcionário encontrado", content = @Content)
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Funcionario>> listarTodos(){
         List<Funcionario> listaTodos = service.listarTodos();
         if (listaTodos.isEmpty()){
@@ -61,6 +64,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "404", description = "Funcionário não encontrado", content = @Content)
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
     public ResponseEntity<Funcionario> buscarPorId(@PathVariable Integer id){
         return ResponseEntity.status(200).body(service.buscarPorIdOuThrow(id));
     }
@@ -71,6 +75,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "404", description = "Funcionário não encontrado", content = @Content)
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletarPorId(@PathVariable Integer id){
         service.deletarPorId(id);
         return ResponseEntity.status(200).build();
@@ -82,6 +87,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "404", description = "Funcionário não encontrado", content = @Content)
     })
     @PatchMapping("/desativar/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> desativarFuncionario(@PathVariable Integer id){
         service.desativarProfissional(id);
         return ResponseEntity.status(200).build();
@@ -93,6 +99,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "404", description = "Funcionário não encontrado", content = @Content)
     })
     @PatchMapping("/ativar/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> ativarFuncionario(@PathVariable Integer id){
         service.ativarProfissional(id);
         return ResponseEntity.status(200).build();
@@ -105,6 +112,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "404", description = "Funcionário não encontrado", content = @Content)
     })
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
     public ResponseEntity<Funcionario> atualizarParcial(@PathVariable Integer id, @RequestBody FuncionarioPatchRequestBody body ){
         return ResponseEntity.status(200).body(service.atualizarParcial(id,body));
     }

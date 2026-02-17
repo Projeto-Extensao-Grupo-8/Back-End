@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class ConsultaController {
                     content = @Content(schema = @Schema(implementation = BadRequestException.class)))
     })
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE')")
     public ResponseEntity<ConsultaResponseBody> cadastrar(@RequestBody @Valid ConsultaPostRequestBody body) {
 
         Consulta consulta = ConsultaMapper.of(body);
@@ -51,6 +53,7 @@ public class ConsultaController {
             @ApiResponse(responseCode = "204", description = "Não há consultas cadastradas")
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ConsultaResponseBody>> listarTodas() {
         List<ConsultaResponseBody> lista = service.listarTodas().stream().map(ConsultaMapper::of).toList();
         if (lista.isEmpty()) {
@@ -66,6 +69,7 @@ public class ConsultaController {
                     content = @Content(schema = @Schema(implementation = EntidadeNaoEncontradoException.class)))
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO','PACIENTE')")
     public ResponseEntity<ConsultaResponseBody> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.status(200).body(ConsultaMapper.of(service.buscarPorIdOuThrow(id)));
     }
@@ -77,6 +81,7 @@ public class ConsultaController {
                     content = @Content(schema = @Schema(implementation = EntidadeNaoEncontradoException.class)))
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Void> deletarPorId(@PathVariable Integer id) {
         service.deletarPorId(id);
         return ResponseEntity.status(200).build();
@@ -92,6 +97,7 @@ public class ConsultaController {
                     content = @Content(schema = @Schema(implementation = BadRequestException.class)))
     })
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO','PACIENTE')")
     public ResponseEntity<ConsultaResponseBody> atualizarParcial(
             @PathVariable Integer id,
             @RequestBody @Valid ConsultaPostRequestBody body) {
@@ -112,6 +118,7 @@ public class ConsultaController {
             @ApiResponse(responseCode = "204", description = "Paciente não possui consultas cadastradas")
     })
     @GetMapping("/paciente/{idPaciente}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE')")
     public ResponseEntity<List<ConsultaResponseBody>> listarPorPaciente(@PathVariable Integer idPaciente) {
         List<ConsultaResponseBody> lista = service.listarPorPacienteResponse(idPaciente);
         if (lista.isEmpty()) {
@@ -126,6 +133,7 @@ public class ConsultaController {
             @ApiResponse(responseCode = "204", description = "Funcionário não possui consultas cadastradas")
     })
     @GetMapping("/funcionario/{idFuncionario}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO','PACIENTE')")
     public ResponseEntity<List<ConsultaResponseBody>> listarPorFuncionario(@PathVariable Integer idFuncionario) {
         List<ConsultaResponseBody> lista = service.listarPorFuncionarioResponse(idFuncionario);
         if (lista.isEmpty()) {

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class MovimentacaoEstoqueController {
             })
     })
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<MovimentacaoEstoqueResponse> cadastrar(@RequestBody @Valid MovimentacaoEstoqueRequest body){
 
         MovimentacaoEstoque estoqueSalvar = MovimentacaoEstoqueMapper.toEntity(body);
@@ -45,6 +47,7 @@ public class MovimentacaoEstoqueController {
             @ApiResponse(responseCode = "204", description = "Não possui testes cadastrados")
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<MovimentacaoEstoqueResponse>> listar(){
         List<MovimentacaoEstoque> todos = service.listar();
 
@@ -64,6 +67,7 @@ public class MovimentacaoEstoqueController {
             @ApiResponse(responseCode = "204", description = "Não possui testes cadastrados")
     })
     @GetMapping("/{idPaciente}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<MoviEstoqueResponseGet>> listarPorPaciente(@PathVariable Integer idPaciente){
 
         List<MoviEstoqueResponseGet> listaResponseGet = MovimentacaoEstoqueMapper.toResponseListGet(service.listarPorPaciente(idPaciente));
@@ -82,6 +86,7 @@ public class MovimentacaoEstoqueController {
             @ApiResponse(responseCode = "204", description = "Não possui testes cadastrados")
     })
     @GetMapping("buscarPorFunc/{idFuncionario}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<MoviEstoqueResponseGetFunc>> listarPorFuncionario(@PathVariable Integer idFuncionario){
 
         List<MoviEstoqueResponseGetFunc> listaResponseGet = MovimentacaoEstoqueMapper.toResponseListGetFunc(service.listarPorFuncionario(idFuncionario));
@@ -101,6 +106,7 @@ public class MovimentacaoEstoqueController {
             })
     })
     @PatchMapping("/{idMovi}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<MovimentacaoEstoqueResponse> atualizarMovimentacao(@PathVariable Integer idMovi,@RequestBody @Valid MovimentacaoEstoqueRequest body){
 
         MovimentacaoEstoque entity = MovimentacaoEstoqueMapper.toEntity(body);

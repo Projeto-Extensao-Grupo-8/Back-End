@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,8 @@ public class AgendamentoController {
             @ApiResponse(responseCode = "400", description = "Horário indisponível")
     })
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+
     public ResponseEntity<AgendamentoResponse> publicar(@RequestBody @Valid AgendamentoPostRequest dto) {
 
         Agendamento agendamento = AgendamentoMapper.of(dto);
@@ -44,6 +47,7 @@ public class AgendamentoController {
             @ApiResponse(responseCode = "404", description = "Agendamento não encontrado")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<Void> remover(@PathVariable Integer id) {
         service.remover(id);
         return ResponseEntity.ok().build();
@@ -51,6 +55,7 @@ public class AgendamentoController {
 
     @Operation(summary = "Listar todos os agendamentos")
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<List<AgendamentoResponse>> listarTodos() {
         List<AgendamentoResponse> lista = service.listarTodos()
                                                             .stream()
@@ -62,6 +67,7 @@ public class AgendamentoController {
 
     @Operation(summary = "Listar agendamentos de um funcionário")
     @GetMapping("/funcionario/{idFuncionario}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<AgendamentoResponse>> listarPorFuncionario(@PathVariable Integer idFuncionario) {
         List<AgendamentoResponse> lista = service.listarPorFuncionario(idFuncionario).stream().map(AgendamentoMapper::of).collect(Collectors.toList());;
         if (lista.isEmpty()) return ResponseEntity.noContent().build();

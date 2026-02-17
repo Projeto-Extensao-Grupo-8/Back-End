@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class EstoqueTesteController {
             })
     })
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<EstoqueTesteResponse> cadastrar(@RequestBody EstoqueTesteRequest body ){
 
         EstoqueTeste cadastrar = EstoqueTesteMapper.toEntity(body);
@@ -49,6 +51,7 @@ public class EstoqueTesteController {
             })
     })
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<EstoqueTesteResponse> atualizar(@PathVariable Integer id,@RequestBody @Valid EstoqueTesteRequest body){
 
         EstoqueTeste entity = EstoqueTesteMapper.toEntity(body);
@@ -65,6 +68,7 @@ public class EstoqueTesteController {
             @ApiResponse(responseCode = "204", description = "Não possui testes cadastrados")
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<EstoqueTesteResponse>> buscarTodos(){
         List<EstoqueTesteResponse> todosResponse = EstoqueTesteMapper.toResponseList(service.listarTodos());
 
@@ -80,6 +84,7 @@ public class EstoqueTesteController {
             @ApiResponse(responseCode = "404", description = "Estoque não encontrado no sistema")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<EstoqueTesteResponse> buscarID(@PathVariable Integer id){
 
         EstoqueTesteResponse response = EstoqueTesteMapper.toResponse(service.findByIdOrThrow(id));
@@ -105,6 +110,7 @@ public class EstoqueTesteController {
             @ApiResponse(responseCode = "200", description = "Teste buscada com Sucesso")
     })
     @GetMapping("/quantidade")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EstoqueTesteResponse> buscarPorQuantidade(){
         EstoqueTesteResponse estoqueTeste = EstoqueTesteMapper.toResponse(service.buscarPorQtd());
         if (estoqueTeste == null){

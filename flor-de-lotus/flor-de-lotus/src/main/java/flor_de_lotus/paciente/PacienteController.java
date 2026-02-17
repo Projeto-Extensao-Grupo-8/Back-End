@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ public class PacienteController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
     @PostMapping
+    @PreAuthorize("hasAnyRole('PACIENTE', 'ADMIN')")
     public ResponseEntity<PacienteResponseBody> cadastrar(@RequestBody @Valid PacientePostRequestBody body) {
 
         Paciente pacienteCadastrar = PacienteMapper.of(body);
@@ -47,6 +49,7 @@ public class PacienteController {
             @ApiResponse(responseCode = "204", description = "Não há pacientes cadastrados")
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PacienteResponseBody>> listarTodos() {
         List<PacienteResponseBody> lista = service.listarTodos().stream().map(PacienteMapper::of).toList();
         if (lista.isEmpty()) {
@@ -57,12 +60,14 @@ public class PacienteController {
 
     @Operation(summary = "Buscar paciente por ID")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('PACIENTE','FUNCIONARIO' ,'ADMIN')")
     public ResponseEntity<PacienteResponseBody> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.status(200).body(PacienteMapper.of(service.buscarPorIdOuThrow(id)));
     }
 
     @Operation(summary = "Atualizar parcialmente um paciente")
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('PACIENTE', 'ADMIN')")
     public ResponseEntity<PacienteResponseBody> atualizarParcial(
             @PathVariable Integer id,
             @RequestBody @Valid PacientePostRequestBody body) {
@@ -77,6 +82,7 @@ public class PacienteController {
 
     @Operation(summary = "Deletar paciente por ID")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletarPorId(@PathVariable Integer id) {
         service.deletarPorId(id);
         return ResponseEntity.status(200).build();

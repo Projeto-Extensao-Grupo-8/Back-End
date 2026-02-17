@@ -31,13 +31,13 @@ public class UsuarioDetalhes implements UserDetails {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         if ("4".equals(nivelAcesso)) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            authorities.add(new SimpleGrantedAuthority("ADMIN"));
         } else if ("3".equals(nivelAcesso)) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_PACIENTE"));
+            authorities.add(new SimpleGrantedAuthority("FUNCIONARIO"));
         } else if ("2".equals(nivelAcesso)) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"));
+            authorities.add(new SimpleGrantedAuthority("PACIENTE"));
         } else {
-            authorities.add(new SimpleGrantedAuthority("ROLE_USUARIO"));
+            authorities.add(new SimpleGrantedAuthority("USUARIO"));
         }
 
         return authorities;

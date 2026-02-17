@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,12 +24,14 @@ public class ArtigoController {
     private final ArtigoService artigoService;
     @Operation(summary = "Listar Todos Artigos")
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'USUARIO', 'PACIENTE')")
     public ResponseEntity<List<ArtigoResponse>> listarTodos() {
         return ResponseEntity.ok(ArtigoMapper.toResponseList(artigoService.listarTodos()));
     }
 
     @Operation(summary = "Procurar artigo por palavra")
     @GetMapping("/pesquisar")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'USUARIO', 'PACIENTE')")
     public ResponseEntity<List<ArtigoResponse>> pesquisar(
             @RequestParam(value = "termo", required = false) String termo) {
         return ResponseEntity.ok(ArtigoMapper.toResponseList(artigoService.pesquisar(termo)));
@@ -36,6 +39,7 @@ public class ArtigoController {
 
     @Operation(summary = "Procurar Artigo por Id")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'USUARIO', 'PACIENTE')")
     public ResponseEntity<ArtigoResponse> buscarPorId(@PathVariable Integer id) {
 
         Optional<ArtigoResponse> artigo = artigoService.buscarPorId(id).map(ArtigoMapper::toResponse);
@@ -47,6 +51,7 @@ public class ArtigoController {
 
     @Operation(summary = "Cadastrar novos artigos no sistema")
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ArtigoResponse> cadastrar(@Valid @RequestBody ArtigoPostRequest dto) {
 
         Artigo artigo = ArtigoMapper.toEntity(dto);
@@ -63,6 +68,7 @@ public class ArtigoController {
 
     @Operation(summary = "Atualizar Artigo por ID")
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ArtigoResponse> atualizar(
             @PathVariable Integer id,
             @Valid @RequestBody ArtigoPostRequest dto) {
@@ -78,6 +84,7 @@ public class ArtigoController {
 
     @Operation(summary = "Deletar Artigo por ID")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         artigoService.deletar(id);
         return ResponseEntity.noContent().build();

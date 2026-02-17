@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class TesteController {
                     content = @Content(schema = @Schema(implementation = EntidadeConflitoException.class)))
     })
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<TesteResponse> cadastrar(@RequestBody @Valid TestePostRequest body){
 
         Teste teste = TesteMapper.toEntity(body);
@@ -53,6 +55,7 @@ public class TesteController {
                     content = @Content(schema = @Schema(implementation = EntidadeConflitoException.class)))
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletarPorId(@PathVariable Integer id){
         service.deletarPorId(id);
         return ResponseEntity.status(200).build();
@@ -64,6 +67,7 @@ public class TesteController {
             @ApiResponse(responseCode = "404", description = "Teste não encontrado no sistema")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<TesteResponse> buscarPorId(@PathVariable Integer id){
         return ResponseEntity.status(200).body(TesteMapper.toResponse(service.findByIdOrThrow(id)));
     }
@@ -74,6 +78,7 @@ public class TesteController {
             @ApiResponse(responseCode = "204", description = "Não possui testes cadastrados")
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<TesteResponse>> listarTodos(){
 
         List<Teste> lista = service.listarTodos();
@@ -94,6 +99,7 @@ public class TesteController {
             @ApiResponse(responseCode = "204", description = "Não possui testes cadastrados com essa categoria")
     })
     @GetMapping("/{categoria}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<TesteResponse>> listarPorCategoria(@PathVariable String categoria){
         List<Teste> listaTodos = service.listarPorCategoria(categoria);
         if (listaTodos.isEmpty()){
@@ -112,6 +118,7 @@ public class TesteController {
             @ApiResponse(responseCode = "204", description = "Não possui testes cadastrados com esse tipo")
     })
     @GetMapping("/{tipo}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<TesteResponse>> listarPorTipo (@PathVariable String tipo){
         List<Teste> listaTodos = service.listarPorTipo(tipo);
         if (listaTodos.isEmpty()){
@@ -131,6 +138,7 @@ public class TesteController {
 
     })
     @GetMapping("/validade")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Integer> buscarPorValidade(){
         Integer qtdTesteEncontrado = service.buscarQtdTesteComValidadeProxima();
         if (qtdTesteEncontrado == null){

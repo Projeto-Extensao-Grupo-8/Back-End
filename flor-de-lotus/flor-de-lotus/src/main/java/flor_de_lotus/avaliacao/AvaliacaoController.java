@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)
     })
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'PACIENTE')")
     public ResponseEntity<AvaliacaoResponse> cadastrar(@RequestBody @Valid AvaliacaoRequest body){
 
         Avaliacao avaliacao = AvaliacaoMapper.toEntity(body);
@@ -48,6 +50,7 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "204", description = "Nenhuma avaliação encontrada", content = @Content)
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AvaliacaoResponse>> listarTodos(){
         List<Avaliacao> listaTodos = service.listarTodos();
 

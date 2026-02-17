@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -81,6 +82,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Deletar um usuário",
             description = "Recebe o id de um usuário previamente cadastrado e o remove do sistema"
@@ -130,6 +132,7 @@ public class UsuarioController {
 
     })
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'USUARIO', 'PACIENTE')")
     public ResponseEntity<UsuarioResponseBody> atualizarParcial(@PathVariable Integer id,@RequestBody @Valid UsuarioReplaceRequestBody body){
 
         Usuario usuario = UsuarioMapper.of(body);
@@ -162,6 +165,7 @@ public class UsuarioController {
 
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'USUARIO', 'PACIENTE')")
     public ResponseEntity<UsuarioResponseBody> buscarUsuario(@PathVariable Integer id){
 
         UsuarioResponseBody response = UsuarioMapper.of(service.buscarPorIdOuThrow(id));
@@ -186,6 +190,7 @@ public class UsuarioController {
             )
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UsuarioResponseBody>> listarTodos(){
 
         List<UsuarioResponseBody> lista = service.listarTodos()
