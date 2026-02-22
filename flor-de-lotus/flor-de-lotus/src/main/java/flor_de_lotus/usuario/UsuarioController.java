@@ -190,7 +190,7 @@ public class UsuarioController {
             )
     })
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UsuarioResponseBody>> listarTodos(){
 
         List<UsuarioResponseBody> lista = service.listarTodos()

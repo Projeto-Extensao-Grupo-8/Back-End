@@ -1,11 +1,11 @@
 -- ======================================
 -- TABELA: ENDERECO
 -- ======================================
-INSERT INTO endereco (id_endereco, logradouro, numero, complemento, bairro, cidade, estado, cep)
+INSERT INTO endereco (logradouro, numero, complemento, bairro, cidade, estado, cep)
 VALUES
-    (1, 'Rua das Flores', '123', 'Apto 12', 'Centro', 'São Paulo', 'SP', '01000-000'),
-    (2, 'Avenida Paulista', '1000', 'Conjunto 1501', 'Bela Vista', 'São Paulo', 'SP', '01310-100'),
-    (3, 'Rua Verdejante', '45', NULL, 'Jardins', 'São Paulo', 'SP', '01420-020');
+    ('Rua das Flores', '123', 'Apto 12', 'Centro', 'São Paulo', 'SP', '01000-000'),
+    ('Avenida Paulista', '1000', 'Conjunto 1501', 'Bela Vista', 'São Paulo', 'SP', '01310-100'),
+    ('Rua Verdejante', '45', NULL, 'Jardins', 'São Paulo', 'SP', '01420-020');
 
 -- ======================================
 -- TABELA: USUARIO

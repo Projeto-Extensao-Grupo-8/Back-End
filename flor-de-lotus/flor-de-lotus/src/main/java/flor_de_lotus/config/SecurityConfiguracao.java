@@ -2,6 +2,7 @@ package flor_de_lotus.config;
 
 import flor_de_lotus.usuario.AutenticacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +32,9 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfiguracao {
 
+    @Value("${url.frontend}")
+    private String urlFrontend;
+
     @Autowired
     private AutenticacaoService autenticacaoService;
 
@@ -49,23 +53,23 @@ public class SecurityConfiguracao {
             "/v3/api-docs/**",
             "/actuator/*",
             "/usuarios/login",
-            "/usuarios/cadastro",
-            "/h2-console/**",
-            "/error/"
+            "/usuarios/cadastro"
     };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .headers(headers -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                        // H2 Console segurança: permite frames apenas da mesma origem (melhor que disable)
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .cors(Customizer.withDefaults())
                 .csrf(CsrfConfigurer<HttpSecurity>::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(URLS_PERMITIDAS)
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated()
+                        .requestMatchers(URLS_PERMITIDAS).permitAll()
+                        // Proteção Actuator e H2: Apenas usuários autenticados (ou com role específica)
+                        .requestMatchers("/actuator/**").hasRole("ADMIN")
+                        .requestMatchers("/h2-console/**").authenticated()
+                        .anyRequest().authenticated()
                 )
                 .exceptionHandling(handling -> handling
                         .authenticationEntryPoint(autenticacaoJwtEntryPoint))
@@ -101,7 +105,8 @@ public class SecurityConfiguracao {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuracao = new CorsConfiguration();
-        configuracao.applyPermitDefaultValues();
+        configuracao.addAllowedOrigin(urlFrontend);
+
         configuracao.setAllowedMethods(
                 Arrays.asList(
                         HttpMethod.GET.name(),
@@ -109,11 +114,11 @@ public class SecurityConfiguracao {
                         HttpMethod.PUT.name(),
                         HttpMethod.PATCH.name(),
                         HttpMethod.DELETE.name(),
-                        HttpMethod.OPTIONS.name(),
-                        HttpMethod.HEAD.name(),
-                        HttpMethod.TRACE.name()));
+                        HttpMethod.OPTIONS.name()));
 
         configuracao.setExposedHeaders(List.of(HttpHeaders.CONTENT_DISPOSITION));
+        configuracao.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Cache-Control"));
+        configuracao.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource origem = new UrlBasedCorsConfigurationSource();
         origem.registerCorsConfiguration("/**", configuracao);
