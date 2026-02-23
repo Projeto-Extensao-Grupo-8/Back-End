@@ -40,10 +40,12 @@ public class AutenticacaoFilter extends OncePerRequestFilter {
                 username = jwtTokenManager.getUsernameFromToken(jwtToken);
             } catch (ExpiredJwtException exception) {
 
-                LOGGER.info("FALHA AUTENTICACAO - Token expirado. usuario: {} - {}",
-                        exception.getClaims().getSubject(), exception.getMessage());
+                // Não logar claims sensíveis em claro. Logar apenas o mínimo necessário (evento e username mascarado)
+                String maskedUser = maskUsername(exception.getClaims() != null ? exception.getClaims().getSubject() : null);
+                LOGGER.info("FALHA AUTENTICACAO - Token expirado para usuário: {}", maskedUser);
 
-                LOGGER.trace("FALHA AUTENTICACAO - stack trace: %s", exception);
+                // Registrar detalhes e stack trace com nível debug, passando a exceção como último parâmetro
+                LOGGER.debug("FALHA AUTENTICACAO - Token expirado (detalhes): {}", exception.getMessage(), exception);
 
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
@@ -69,5 +71,16 @@ public class AutenticacaoFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         }
+    }
+
+    // Mascara um username para evitar exposição de claims sensíveis nos logs
+    private String maskUsername(String username) {
+        if (username == null || username.isBlank()) {
+            return "[unknown]";
+        }
+        // Mostrar apenas os primeiros 3 caracteres (quando possível) e mascarar o restante
+        int visible = Math.min(3, username.length());
+        String visiblePart = username.substring(0, visible);
+        return visiblePart + "***";
     }
 }
