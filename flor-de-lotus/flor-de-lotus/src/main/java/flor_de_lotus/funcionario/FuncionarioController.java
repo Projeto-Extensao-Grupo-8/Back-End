@@ -2,6 +2,7 @@ package flor_de_lotus.funcionario;
 
 import flor_de_lotus.funcionario.dto.FuncionarioPatchRequestBody;
 import flor_de_lotus.funcionario.dto.FuncionarioPostRequestBody;
+import flor_de_lotus.funcionario.dto.FuncionarioResponse;
 import flor_de_lotus.funcionario.mapper.FuncionarioMapper;
 import flor_de_lotus.usuario.Usuario;
 import flor_de_lotus.usuario.UsuarioService;
@@ -29,44 +30,45 @@ public class FuncionarioController {
     @Operation(summary = "Cadastrar funcionário", description = "Cria um novo registro de funcionário no sistema.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Funcionário cadastrado com sucesso",
-                    content = @Content(schema = @Schema(implementation = Funcionario.class))),
+                    content = @Content(schema = @Schema(implementation = FuncionarioResponse.class))),
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)
     })
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Funcionario> cadastrar(@RequestBody @Valid FuncionarioPostRequestBody body){
+    public ResponseEntity<FuncionarioResponse> cadastrar(@RequestBody @Valid FuncionarioPostRequestBody body){
         Usuario usuario = usuarioService.buscarEntidadePorIdOuThrow(body.getFkUsuario());
         Funcionario funcionario = FuncionarioMapper.toEntity(body, usuario);
 
-        return ResponseEntity.status(201).body(service.cadastrar(funcionario, usuario));
+        Funcionario cadastrado = service.cadastrar(funcionario, usuario);
+        return ResponseEntity.status(201).body(FuncionarioMapper.toResponse(cadastrado));
     }
 
     @Operation(summary = "Listar todos os funcionários", description = "Retorna uma lista de todos os funcionários cadastrados.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso",
-                    content = @Content(schema = @Schema(implementation = Funcionario.class))),
+                    content = @Content(schema = @Schema(implementation = FuncionarioResponse.class))),
             @ApiResponse(responseCode = "204", description = "Nenhum funcionário encontrado", content = @Content)
     })
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Funcionario>> listarTodos(){
+    public ResponseEntity<List<FuncionarioResponse>> listarTodos(){
         List<Funcionario> listaTodos = service.listarTodos();
         if (listaTodos.isEmpty()){
             return ResponseEntity.status(204).build();
         }
-        return ResponseEntity.status(200).body(listaTodos);
+        return ResponseEntity.status(200).body(FuncionarioMapper.toResponseList(listaTodos));
     }
 
     @Operation(summary = "Buscar funcionário por ID", description = "Busca um funcionário específico pelo seu ID.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Funcionário encontrado",
-                    content = @Content(schema = @Schema(implementation = Funcionario.class))),
+                    content = @Content(schema = @Schema(implementation = FuncionarioResponse.class))),
             @ApiResponse(responseCode = "404", description = "Funcionário não encontrado", content = @Content)
     })
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
-    public ResponseEntity<Funcionario> buscarPorId(@PathVariable Integer id){
-        return ResponseEntity.status(200).body(service.buscarPorIdOuThrow(id));
+    public ResponseEntity<FuncionarioResponse> buscarPorId(@PathVariable Integer id){
+        return ResponseEntity.status(200).body(FuncionarioMapper.toResponse(service.buscarPorIdOuThrow(id)));
     }
 
     @Operation(summary = "Deletar funcionário", description = "Remove permanentemente um funcionário do sistema pelo ID.")
@@ -108,13 +110,14 @@ public class FuncionarioController {
     @Operation(summary = "Atualizar parcialmente funcionário", description = "Atualiza parcialmente os dados de um funcionário existente.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Funcionário atualizado com sucesso",
-                    content = @Content(schema = @Schema(implementation = Funcionario.class))),
+                    content = @Content(schema = @Schema(implementation = FuncionarioResponse.class))),
             @ApiResponse(responseCode = "404", description = "Funcionário não encontrado", content = @Content)
     })
     @PatchMapping("/{id}")
     @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
-    public ResponseEntity<Funcionario> atualizarParcial(@PathVariable Integer id, @RequestBody FuncionarioPatchRequestBody body ){
-        return ResponseEntity.status(200).body(service.atualizarParcial(id,body));
+    public ResponseEntity<FuncionarioResponse> atualizarParcial(@PathVariable Integer id, @RequestBody FuncionarioPatchRequestBody body ){
+        Funcionario atualizado = service.atualizarParcial(id, body);
+        return ResponseEntity.status(200).body(FuncionarioMapper.toResponse(atualizado));
     }
 
 }

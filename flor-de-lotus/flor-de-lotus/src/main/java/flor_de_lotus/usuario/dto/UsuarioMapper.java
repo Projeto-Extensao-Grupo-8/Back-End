@@ -5,7 +5,7 @@ import flor_de_lotus.usuario.Usuario;
 
 public class UsuarioMapper {
 
-    public static Usuario of(UsuarioPostRequestBody dto, Endereco endereco) {
+    public static Usuario toEntity(UsuarioPostRequestBody dto, Endereco endereco) {
 
         Usuario entinty = new Usuario();
 
@@ -22,7 +22,7 @@ public class UsuarioMapper {
 
     }
 
-    public static Usuario of(UsuarioPostRequestBody dto) {
+    public static Usuario toEntity(UsuarioPostRequestBody dto) {
 
         Usuario entinty = new Usuario();
 
@@ -38,7 +38,7 @@ public class UsuarioMapper {
 
     }
 
-    public static Usuario of(UsuarioReplaceRequestBody dto) {
+    public static Usuario toEntity(UsuarioReplaceRequestBody dto) {
 
         Usuario entinty = new Usuario();
 
@@ -54,7 +54,7 @@ public class UsuarioMapper {
 
     }
 
-    public static Usuario of(UsuarioLoginRequestBody dto) {
+    public static Usuario toEntity(UsuarioLoginRequestBody dto) {
 
         Usuario entinty = new Usuario();
 
@@ -65,7 +65,7 @@ public class UsuarioMapper {
 
     }
 
-    public static UsuarioResponseBody of(Usuario usuario) {
+    public static UsuarioResponseBody toResponse(Usuario usuario) {
 
         UsuarioResponseBody usuarioResponseBody = new UsuarioResponseBody();
 
@@ -78,7 +78,7 @@ public class UsuarioMapper {
 
     }
 
-    public static UsuarioTokenResponseBody of(Usuario usuario, String token) {
+    public static UsuarioTokenResponseBody toTokenResponse(Usuario usuario, String token) {
         UsuarioTokenResponseBody usuarioTokenResponseBody = new UsuarioTokenResponseBody();
 
         usuarioTokenResponseBody.setUserId(usuario.getIdUsuario());

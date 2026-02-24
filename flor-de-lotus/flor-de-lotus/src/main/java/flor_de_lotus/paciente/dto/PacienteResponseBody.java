@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class PacienteResponseBody {
     private Integer idPaciente;
-    private Character ativo;
+    private boolean ativo;
     private Integer idUsuario;
     private String nomeUsuario;
 }

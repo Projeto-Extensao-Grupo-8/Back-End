@@ -1,19 +1,17 @@
 package flor_de_lotus.funcionario.dto;
 
-import flor_de_lotus.usuario.Usuario;
-import jakarta.persistence.Column;
-import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class FuncionarioPostRequestBody {
-    @Column(unique = true )
+    @NotBlank
     private String crp;
+    @NotBlank
     private String especialidade;
-    @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
-    private boolean ativo;
-    @OneToOne
+    @NotNull
     private Integer fkUsuario;
 }

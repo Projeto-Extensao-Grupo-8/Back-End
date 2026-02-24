@@ -1,6 +1,5 @@
 package flor_de_lotus.paciente;
 
-import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.paciente.dto.PacienteMapper;
 import flor_de_lotus.paciente.dto.PacientePostRequestBody;
 import flor_de_lotus.paciente.dto.PacienteResponseBody;
@@ -12,7 +11,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,11 +32,9 @@ public class PacienteController {
     @PreAuthorize("hasAnyRole('PACIENTE', 'ADMIN')")
     public ResponseEntity<PacienteResponseBody> cadastrar(@RequestBody @Valid PacientePostRequestBody body) {
 
-        Paciente pacienteCadastrar = PacienteMapper.of(body);
-
         Paciente pacienteCadastrado = service.cadastrar(body.getFkUsuario());
 
-        PacienteResponseBody response = PacienteMapper.of(pacienteCadastrado);
+        PacienteResponseBody response = PacienteMapper.toResponse(pacienteCadastrado);
 
         return ResponseEntity.status(201).body(response);
     }
@@ -51,7 +47,7 @@ public class PacienteController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PacienteResponseBody>> listarTodos() {
-        List<PacienteResponseBody> lista = service.listarTodos().stream().map(PacienteMapper::of).toList();
+        List<PacienteResponseBody> lista = service.listarTodos().stream().map(PacienteMapper::toResponse).toList();
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
@@ -62,7 +58,7 @@ public class PacienteController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('PACIENTE','FUNCIONARIO' ,'ADMIN')")
     public ResponseEntity<PacienteResponseBody> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.status(200).body(PacienteMapper.of(service.buscarPorIdOuThrow(id)));
+        return ResponseEntity.status(200).body(PacienteMapper.toResponse(service.buscarPorIdOuThrow(id)));
     }
 
     @Operation(summary = "Atualizar parcialmente um paciente")
@@ -72,12 +68,9 @@ public class PacienteController {
             @PathVariable Integer id,
             @RequestBody @Valid PacientePostRequestBody body) {
 
-        Paciente atualizacao = PacienteMapper.of(body);
+        Paciente atualizado = service.atualizarParcial(id, body);
 
-        PacienteResponseBody atualizado = PacienteMapper.of(service.atualizarParcial(id, atualizacao, body.getFkUsuario()));
-
-        return ResponseEntity.status(200).body(atualizado);
-
+        return ResponseEntity.status(200).body(PacienteMapper.toResponse(atualizado));
     }
 
     @Operation(summary = "Deletar paciente por ID")

@@ -27,7 +27,7 @@ public class AvaliacaoController {
     @Operation(summary = "Registrar avaliação", description = "Cria uma nova avaliação da consulta no sistema.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Avaliação registrada com sucesso",
-                    content = @Content(schema = @Schema(implementation = Funcionario.class))),
+                    content = @Content(schema = @Schema(implementation = AvaliacaoResponse.class))),
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)
     })
     @PostMapping
@@ -46,7 +46,7 @@ public class AvaliacaoController {
     @Operation(summary = "Listar todos as avaliações", description = "Retorna uma lista de todas as avaliações registradas.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso",
-                    content = @Content(schema = @Schema(implementation = Funcionario.class))),
+                    content = @Content(schema = @Schema(implementation = AvaliacaoResponse.class))),
             @ApiResponse(responseCode = "204", description = "Nenhuma avaliação encontrada", content = @Content)
     })
     @GetMapping
@@ -64,4 +64,3 @@ public class AvaliacaoController {
     }
 
 }
-

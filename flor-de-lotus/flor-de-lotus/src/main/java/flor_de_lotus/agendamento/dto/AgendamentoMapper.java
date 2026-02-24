@@ -5,7 +5,7 @@ import flor_de_lotus.funcionario.Funcionario;
 
 public class AgendamentoMapper {
 
-    public static Agendamento of(AgendamentoPostRequest dto, Funcionario funcionario) {
+    public static Agendamento toEntity(AgendamentoPostRequest dto, Funcionario funcionario) {
         Agendamento agendamento = new Agendamento();
 
         agendamento.setInicioTempo(dto.getInicioTempo());
@@ -16,7 +16,7 @@ public class AgendamentoMapper {
         return agendamento;
     }
 
-    public static Agendamento of(AgendamentoPostRequest dto) {
+    public static Agendamento toEntity(AgendamentoPostRequest dto) {
         Agendamento agendamento = new Agendamento();
 
         agendamento.setInicioTempo(dto.getInicioTempo());
@@ -26,7 +26,7 @@ public class AgendamentoMapper {
         return agendamento;
     }
 
-    public static AgendamentoResponse of(Agendamento entity) {
+    public static AgendamentoResponse toResponse(Agendamento entity) {
         AgendamentoResponse response = new AgendamentoResponse();
 
         response.setIdAgendamento(entity.getIdAgendamento());

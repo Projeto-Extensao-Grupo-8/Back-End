@@ -5,23 +5,23 @@ import flor_de_lotus.usuario.Usuario;
 
 public class PacienteMapper {
 
-    public static Paciente of(Usuario usuario) {
+    public static Paciente toEntity(Usuario usuario) {
         Paciente paciente = new Paciente();
         paciente.setFkUsuario(usuario);
-        paciente.setAtivo('S');
+        paciente.setAtivo(true);
         return paciente;
     }
 
-    public static Paciente of(PacientePostRequestBody dto) {
+    public static Paciente toEntity(PacientePostRequestBody dto) {
         Paciente paciente = new Paciente();
-        paciente.setAtivo('S');
+        paciente.setAtivo(dto.getAtivo() != null ? dto.getAtivo() : true);
         return paciente;
     }
 
-    public static PacienteResponseBody of(Paciente paciente) {
+    public static PacienteResponseBody toResponse(Paciente paciente) {
         PacienteResponseBody response = new PacienteResponseBody();
         response.setIdPaciente(paciente.getIdPaciente());
-        response.setAtivo(paciente.getAtivo());
+        response.setAtivo(paciente.isAtivo());
         if (paciente.getFkUsuario() != null) {
             response.setIdUsuario(paciente.getFkUsuario().getIdUsuario());
             response.setNomeUsuario(paciente.getFkUsuario().getNome());

@@ -35,7 +35,7 @@ public class ConsultaService {
         Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(idFuncionario);
 
         if (repositoryPac.existsByFkUsuario_IdUsuario(idUsuario)){
-            paciente = pacienteService.buscarPorIdOuThrow(idUsuario);
+            paciente = repositoryPac.findByFkUsuario_IdUsuario(idUsuario).orElseThrow(() -> new EntidadeNaoEncontradoException("Paciente não encontrado para usuário informado."));
         }else {
             usuarioService.buscarEntidadePorIdOuThrow(idUsuario);
             paciente = pacienteService.cadastrar(idUsuario);

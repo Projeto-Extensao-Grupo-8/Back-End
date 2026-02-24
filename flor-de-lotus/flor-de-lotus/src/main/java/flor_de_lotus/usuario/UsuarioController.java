@@ -137,7 +137,7 @@ public class UsuarioController {
 
         Usuario usuario = UsuarioMapper.of(body);
 
-        UsuarioResponseBody response = UsuarioMapper.of(service.atulizarParcial(id,usuario));
+        UsuarioResponseBody response = UsuarioMapper.of(service.atualizarParcial(id,usuario));
 
         return ResponseEntity.status(200).body(response);
     }

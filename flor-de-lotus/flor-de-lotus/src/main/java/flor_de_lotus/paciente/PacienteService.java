@@ -1,8 +1,7 @@
 package flor_de_lotus.paciente;
 
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
-import flor_de_lotus.paciente.dto.PacienteMapper;
-import flor_de_lotus.paciente.dto.PacienteResponseBody;
+import flor_de_lotus.paciente.dto.PacientePostRequestBody;
 import flor_de_lotus.usuario.Usuario;
 import flor_de_lotus.usuario.UsuarioRepository;
 import flor_de_lotus.usuario.UsuarioService;
@@ -43,16 +42,12 @@ public class PacienteService {
         return pacienteOpt.get();
     }
 
-    public Paciente atualizarParcial(Integer id, Paciente entity, Integer idUsuario) {
+    public Paciente atualizarParcial(Integer id, PacientePostRequestBody dto) {
         Paciente paciente = buscarPorIdOuThrow(id);
-        if (entity.getFkUsuario() != null) {
-            Usuario usuario = usuarioService.buscarEntidadePorIdOuThrow(idUsuario);
-            paciente.setFkUsuario(usuario);
+        if (dto.getAtivo() != null) {
+            paciente.setAtivo(dto.getAtivo());
         }
-        Paciente atualizado = repository.save(paciente);
-
-        return atualizado;
-
+        return repository.save(paciente);
     }
 
     public void deletarPorId(Integer id) {

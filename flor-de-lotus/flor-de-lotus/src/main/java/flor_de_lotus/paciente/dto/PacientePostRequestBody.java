@@ -9,4 +9,5 @@ import lombok.Setter;
 public class PacientePostRequestBody {
     @NotNull
     private Integer fkUsuario;
+    private Boolean ativo;
 }

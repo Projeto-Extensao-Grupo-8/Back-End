@@ -56,13 +56,8 @@ public class ArtigoController {
 
         Artigo artigo = ArtigoMapper.toEntity(dto);
 
-        try {
-            ArtigoResponse criado = ArtigoMapper.toResponse(artigoService.cadastrar(artigo, dto.getIdFuncionario()));
-            return ResponseEntity.status(HttpStatus.CREATED).body(criado);
-        } catch (RuntimeException e) {
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        ArtigoResponse criado = ArtigoMapper.toResponse(artigoService.cadastrar(artigo, dto.getIdFuncionario()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(criado);
 
     }
 

@@ -38,11 +38,11 @@ public class ConsultaController {
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE')")
     public ResponseEntity<ConsultaResponseBody> cadastrar(@RequestBody @Valid ConsultaPostRequestBody body) {
 
-        Consulta consulta = ConsultaMapper.of(body);
+        Consulta consulta = ConsultaMapper.toEntity(body);
 
         Consulta cadastrada = service.cadastrar(consulta, body.getFkUsuario(), body.getFkFuncionario());
 
-        ConsultaResponseBody response = ConsultaMapper.of(cadastrada);
+        ConsultaResponseBody response = ConsultaMapper.toResponse(cadastrada);
 
         return ResponseEntity.status(201).body(response);
     }
@@ -55,7 +55,7 @@ public class ConsultaController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ConsultaResponseBody>> listarTodas() {
-        List<ConsultaResponseBody> lista = service.listarTodas().stream().map(ConsultaMapper::of).toList();
+        List<ConsultaResponseBody> lista = service.listarTodas().stream().map(ConsultaMapper::toResponse).toList();
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
@@ -71,7 +71,7 @@ public class ConsultaController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO','PACIENTE')")
     public ResponseEntity<ConsultaResponseBody> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.status(200).body(ConsultaMapper.of(service.buscarPorIdOuThrow(id)));
+        return ResponseEntity.status(200).body(ConsultaMapper.toResponse(service.buscarPorIdOuThrow(id)));
     }
 
     @Operation(summary = "Deletar consulta via ID")
@@ -102,11 +102,11 @@ public class ConsultaController {
             @PathVariable Integer id,
             @RequestBody @Valid ConsultaPostRequestBody body) {
 
-        Consulta atualizacao = ConsultaMapper.of(body);
+        Consulta atualizacao = ConsultaMapper.toEntity(body);
 
         Consulta consultaAtualizada = service.atualizarParcial(id, atualizacao, body.getFkFuncionario(), body.getFkUsuario());
 
-        ConsultaResponseBody response = ConsultaMapper.of(consultaAtualizada);
+        ConsultaResponseBody response = ConsultaMapper.toResponse(consultaAtualizada);
 
         return ResponseEntity.status(200).body(response);
 

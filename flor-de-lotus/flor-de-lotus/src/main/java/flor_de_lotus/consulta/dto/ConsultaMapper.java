@@ -6,7 +6,7 @@ import flor_de_lotus.paciente.Paciente;
 
 public class ConsultaMapper {
 
-    public static Consulta of(ConsultaPostRequestBody dto, Funcionario funcionario, Paciente paciente) {
+    public static Consulta toEntity(ConsultaPostRequestBody dto, Funcionario funcionario, Paciente paciente) {
         Consulta entity = new Consulta();
 
         entity.setDataConsulta(dto.getDataConsulta());
@@ -18,7 +18,7 @@ public class ConsultaMapper {
         return entity;
     }
 
-    public static Consulta of(ConsultaPostRequestBody dto) {
+    public static Consulta toEntity(ConsultaPostRequestBody dto) {
         Consulta entity = new Consulta();
 
         entity.setDataConsulta(dto.getDataConsulta());
@@ -30,7 +30,7 @@ public class ConsultaMapper {
         return entity;
     }
 
-    public static ConsultaResponseBody of(Consulta consulta) {
+    public static ConsultaResponseBody toResponse(Consulta consulta) {
         ConsultaResponseBody response = new ConsultaResponseBody();
 
         response.setIdConsulta(consulta.getIdConsulta());

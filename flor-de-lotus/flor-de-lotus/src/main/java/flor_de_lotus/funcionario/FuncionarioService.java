@@ -58,14 +58,15 @@ public class FuncionarioService {
         Funcionario funcionario = buscarPorIdOuThrow(id);
         if (funcionario.isAtivo()){
             funcionario.setAtivo(false);
+            repository.save(funcionario);
         }
-
     }
 
     public void ativarProfissional(Integer id){
         Funcionario funcionario = buscarPorIdOuThrow(id);
         if (!funcionario.isAtivo()){
             funcionario.setAtivo(true);
+            repository.save(funcionario);
         }
 
     }

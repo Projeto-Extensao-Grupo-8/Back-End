@@ -33,9 +33,9 @@ public class AgendamentoController {
 
     public ResponseEntity<AgendamentoResponse> publicar(@RequestBody @Valid AgendamentoPostRequest dto) {
 
-        Agendamento agendamento = AgendamentoMapper.of(dto);
+        Agendamento agendamento = AgendamentoMapper.toEntity(dto);
 
-        AgendamentoResponse response = AgendamentoMapper.of(service.publicar(agendamento,dto.getIdFuncionario()));
+        AgendamentoResponse response = AgendamentoMapper.toResponse(service.publicar(agendamento,dto.getIdFuncionario()));
 
         return ResponseEntity.status(201).body(response);
 
@@ -59,7 +59,7 @@ public class AgendamentoController {
     public ResponseEntity<List<AgendamentoResponse>> listarTodos() {
         List<AgendamentoResponse> lista = service.listarTodos()
                                                             .stream()
-                                                                    .map(AgendamentoMapper::of)
+                                                                    .map(AgendamentoMapper::toResponse)
                                                                         .collect(Collectors.toList());
         if (lista.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(lista);
@@ -69,7 +69,7 @@ public class AgendamentoController {
     @GetMapping("/funcionario/{idFuncionario}")
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<AgendamentoResponse>> listarPorFuncionario(@PathVariable Integer idFuncionario) {
-        List<AgendamentoResponse> lista = service.listarPorFuncionario(idFuncionario).stream().map(AgendamentoMapper::of).collect(Collectors.toList());;
+        List<AgendamentoResponse> lista = service.listarPorFuncionario(idFuncionario).stream().map(AgendamentoMapper::toResponse).collect(Collectors.toList());;
         if (lista.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(lista);
     }

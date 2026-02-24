@@ -21,9 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,9 +44,8 @@ public class UsuarioService {
     private AuthenticationManager authenticationManager;
 
     public Endereco cadastrarEndereco(String cep, String numero, String complemento){
-        Endereco endereco = new Endereco();
         EnderecoResponse enderecoConsultado = enderecoService.buscarCEP(cep);
-        endereco = EnderecoMapper.toEntityPost(enderecoConsultado, numero, complemento);
+        Endereco endereco = EnderecoMapper.toEntityPost(enderecoConsultado, numero, complemento);
 
         return enderecoRepository.save(endereco);
     }
@@ -104,7 +101,7 @@ public class UsuarioService {
 
         final String token = gerenciadorTokenJwt.generateToken(authentication);
 
-        return UsuarioMapper.of(usuarioAutenticado,token);
+        return UsuarioMapper.toTokenResponse(usuarioAutenticado,token);
 
     }
 
@@ -132,11 +129,14 @@ public class UsuarioService {
         repository.delete(buscarEntidadePorIdOuThrow(id));
     }
 
-    public Usuario atulizarParcial(Integer id, Usuario entity){
+    public Usuario atualizarParcial(Integer id, Usuario entity){
         Usuario usuario = buscarEntidadePorIdOuThrow(id);
         if (entity.getEmail() != null) checarDuplicidade(entity.getEmail(), null);usuario.setEmail(entity.getEmail());
         if (entity.getNome() != null) usuario.setNome(entity.getNome());
-        if (entity.getSenha() != null) checarRegrasSenha(entity.getSenha()); usuario.setSenha(entity.getSenha());
+        if (entity.getSenha() != null) {
+            checarRegrasSenha(entity.getSenha());
+            usuario.setSenha(passwordEncoder.encode(entity.getSenha()));
+        }
         if (entity.getTelefone() != null) usuario.setTelefone(entity.getTelefone());
 
         return repository.save(usuario);
@@ -144,8 +144,7 @@ public class UsuarioService {
     }
 
     public List<Usuario> listarTodos(){
-        List<Usuario> usuariosEncontrados = repository.findAll();
-        return usuariosEncontrados;
+        return repository.findAll();
     }
 
 }

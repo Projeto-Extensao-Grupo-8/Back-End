@@ -16,7 +16,7 @@ public class Paciente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPaciente;
 
-    private Character ativo = 'S';
+    private boolean ativo = true;
 
     @OneToOne
     @JoinColumn(name = "fk_usuario_id", nullable = false)
