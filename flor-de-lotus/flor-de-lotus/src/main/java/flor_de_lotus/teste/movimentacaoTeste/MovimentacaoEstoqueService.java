@@ -5,7 +5,6 @@ import flor_de_lotus.consulta.ConsultaService;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.teste.Teste;
 import flor_de_lotus.teste.TesteService;
-import flor_de_lotus.teste.movimentacaoTeste.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +32,7 @@ public class MovimentacaoEstoqueService {
     }
 
     public List<MovimentacaoEstoque> listar(){
-        List<MovimentacaoEstoque> listaTodos = repository.findAll();
-        return listaTodos;
+        return repository.findAll();
     }
 
     public MovimentacaoEstoque buscarPorIdOuThrow(Integer id) {
@@ -46,7 +44,7 @@ public class MovimentacaoEstoqueService {
     }
 
     public List<MovimentacaoEstoque> listarPorPaciente(Integer idPaciente) {
-        List<Consulta> listaConsulta = consultaService.listarPorPaciente(idPaciente);
+        List<Consulta> listaConsulta = consultaService.listarConsultasPorPaciente(idPaciente);
         List<MovimentacaoEstoque> movimentacoes = new ArrayList<>();
 
         for (Consulta c:listaConsulta){
@@ -59,7 +57,7 @@ public class MovimentacaoEstoqueService {
     }
 
     public List<MovimentacaoEstoque> listarPorFuncionario(Integer idFuncionario) {
-        List<Consulta> listaConsulta = consultaService.listarPorFuncionario(idFuncionario);
+        List<Consulta> listaConsulta = consultaService.listarConsultasPorFuncionario(idFuncionario);
         List<MovimentacaoEstoque> movimentacoes = new ArrayList<>();
 
         for (Consulta c:listaConsulta){

@@ -9,10 +9,7 @@ import flor_de_lotus.funcionario.FuncionarioService;
 import flor_de_lotus.paciente.Paciente;
 import flor_de_lotus.paciente.PacienteRepository;
 import flor_de_lotus.paciente.PacienteService;
-import flor_de_lotus.paciente.dto.PacienteMapper;
-import flor_de_lotus.usuario.Usuario;
 import flor_de_lotus.usuario.UsuarioService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +28,7 @@ public class ConsultaService {
     private final UsuarioService usuarioService;
 
     public Consulta cadastrar(Consulta entity, Integer idUsuario, Integer idFuncionario) {
-        Paciente paciente = null;
+        Paciente paciente;
         Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(idFuncionario);
 
         if (repositoryPac.existsByFkUsuario_IdUsuario(idUsuario)){
@@ -47,10 +44,7 @@ public class ConsultaService {
         entity.setFkFuncionario(funcionario);
         entity.setFkPaciente(paciente);
 
-        Consulta consultaSalva = repository.save(entity);
-
-        return consultaSalva;
-
+        return repository.save(entity);
     }
 
     private void checarData(LocalDate dataConsulta) {
@@ -99,50 +93,42 @@ public class ConsultaService {
             consulta.setEspecialidade(entity.getEspecialidade());
         }
 
-        if (entity.getFkFuncionario() != null) {
+        if (entity.getFkFuncionario() != null && idFuncionario != null) {
             Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(idFuncionario);
             consulta.setFkFuncionario(funcionario);
         }
 
-        if (entity.getFkPaciente() != null) {
+        if (entity.getFkPaciente() != null && idPaciente != null) {
             Paciente paciente = pacienteService.buscarPorIdOuThrow(idPaciente);
             consulta.setFkPaciente(paciente);
         }
 
-        Consulta consultaAtualizada = repository.save(consulta);
-
-        return consultaAtualizada;
+        return repository.save(consulta);
 
     }
 
-    public List<ConsultaResponseBody> listarPorPacienteResponse(Integer idPaciente) {
-        Paciente paciente = pacienteService.buscarPorIdOuThrow(idPaciente);
-        return repository.findAll().stream()
-                .filter(c -> c.getFkPaciente() != null && c.getFkPaciente().getIdPaciente().equals(paciente.getIdPaciente()))
-                .map(ConsultaMapper::of)
+    public List<ConsultaResponseBody> listarPorPaciente(Integer idPaciente) {
+        pacienteService.buscarPorIdOuThrow(idPaciente);
+        return repository.findByFkPaciente_IdPaciente(idPaciente).stream()
+                .map(ConsultaMapper::toResponse)
                 .toList();
     }
 
-    public List<Consulta> listarPorPaciente(Integer idPaciente) {
-        Paciente paciente = pacienteService.buscarPorIdOuThrow(idPaciente);
-        return repository.findAll().stream()
-                .filter(c -> c.getFkPaciente() != null && c.getFkPaciente().getIdPaciente().equals(paciente.getIdPaciente()))
+    public List<ConsultaResponseBody> listarPorFuncionario(Integer idFuncionario) {
+        funcionarioService.buscarPorIdOuThrow(idFuncionario);
+        return repository.findByFkFuncionario_IdFuncionario(idFuncionario).stream()
+                .map(ConsultaMapper::toResponse)
                 .toList();
     }
 
-    public List<ConsultaResponseBody> listarPorFuncionarioResponse(Integer idFuncionario) {
-        Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(idFuncionario);
-        return repository.findAll().stream()
-                .filter(c -> c.getFkFuncionario() != null && c.getFkFuncionario().getIdFuncionario().equals(funcionario.getIdFuncionario()))
-                .map(ConsultaMapper::of)
-                .toList();
+    public List<Consulta> listarConsultasPorPaciente(Integer idPaciente) {
+        pacienteService.buscarPorIdOuThrow(idPaciente);
+        return repository.findByFkPaciente_IdPaciente(idPaciente);
     }
 
-    public List<Consulta> listarPorFuncionario(Integer idFuncionario) {
-        Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(idFuncionario);
-        return repository.findAll().stream()
-                .filter(c -> c.getFkFuncionario() != null && c.getFkFuncionario().getIdFuncionario().equals(funcionario.getIdFuncionario()))
-                .toList();
+    public List<Consulta> listarConsultasPorFuncionario(Integer idFuncionario) {
+        funcionarioService.buscarPorIdOuThrow(idFuncionario);
+        return repository.findByFkFuncionario_IdFuncionario(idFuncionario);
     }
 
 }

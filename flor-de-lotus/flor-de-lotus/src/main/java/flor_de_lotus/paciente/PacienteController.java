@@ -1,5 +1,6 @@
 package flor_de_lotus.paciente;
 
+import flor_de_lotus.paciente.dto.PacienteCadastroRequest;
 import flor_de_lotus.paciente.dto.PacienteMapper;
 import flor_de_lotus.paciente.dto.PacientePostRequestBody;
 import flor_de_lotus.paciente.dto.PacienteResponseBody;
@@ -30,7 +31,7 @@ public class PacienteController {
     })
     @PostMapping
     @PreAuthorize("hasAnyRole('PACIENTE', 'ADMIN')")
-    public ResponseEntity<PacienteResponseBody> cadastrar(@RequestBody @Valid PacientePostRequestBody body) {
+    public ResponseEntity<PacienteResponseBody> cadastrar(@RequestBody @Valid PacienteCadastroRequest body) {
 
         Paciente pacienteCadastrado = service.cadastrar(body.getFkUsuario());
 
@@ -39,7 +40,7 @@ public class PacienteController {
         return ResponseEntity.status(201).body(response);
     }
 
-    @Operation(summary = "Listar todos os pacientes")
+    // ...existing code...
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de pacientes retornada"),
             @ApiResponse(responseCode = "204", description = "Não há pacientes cadastrados")

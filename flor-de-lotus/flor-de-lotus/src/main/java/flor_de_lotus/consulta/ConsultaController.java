@@ -6,6 +6,7 @@ import flor_de_lotus.consulta.dto.ConsultaResponseBody;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.exception.BadRequestException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,7 +50,8 @@ public class ConsultaController {
 
     @Operation(summary = "Listar todas as consultas cadastradas no sistema")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de consultas buscada com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Lista de consultas buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
             @ApiResponse(responseCode = "204", description = "Não há consultas cadastradas")
     })
     @GetMapping
@@ -114,13 +116,14 @@ public class ConsultaController {
 
     @Operation(summary = "Listar consultas de um paciente específico")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de consultas buscada com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Lista de consultas buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
             @ApiResponse(responseCode = "204", description = "Paciente não possui consultas cadastradas")
     })
     @GetMapping("/paciente/{idPaciente}")
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE')")
     public ResponseEntity<List<ConsultaResponseBody>> listarPorPaciente(@PathVariable Integer idPaciente) {
-        List<ConsultaResponseBody> lista = service.listarPorPacienteResponse(idPaciente);
+        List<ConsultaResponseBody> lista = service.listarPorPaciente(idPaciente);
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
@@ -135,7 +138,7 @@ public class ConsultaController {
     @GetMapping("/funcionario/{idFuncionario}")
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO','PACIENTE')")
     public ResponseEntity<List<ConsultaResponseBody>> listarPorFuncionario(@PathVariable Integer idFuncionario) {
-        List<ConsultaResponseBody> lista = service.listarPorFuncionarioResponse(idFuncionario);
+        List<ConsultaResponseBody> lista = service.listarPorFuncionario(idFuncionario);
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }

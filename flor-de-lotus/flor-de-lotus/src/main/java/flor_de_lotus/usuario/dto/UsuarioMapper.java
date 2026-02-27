@@ -3,10 +3,11 @@ package flor_de_lotus.usuario.dto;
 import flor_de_lotus.endereco.Endereco;
 import flor_de_lotus.usuario.Usuario;
 
+import java.util.List;
+
 public class UsuarioMapper {
 
     public static Usuario toEntity(UsuarioPostRequestBody dto, Endereco endereco) {
-
         Usuario entinty = new Usuario();
 
         entinty.setNome(dto.getNome());
@@ -19,11 +20,9 @@ public class UsuarioMapper {
         entinty.setNewsletter(dto.getNewsletter());
 
         return entinty;
-
     }
 
     public static Usuario toEntity(UsuarioPostRequestBody dto) {
-
         Usuario entinty = new Usuario();
 
         entinty.setNome(dto.getNome());
@@ -35,11 +34,9 @@ public class UsuarioMapper {
         entinty.setNewsletter(dto.getNewsletter());
 
         return entinty;
-
     }
 
     public static Usuario toEntity(UsuarioReplaceRequestBody dto) {
-
         Usuario entinty = new Usuario();
 
         entinty.setNome(dto.getNome());
@@ -51,22 +48,18 @@ public class UsuarioMapper {
         entinty.setNewsletter(dto.getNewsletter());
 
         return entinty;
-
     }
 
     public static Usuario toEntity(UsuarioLoginRequestBody dto) {
-
         Usuario entinty = new Usuario();
 
         entinty.setEmail(dto.getEmail());
         entinty.setSenha(dto.getSenha());
 
         return entinty;
-
     }
 
     public static UsuarioResponseBody toResponse(Usuario usuario) {
-
         UsuarioResponseBody usuarioResponseBody = new UsuarioResponseBody();
 
         usuarioResponseBody.setId(usuario.getIdUsuario());
@@ -75,7 +68,6 @@ public class UsuarioMapper {
         usuarioResponseBody.setNivelPermissao(usuario.getNivelPermissao());
 
         return usuarioResponseBody;
-
     }
 
     public static UsuarioTokenResponseBody toTokenResponse(Usuario usuario, String token) {
@@ -88,7 +80,15 @@ public class UsuarioMapper {
         usuarioTokenResponseBody.setToken(token);
 
         return usuarioTokenResponseBody;
+    }
 
+    public static List<UsuarioResponseBody> toResponseList(List<Usuario> usuarios) {
+        if (usuarios == null) {
+            return null;
+        }
+        return usuarios.stream()
+                .map(UsuarioMapper::toResponse)
+                .toList();
     }
 
 }

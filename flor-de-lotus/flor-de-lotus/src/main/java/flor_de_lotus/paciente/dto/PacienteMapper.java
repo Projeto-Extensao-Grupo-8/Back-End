@@ -3,6 +3,8 @@ package flor_de_lotus.paciente.dto;
 import flor_de_lotus.paciente.Paciente;
 import flor_de_lotus.usuario.Usuario;
 
+import java.util.List;
+
 public class PacienteMapper {
 
     public static Paciente toEntity(Usuario usuario) {
@@ -27,5 +29,14 @@ public class PacienteMapper {
             response.setNomeUsuario(paciente.getFkUsuario().getNome());
         }
         return response;
+    }
+
+    public static List<PacienteResponseBody> toResponseList(List<Paciente> pacientes) {
+        if (pacientes == null) {
+            return null;
+        }
+        return pacientes.stream()
+                .map(PacienteMapper::toResponse)
+                .toList();
     }
 }

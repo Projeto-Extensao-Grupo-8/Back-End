@@ -2,6 +2,8 @@ package flor_de_lotus.endereco.dto;
 
 import flor_de_lotus.endereco.Endereco;
 
+import java.util.List;
+
 public class EnderecoMapper {
     public static Endereco toEntityPost(EnderecoResponse response, String numero, String complemento){
         if (response == null){
@@ -55,6 +57,15 @@ public class EnderecoMapper {
         endereco.setComplemento(entity.getComplemento());
 
         return endereco;
+    }
+
+    public static List<EnderecoResponsePatch> toResponseList(List<Endereco> enderecos){
+        if (enderecos == null){
+            return null;
+        }
+        return enderecos.stream()
+                .map(EnderecoMapper::toResponse)
+                .toList();
     }
 
 }

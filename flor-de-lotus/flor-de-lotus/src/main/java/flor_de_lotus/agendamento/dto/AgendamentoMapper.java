@@ -3,6 +3,8 @@ package flor_de_lotus.agendamento.dto;
 import flor_de_lotus.agendamento.Agendamento;
 import flor_de_lotus.funcionario.Funcionario;
 
+import java.util.List;
+
 public class AgendamentoMapper {
 
     public static Agendamento toEntity(AgendamentoPostRequest dto, Funcionario funcionario) {
@@ -38,5 +40,14 @@ public class AgendamentoMapper {
         );
 
         return response;
+    }
+
+    public static List<AgendamentoResponse> toResponseList(List<Agendamento> agendamentos) {
+        if (agendamentos == null) {
+            return null;
+        }
+        return agendamentos.stream()
+                .map(AgendamentoMapper::toResponse)
+                .toList();
     }
 }

@@ -3,7 +3,6 @@ package flor_de_lotus.avaliacao;
 import flor_de_lotus.avaliacao.dto.AvaliacaoRequest;
 import flor_de_lotus.avaliacao.dto.AvaliacaoResponse;
 import flor_de_lotus.avaliacao.dto.AvaliacaoMapper;
-import flor_de_lotus.funcionario.Funcionario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

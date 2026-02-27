@@ -21,8 +21,8 @@ public class FuncionarioService {
     private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
 
-    public Funcionario cadastrar(Funcionario body, Usuario usuario) {
-        Usuario usuarioCa = usuarioService.buscarEntidadePorIdOuThrow(usuario.getIdUsuario());
+    public Funcionario cadastrar(Funcionario body, Integer idUsuario) {
+        Usuario usuarioCa = usuarioService.buscarEntidadePorIdOuThrow(idUsuario);
 
         if (repository.existsByCrp(body.getCrp())) {
             throw new EntidadeConflitoException("Conflito no campo CRP");
@@ -73,8 +73,18 @@ public class FuncionarioService {
 
     public Funcionario atualizarParcial(Integer id, FuncionarioPatchRequestBody dto){
        Funcionario funcionario = buscarPorIdOuThrow(id);
-       if (dto.getCrp() != null) funcionario.setCrp(dto.getCrp());
-       if (dto.getEspecialidade() != null) funcionario.setEspecialidade(dto.getEspecialidade());
+
+       if (dto.getCrp() != null) {
+           // Validate CRP is not already in use by another funcionario
+           if (repository.existsByCrp(dto.getCrp()) && !funcionario.getCrp().equals(dto.getCrp())) {
+               throw new EntidadeConflitoException("CRP já está em uso");
+           }
+           funcionario.setCrp(dto.getCrp());
+       }
+
+       if (dto.getEspecialidade() != null) {
+           funcionario.setEspecialidade(dto.getEspecialidade());
+       }
 
        return repository.save(funcionario);
     }

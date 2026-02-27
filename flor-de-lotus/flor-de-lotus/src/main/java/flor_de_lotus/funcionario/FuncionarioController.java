@@ -4,8 +4,6 @@ import flor_de_lotus.funcionario.dto.FuncionarioPatchRequestBody;
 import flor_de_lotus.funcionario.dto.FuncionarioPostRequestBody;
 import flor_de_lotus.funcionario.dto.FuncionarioResponse;
 import flor_de_lotus.funcionario.mapper.FuncionarioMapper;
-import flor_de_lotus.usuario.Usuario;
-import flor_de_lotus.usuario.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,7 +23,6 @@ import java.util.List;
 @RequestMapping("/funcionarios")
 public class FuncionarioController {
     public final FuncionarioService service;
-    public final UsuarioService usuarioService;
 
     @Operation(summary = "Cadastrar funcionário", description = "Cria um novo registro de funcionário no sistema.")
     @ApiResponses({
@@ -36,10 +33,8 @@ public class FuncionarioController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<FuncionarioResponse> cadastrar(@RequestBody @Valid FuncionarioPostRequestBody body){
-        Usuario usuario = usuarioService.buscarEntidadePorIdOuThrow(body.getFkUsuario());
-        Funcionario funcionario = FuncionarioMapper.toEntity(body, usuario);
-
-        Funcionario cadastrado = service.cadastrar(funcionario, usuario);
+        Funcionario funcionario = FuncionarioMapper.toEntity(body);
+        Funcionario cadastrado = service.cadastrar(funcionario, body.getFkUsuario());
         return ResponseEntity.status(201).body(FuncionarioMapper.toResponse(cadastrado));
     }
 

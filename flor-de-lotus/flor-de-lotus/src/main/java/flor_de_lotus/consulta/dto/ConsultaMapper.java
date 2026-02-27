@@ -4,6 +4,8 @@ import flor_de_lotus.consulta.Consulta;
 import flor_de_lotus.funcionario.Funcionario;
 import flor_de_lotus.paciente.Paciente;
 
+import java.util.List;
+
 public class ConsultaMapper {
 
     public static Consulta toEntity(ConsultaPostRequestBody dto, Funcionario funcionario, Paciente paciente) {
@@ -45,5 +47,14 @@ public class ConsultaMapper {
         );
 
         return response;
+    }
+
+    public static List<ConsultaResponseBody> toResponseList(List<Consulta> consultas) {
+        if (consultas == null) {
+            return null;
+        }
+        return consultas.stream()
+                .map(ConsultaMapper::toResponse)
+                .toList();
     }
 }

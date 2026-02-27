@@ -53,9 +53,9 @@ public class UsuarioController {
     })
     public ResponseEntity<UsuarioResponseBody> cadastrar(@RequestBody @Valid UsuarioPostRequestBody body){
 
-        Usuario usuario = UsuarioMapper.of(body);
+        Usuario usuario = UsuarioMapper.toEntity(body);
 
-        UsuarioResponseBody response = UsuarioMapper.of(service.cadastrar(usuario, body.getCep(), body.getNumero(), body.getComplemento()));
+        UsuarioResponseBody response = UsuarioMapper.toResponse(service.cadastrar(usuario, body.getCep(), body.getNumero(), body.getComplemento()));
 
         return ResponseEntity.status(201).body(response);
     }
@@ -135,9 +135,9 @@ public class UsuarioController {
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'USUARIO', 'PACIENTE')")
     public ResponseEntity<UsuarioResponseBody> atualizarParcial(@PathVariable Integer id,@RequestBody @Valid UsuarioReplaceRequestBody body){
 
-        Usuario usuario = UsuarioMapper.of(body);
+        Usuario usuario = UsuarioMapper.toEntity(body);
 
-        UsuarioResponseBody response = UsuarioMapper.of(service.atualizarParcial(id,usuario));
+        UsuarioResponseBody response = UsuarioMapper.toResponse(service.atualizarParcial(id,usuario));
 
         return ResponseEntity.status(200).body(response);
     }
@@ -168,7 +168,7 @@ public class UsuarioController {
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'USUARIO', 'PACIENTE')")
     public ResponseEntity<UsuarioResponseBody> buscarUsuario(@PathVariable Integer id){
 
-        UsuarioResponseBody response = UsuarioMapper.of(service.buscarPorIdOuThrow(id));
+        UsuarioResponseBody response = UsuarioMapper.toResponse(service.buscarPorIdOuThrow(id));
 
         return ResponseEntity.status(200).body(response);
     }
@@ -195,7 +195,7 @@ public class UsuarioController {
 
         List<UsuarioResponseBody> lista = service.listarTodos()
                                                         .stream()
-                                                            .map(UsuarioMapper::of)
+                                                            .map(UsuarioMapper::toResponse)
                                                                 .toList();
         return ResponseEntity.status(200).body(lista);
 

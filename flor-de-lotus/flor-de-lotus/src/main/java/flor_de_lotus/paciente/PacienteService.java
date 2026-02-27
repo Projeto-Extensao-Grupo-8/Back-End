@@ -44,9 +44,12 @@ public class PacienteService {
 
     public Paciente atualizarParcial(Integer id, PacientePostRequestBody dto) {
         Paciente paciente = buscarPorIdOuThrow(id);
+
         if (dto.getAtivo() != null) {
             paciente.setAtivo(dto.getAtivo());
         }
+
+
         return repository.save(paciente);
     }
 
