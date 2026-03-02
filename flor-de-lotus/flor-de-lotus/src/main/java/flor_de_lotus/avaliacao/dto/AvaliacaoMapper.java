@@ -22,7 +22,7 @@ public class AvaliacaoMapper {
             return new Avaliacao(null, dto.getDescricao(), dto.getEstrelas(), null);
         }
 
-        public static AvaliacaoResponse toDto(Avaliacao entity) {
+        public static AvaliacaoResponse toResponse(Avaliacao entity) {
             if (entity == null) {
                 return null;
             }
@@ -33,13 +33,13 @@ public class AvaliacaoMapper {
                     entity.getFkConsulta());
         }
 
-        public static List<AvaliacaoResponse> toDto(List<Avaliacao> entities) {
+        public static List<AvaliacaoResponse> toResponseList(List<Avaliacao> entities) {
             if (entities == null) {
                 return null;
             }
 
             return entities.stream()
-                    .map(AvaliacaoMapper::toDto)
+                    .map(AvaliacaoMapper::toResponse)
                     .toList();
         }
 }

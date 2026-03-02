@@ -190,13 +190,10 @@ public class UsuarioController {
             )
     })
     @GetMapping
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UsuarioResponseBody>> listarTodos(){
 
-        List<UsuarioResponseBody> lista = service.listarTodos()
-                                                        .stream()
-                                                            .map(UsuarioMapper::toResponse)
-                                                                .toList();
+        List<UsuarioResponseBody> lista = UsuarioMapper.toResponseList(service.listarTodos());
         return ResponseEntity.status(200).body(lista);
 
     }

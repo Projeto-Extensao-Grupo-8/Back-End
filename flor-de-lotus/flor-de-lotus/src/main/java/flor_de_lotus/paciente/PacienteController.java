@@ -48,7 +48,7 @@ public class PacienteController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PacienteResponseBody>> listarTodos() {
-        List<PacienteResponseBody> lista = service.listarTodos().stream().map(PacienteMapper::toResponse).toList();
+        List<PacienteResponseBody> lista = PacienteMapper.toResponseList(service.listarTodos());
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }

@@ -37,7 +37,7 @@ public class AvaliacaoController {
 
         Avaliacao avaliacaoCadastrada = service.cadastrar(avaliacao, body.getFkConsulta());
 
-        AvaliacaoResponse response = AvaliacaoMapper.toDto(avaliacaoCadastrada);
+        AvaliacaoResponse response = AvaliacaoMapper.toResponse(avaliacaoCadastrada);
 
         return ResponseEntity.status(201).body(response);
     }
@@ -57,7 +57,7 @@ public class AvaliacaoController {
             return ResponseEntity.status(204).build();
         }
 
-        List<AvaliacaoResponse> response = AvaliacaoMapper.toDto(listaTodos);
+        List<AvaliacaoResponse> response = AvaliacaoMapper.toResponseList(listaTodos);
 
         return ResponseEntity.status(200).body(response);
     }

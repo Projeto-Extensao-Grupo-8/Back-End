@@ -3,8 +3,6 @@ package flor_de_lotus.teste.movimentacaoTeste.dto;
 import flor_de_lotus.consulta.Consulta;
 import flor_de_lotus.teste.Teste;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 public class MovimentacaoEstoqueResponse {
     @Schema(description = "ID único do registro de movimentação, gerado pelo sistema.")
-    private Integer idMovimentacaoEstoque;;
+    private Integer idMovimentacaoEstoque;
     @Schema(description = "Quantidade de unidades movidas ou usadas na consulta")
     private Integer qtd;
     @Schema(description = "Data em que a movimentação ocorreu.")

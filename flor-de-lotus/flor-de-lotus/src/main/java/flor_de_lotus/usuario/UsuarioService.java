@@ -131,13 +131,24 @@ public class UsuarioService {
 
     public Usuario atualizarParcial(Integer id, Usuario entity){
         Usuario usuario = buscarEntidadePorIdOuThrow(id);
-        if (entity.getEmail() != null) checarDuplicidade(entity.getEmail(), null);usuario.setEmail(entity.getEmail());
-        if (entity.getNome() != null) usuario.setNome(entity.getNome());
+
+        if (entity.getEmail() != null) {
+            checarDuplicidade(entity.getEmail(), usuario.getCpf());
+            usuario.setEmail(entity.getEmail());
+        }
+
+        if (entity.getNome() != null) {
+            usuario.setNome(entity.getNome());
+        }
+
         if (entity.getSenha() != null) {
             checarRegrasSenha(entity.getSenha());
             usuario.setSenha(passwordEncoder.encode(entity.getSenha()));
         }
-        if (entity.getTelefone() != null) usuario.setTelefone(entity.getTelefone());
+
+        if (entity.getTelefone() != null) {
+            usuario.setTelefone(entity.getTelefone());
+        }
 
         return repository.save(usuario);
 

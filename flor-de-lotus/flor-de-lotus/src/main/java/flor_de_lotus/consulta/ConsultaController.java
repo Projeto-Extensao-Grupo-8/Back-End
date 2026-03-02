@@ -57,7 +57,7 @@ public class ConsultaController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ConsultaResponseBody>> listarTodas() {
-        List<ConsultaResponseBody> lista = service.listarTodas().stream().map(ConsultaMapper::toResponse).toList();
+        List<ConsultaResponseBody> lista = ConsultaMapper.toResponseList(service.listarTodas());
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
@@ -132,7 +132,8 @@ public class ConsultaController {
 
     @Operation(summary = "Listar consultas de um funcionário específico")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de consultas buscada com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Lista de consultas buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
             @ApiResponse(responseCode = "204", description = "Funcionário não possui consultas cadastradas")
     })
     @GetMapping("/funcionario/{idFuncionario}")
