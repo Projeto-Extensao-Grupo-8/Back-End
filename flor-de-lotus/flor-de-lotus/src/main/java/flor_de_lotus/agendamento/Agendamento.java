@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Entity
+@Entity(name = "agenda")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -17,7 +17,7 @@ public class Agendamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idAgendamento;
+    private Integer idAgenda;
 
     private LocalTime inicioTempo;
 
@@ -26,6 +26,6 @@ public class Agendamento {
     private LocalDate dataDia;
 
     @ManyToOne
-    @JoinColumn(name = "fk_funcionario_id", nullable = false)
+    @JoinColumn(name = "fk_funcionario", nullable = false)
     private Funcionario fkFuncionario;
 }

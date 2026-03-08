@@ -25,10 +25,10 @@ public class MovimentacaoEstoque {
     private LocalDate dataMovimentacao;
     private String descricao;
     @ManyToOne
-    @JoinColumn(name = "idTeste", nullable = false)
+    @JoinColumn(name = "fk_teste", nullable = false)
     private Teste teste;
     @ManyToOne
-    @JoinColumn(name = "idConsulta", nullable = false)
+    @JoinColumn(name = "fk_consulta", nullable = false)
     private Consulta consulta;
 
 }

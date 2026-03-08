@@ -38,8 +38,8 @@ public class ConsultaService {
             paciente = pacienteService.cadastrar(idUsuario);
         }
 
-        checarData(entity.getDataConsulta());
-        checarValor(entity.getValorConsulta());
+        checarData(entity.getData());
+        checarValor(entity.getValor());
 
         entity.setFkFuncionario(funcionario);
         entity.setFkPaciente(paciente);
@@ -79,14 +79,14 @@ public class ConsultaService {
 
         Consulta consulta = buscarPorIdOuThrow(id);
 
-        if (entity.getDataConsulta() != null) {
-            checarData(entity.getDataConsulta());
-            consulta.setDataConsulta(entity.getDataConsulta());
+        if (entity.getData() != null) {
+            checarData(entity.getData());
+            consulta.setData(entity.getData());
         }
 
-        if (entity.getValorConsulta() != null) {
-            checarValor(entity.getValorConsulta());
-            consulta.setValorConsulta(entity.getValorConsulta());
+        if (entity.getValor() != null) {
+            checarValor(entity.getValor());
+            consulta.setValor(entity.getValor());
         }
 
         if (entity.getEspecialidade() != null) {

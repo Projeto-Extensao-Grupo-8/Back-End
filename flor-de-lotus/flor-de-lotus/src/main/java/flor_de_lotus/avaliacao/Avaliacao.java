@@ -21,6 +21,6 @@ public class Avaliacao {
     private Integer estrelas;
 
     @OneToOne
-    @JoinColumn(name = "idConsulta", nullable = false)
+    @JoinColumn(name = "fk_consulta", nullable = false)
     private Consulta fkConsulta;
 }

@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MovimentacaoEstoqueService {
+public class    MovimentacaoEstoqueService {
     private final MovimentacaoEstoqueRepository repository;
     private final TesteService testeService;
     private final ConsultaService consultaService;
@@ -25,7 +25,7 @@ public class MovimentacaoEstoqueService {
 
         entity.setConsulta(consulta);
         entity.setTeste(teste);
-        entity.setDataMovimentacao(consulta.getDataConsulta());
+        entity.setDataMovimentacao(consulta.getData());
 
         return repository.save(entity);
 

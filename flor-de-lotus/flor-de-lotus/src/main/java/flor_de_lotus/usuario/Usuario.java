@@ -52,7 +52,7 @@ public class Usuario {
 
     @OneToOne
     @Schema(description = "Fk relacionado ao endereço", example = "1")
-    @JoinColumn(name = "fk_endereco_id")
+    @JoinColumn(name = "fk_endereco")
     private Endereco fkEndereco;
 
     public Usuario(String nome, String email, LocalDate dataNascimento, String telefone, String cpf, String senha, String nivelPermissao) {

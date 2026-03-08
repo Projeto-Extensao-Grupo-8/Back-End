@@ -75,7 +75,6 @@ public class FuncionarioService {
        Funcionario funcionario = buscarPorIdOuThrow(id);
 
        if (dto.getCrp() != null) {
-           // Validate CRP is not already in use by another funcionario
            if (repository.existsByCrp(dto.getCrp()) && !funcionario.getCrp().equals(dto.getCrp())) {
                throw new EntidadeConflitoException("CRP já está em uso");
            }

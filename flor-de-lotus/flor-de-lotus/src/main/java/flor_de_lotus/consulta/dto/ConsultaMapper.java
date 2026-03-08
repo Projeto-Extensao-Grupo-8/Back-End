@@ -11,8 +11,8 @@ public class ConsultaMapper {
     public static Consulta toEntity(ConsultaPostRequestBody dto, Funcionario funcionario, Paciente paciente) {
         Consulta entity = new Consulta();
 
-        entity.setDataConsulta(dto.getDataConsulta());
-        entity.setValorConsulta(dto.getValorConsulta());
+        entity.setData(dto.getDataConsulta());
+        entity.setValor(dto.getValorConsulta());
         entity.setEspecialidade(dto.getEspecialidade());
         entity.setFkFuncionario(funcionario);
         entity.setFkPaciente(paciente);
@@ -23,8 +23,8 @@ public class ConsultaMapper {
     public static Consulta toEntity(ConsultaPostRequestBody dto) {
         Consulta entity = new Consulta();
 
-        entity.setDataConsulta(dto.getDataConsulta());
-        entity.setValorConsulta(dto.getValorConsulta());
+        entity.setData(dto.getDataConsulta());
+        entity.setValor(dto.getValorConsulta());
         entity.setEspecialidade(dto.getEspecialidade());
         entity.setFkFuncionario(null);
         entity.setFkPaciente(null);
@@ -36,8 +36,8 @@ public class ConsultaMapper {
         ConsultaResponseBody response = new ConsultaResponseBody();
 
         response.setIdConsulta(consulta.getIdConsulta());
-        response.setDataConsulta(consulta.getDataConsulta());
-        response.setValorConsulta(consulta.getValorConsulta());
+        response.setDataConsulta(consulta.getData());
+        response.setValorConsulta(consulta.getValor());
         response.setEspecialidade(consulta.getEspecialidade());
         response.setNomeFuncionario(
                 consulta.getFkFuncionario() != null ? consulta.getFkFuncionario().getNome() : null

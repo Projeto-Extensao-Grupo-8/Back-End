@@ -29,6 +29,6 @@ public class Artigo {
     private LocalDate dtPublicacao;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Funcionario", nullable = false)
+    @JoinColumn(name = "fk_funcionario", nullable = false)
     private Funcionario fkFuncionario;
 }

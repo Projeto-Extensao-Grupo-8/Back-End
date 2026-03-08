@@ -19,7 +19,7 @@ public class Paciente {
     private boolean ativo = true;
 
     @OneToOne
-    @JoinColumn(name = "fk_usuario_id", nullable = false)
+    @JoinColumn(name = "fk_usuario", nullable = false)
     private Usuario fkUsuario;
 
 

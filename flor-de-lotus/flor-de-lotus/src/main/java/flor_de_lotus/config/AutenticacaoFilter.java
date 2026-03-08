@@ -39,7 +39,6 @@ public class AutenticacaoFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenManager.getUsernameFromToken(jwtToken);
             } catch (ExpiredJwtException exception) {
-
                 // Não logar claims sensíveis em claro. Logar apenas o mínimo necessário (evento e username mascarado)
                 String maskedUser = maskUsername(exception.getClaims() != null ? exception.getClaims().getSubject() : null);
                 LOGGER.info("FALHA AUTENTICACAO - Token expirado para usuário: {}", maskedUser);
@@ -50,6 +49,8 @@ public class AutenticacaoFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
         }
+
+        System.out.println(username);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             addUsernameInContext(request, username, jwtToken);

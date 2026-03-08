@@ -17,14 +17,14 @@ public class Consulta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idConsulta;
-    private LocalDate dataConsulta;
-    private Double valorConsulta;
+    private LocalDate data;
+    private Double valor;
     private String especialidade;
     @ManyToOne
-    @JoinColumn(name = "fk_funcionario_id")
+    @JoinColumn(name = "fk_funcionario")
     private Funcionario fkFuncionario;
     @ManyToOne
-    @JoinColumn(name = "fk_paciente_id")
+    @JoinColumn(name = "fk_paciente")
     private Paciente fkPaciente;
 
 }

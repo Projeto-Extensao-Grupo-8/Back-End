@@ -1,10 +1,10 @@
 package flor_de_lotus.usuario.dto;
 
-import flor_de_lotus.usuario.Usuario;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import flor_de_lotus.usuario.Usuario;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,8 +12,6 @@ import java.util.List;
 
 @Getter
 public class UsuarioDetalhes implements UserDetails {
-
-
     private final String nome;
     private final String email;
     private final String senha;
@@ -31,13 +29,13 @@ public class UsuarioDetalhes implements UserDetails {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         if ("4".equals(nivelAcesso)) {
-            authorities.add(new SimpleGrantedAuthority("ADMIN"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         } else if ("3".equals(nivelAcesso)) {
-            authorities.add(new SimpleGrantedAuthority("FUNCIONARIO"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"));
         } else if ("2".equals(nivelAcesso)) {
-            authorities.add(new SimpleGrantedAuthority("PACIENTE"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_PACIENTE"));
         } else {
-            authorities.add(new SimpleGrantedAuthority("USUARIO"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_USUARIO"));
         }
 
         return authorities;

@@ -18,7 +18,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -48,7 +47,7 @@ class MovimentacaoEstoqueServiceTest {
 
         consultaMockada = new Consulta();
         consultaMockada.setIdConsulta(20);
-        consultaMockada.setDataConsulta(LocalDate.of(2025, 10, 20));
+        consultaMockada.setData(LocalDate.of(2025, 10, 20));
 
         movimentacaoEnvio = new MovimentacaoEstoque();
         movimentacaoEnvio.setQtd(5);
@@ -58,7 +57,7 @@ class MovimentacaoEstoqueServiceTest {
         movimentacaoDesejada.setQtd(5);
         movimentacaoDesejada.setTeste(testeMockado);
         movimentacaoDesejada.setConsulta(consultaMockada);
-        movimentacaoDesejada.setDataMovimentacao(consultaMockada.getDataConsulta());
+        movimentacaoDesejada.setDataMovimentacao(consultaMockada.getData());
     }
 
     @Test

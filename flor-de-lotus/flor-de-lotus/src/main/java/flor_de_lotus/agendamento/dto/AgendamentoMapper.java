@@ -31,7 +31,7 @@ public class AgendamentoMapper {
     public static AgendamentoResponse toResponse(Agendamento entity) {
         AgendamentoResponse response = new AgendamentoResponse();
 
-        response.setIdAgendamento(entity.getIdAgendamento());
+        response.setIdAgendamento(entity.getIdAgenda());
         response.setInicioTempo(entity.getInicioTempo());
         response.setFinalTempo(entity.getFinalTempo());
         response.setDataDia(entity.getDataDia());

@@ -92,7 +92,7 @@ class AgendamentoServiceTest {
     @DisplayName("Deve remover um agendamento com sucesso")
     void deveRemoverComSucesso() {
         Agendamento ag = new Agendamento();
-        ag.setIdAgendamento(10);
+        ag.setIdAgenda(10);
 
         when(repository.findById(10)).thenReturn(Optional.of(ag));
 
