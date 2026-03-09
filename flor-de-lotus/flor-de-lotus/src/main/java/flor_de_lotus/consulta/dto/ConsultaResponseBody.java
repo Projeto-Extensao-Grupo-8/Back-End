@@ -11,6 +11,8 @@ public class ConsultaResponseBody {
     private LocalDate dataConsulta;
     private Double valorConsulta;
     private String especialidade;
+    private String tipo;
+    private String status;
     private String nomeFuncionario;
     private String nomePaciente;
 }

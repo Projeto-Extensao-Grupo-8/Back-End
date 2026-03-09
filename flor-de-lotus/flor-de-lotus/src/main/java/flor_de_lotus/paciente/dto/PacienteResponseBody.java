@@ -10,4 +10,6 @@ public class PacienteResponseBody {
     private boolean ativo;
     private Integer idUsuario;
     private String nomeUsuario;
+    private String emailUsuario;
+    private String telefoneUsuario;
 }

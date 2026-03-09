@@ -131,4 +131,9 @@ public class ConsultaService {
         return repository.findByFkFuncionario_IdFuncionario(idFuncionario);
     }
 
+    public List<Consulta> listarProximasConsulasFuncionario(Integer idFuncionario) {
+        funcionarioService.buscarPorIdOuThrow(idFuncionario);
+        return repository.findTop4ProximasConsultasDoFuncionario(idFuncionario);
+    }
+
 }

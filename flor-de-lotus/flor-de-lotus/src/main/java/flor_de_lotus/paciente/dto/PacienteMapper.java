@@ -27,6 +27,8 @@ public class PacienteMapper {
         if (paciente.getFkUsuario() != null) {
             response.setIdUsuario(paciente.getFkUsuario().getIdUsuario());
             response.setNomeUsuario(paciente.getFkUsuario().getNome());
+            response.setEmailUsuario(paciente.getFkUsuario().getEmail());
+            response.setTelefoneUsuario(paciente.getFkUsuario().getTelefone());
         }
         return response;
     }

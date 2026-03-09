@@ -20,11 +20,13 @@ public class Consulta {
     private LocalDate data;
     private Double valor;
     private String especialidade;
+    private String tipo;
+    private String status;
     @ManyToOne
     @JoinColumn(name = "fk_funcionario")
     private Funcionario fkFuncionario;
     @ManyToOne
-    @JoinColumn(name = "fk_paciente")
+    @JoinColumn(name = "fk_paciente ")
     private Paciente fkPaciente;
 
 }

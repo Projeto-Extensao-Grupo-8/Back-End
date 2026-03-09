@@ -17,6 +17,9 @@ public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
     Boolean existsByFkUsuario_IdUsuario(Integer id);
     Optional<Paciente> findByFkUsuario_IdUsuario(Integer idUsuario);
 
+    @Query(value = "SELECT DISTINCT p.* FROM paciente p INNER JOIN consulta c ON p.id_paciente = c.fk_paciente WHERE c.fk_funcionario = :idFuncionario", nativeQuery = true)
+    List<Paciente> findPacientesByFkFuncionario_IdFuncionario(@Param("idFuncionario") Integer idFuncionario);
+
     @Query(value = "SELECT total_pacientes_ativos FROM total_pacientes", nativeQuery = true)
     ViewTotalPacientes totalPacientes();
 
@@ -25,4 +28,7 @@ public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
 
     @Query(value = "SELECT nome_paciente, consultas, valor, ativo FROM top_5_pacientes", nativeQuery = true)
     List<ViewTop5paciente> top5Pacientes();
+
+
 }
+

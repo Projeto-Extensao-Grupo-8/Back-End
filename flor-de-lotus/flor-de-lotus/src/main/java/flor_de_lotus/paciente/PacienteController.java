@@ -82,4 +82,20 @@ public class PacienteController {
         return ResponseEntity.status(200).build();
     }
 
+    @Operation(summary = "Listar pacientes por funcionário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de pacientes do funcionário retornada"),
+            @ApiResponse(responseCode = "204", description = "O funcionário não possui pacientes")
+    })
+    @GetMapping("/funcionario/{idFuncionario}")
+    @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
+    public ResponseEntity<List<PacienteResponseBody>> listarPacientesPorFuncionario(@PathVariable Integer idFuncionario) {
+        List<PacienteResponseBody> lista = PacienteMapper.toResponseList(service.listarPacientesPorFuncionario(idFuncionario));
+        if (lista.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(lista);
+    }
+
+
 }

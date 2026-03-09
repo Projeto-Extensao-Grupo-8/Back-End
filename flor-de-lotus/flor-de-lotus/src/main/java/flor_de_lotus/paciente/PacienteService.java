@@ -57,4 +57,9 @@ public class PacienteService {
         repository.delete(buscarPorIdOuThrow(id));
     }
 
+    public List<Paciente> listarPacientesPorFuncionario(Integer idFuncionario) {
+        return repository.findPacientesByFkFuncionario_IdFuncionario(idFuncionario);
+    }
+
+
 }
