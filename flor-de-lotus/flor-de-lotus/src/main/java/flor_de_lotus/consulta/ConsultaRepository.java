@@ -11,6 +11,9 @@ import java.util.List;
 public interface ConsultaRepository extends JpaRepository<Consulta, Integer> {
     List<Consulta> findByFkPaciente_IdPaciente(Integer idPaciente);
     List<Consulta> findByFkFuncionario_IdFuncionario(Integer idFuncionario);
-    @Query("SELECT c FROM Consulta c WHERE c.fkFuncionario.idFuncionario = :idFuncionario AND c.data >= CURRENT_DATE ORDER BY c.data ASC")
+    @Query(value = "SELECT * FROM consulta WHERE fk_funcionario = :idFuncionario AND data >= CURRENT_DATE ORDER BY data ASC LIMIT 4", nativeQuery = true)
     List<Consulta> findTop4ProximasConsultasDoFuncionario(@Param("idFuncionario") Integer idFuncionario);
+
+    @Query(value = "SELECT COUNT(*) FROM consulta WHERE fk_paciente = :idPaciente AND status = 'REALIZADA'", nativeQuery = true)
+    Integer qtdSessoesRealizadasDoPaciente(@Param("idPaciente") Integer idPaciente);
 }

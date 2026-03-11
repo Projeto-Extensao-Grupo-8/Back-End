@@ -163,4 +163,17 @@ public class ConsultaController {
         return ResponseEntity.status(200).body(lista);
     }
 
+    @Operation(summary = "Listar próximas consultas de um funcionário específico")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de consultas buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+            @ApiResponse(responseCode = "204", description = "Funcionário não possui consultas cadastradas")
+    })
+    @GetMapping("pacienteConsultas/{idPaciente}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO','PACIENTE')")
+    public ResponseEntity<Integer> qtdSessoesRealizadasDoPaciente(@PathVariable Integer idPaciente) {
+        Integer qtdSessoesRealizadas = service.qtdSessoesRealizadasDoPaciente(idPaciente);
+        return ResponseEntity.status(200).body(qtdSessoesRealizadas);
+    }
+
 }

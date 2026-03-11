@@ -136,4 +136,9 @@ public class ConsultaService {
         return repository.findTop4ProximasConsultasDoFuncionario(idFuncionario);
     }
 
+  public Integer qtdSessoesRealizadasDoPaciente(Integer idPaciente) {
+        pacienteService.buscarPorIdOuThrow(idPaciente);
+        return repository.qtdSessoesRealizadasDoPaciente(idPaciente);
+  }
+
 }

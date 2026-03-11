@@ -32,7 +32,7 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfiguracao {
 
-    @Value("${url.frontend}")
+    @Value("${url.frontend:http://localhost:3000}")
     private String urlFrontend;
 
     @Autowired

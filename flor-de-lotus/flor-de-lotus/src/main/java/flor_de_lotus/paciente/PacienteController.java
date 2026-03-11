@@ -1,15 +1,14 @@
 package flor_de_lotus.paciente;
 
-import flor_de_lotus.paciente.dto.PacienteCadastroRequest;
-import flor_de_lotus.paciente.dto.PacienteMapper;
-import flor_de_lotus.paciente.dto.PacientePostRequestBody;
-import flor_de_lotus.paciente.dto.PacienteResponseBody;
+import flor_de_lotus.paciente.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -97,5 +96,49 @@ public class PacienteController {
         return ResponseEntity.status(200).body(lista);
     }
 
+    @Operation(summary = "Buscar quantidade de pacientes ativos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "quantidade de pacientes ativos"),
+            @ApiResponse(responseCode = "204", description = "não possui pacientes")
+    })
+    @GetMapping("/qtdPacientes")
+    @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
+    public ResponseEntity<Integer> totalPacientes() {
+        Integer totalPacientes = service.totalPacientes();
+        if (totalPacientes == 0) {
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(totalPacientes);
+    }
+
+    @Operation(summary = "Buscar quantidade de pacientes ativos por ano")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "quantidade de pacientes ativos por ano"),
+            @ApiResponse(responseCode = "204", description = "não possui pacientespoe ano")
+    })
+    @GetMapping("/qtdPacientes/ano/{ano}")
+    @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
+    public ResponseEntity<Integer> totalPacientes(@PathVariable @NotNull @Valid Integer ano) {
+        Integer totalPacientes = service.totalPacientesPorAno(ano);
+        if (totalPacientes == 0) {
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(totalPacientes);
+    }
+
+    @Operation(summary = "Buscar quantidade de pacientes ativos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "quantidade de pacientes ativos"),
+            @ApiResponse(responseCode = "204", description = "não possui pacientes")
+    })
+    @GetMapping("/top5Pacientes")
+    @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
+    public ResponseEntity<List<ViewTop5paciente>> top5pacientes() {
+        List<ViewTop5paciente> totalPacientes = service.top5pacientes();
+        if (totalPacientes.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(totalPacientes);
+    }
 
 }

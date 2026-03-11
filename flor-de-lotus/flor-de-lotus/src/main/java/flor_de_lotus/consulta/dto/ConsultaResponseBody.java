@@ -1,5 +1,6 @@
 package flor_de_lotus.consulta.dto;
 
+import flor_de_lotus.consulta.StatusConsulta;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ public class ConsultaResponseBody {
     private Double valorConsulta;
     private String especialidade;
     private String tipo;
-    private String status;
+    private StatusConsulta status;
     private String nomeFuncionario;
     private String nomePaciente;
 }

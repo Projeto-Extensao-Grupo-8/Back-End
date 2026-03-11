@@ -2,6 +2,7 @@ package flor_de_lotus.paciente;
 
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.paciente.dto.PacientePostRequestBody;
+import flor_de_lotus.paciente.dto.ViewTop5paciente;
 import flor_de_lotus.usuario.Usuario;
 import flor_de_lotus.usuario.UsuarioRepository;
 import flor_de_lotus.usuario.UsuarioService;
@@ -17,6 +18,7 @@ public class PacienteService {
     private final UsuarioRepository userRepository;
     private final PacienteRepository repository;
     private final UsuarioService usuarioService;
+
 
     public Paciente cadastrar(Integer idUsuario) {
 
@@ -62,4 +64,15 @@ public class PacienteService {
     }
 
 
+    public Integer totalPacientes() {
+        return repository.totalPacientes().getTotalPacientesAtivos();
+    }
+
+    public Integer totalPacientesPorAno(Integer ano) {
+        return repository.totalPacientesPorAno(ano).getQtd();
+    }
+
+    public List<ViewTop5paciente> top5pacientes() {
+        return repository.top5Pacientes();
+    }
 }
