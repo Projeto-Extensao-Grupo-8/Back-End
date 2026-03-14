@@ -1,6 +1,9 @@
 package flor_de_lotus.paciente;
 
 import flor_de_lotus.paciente.dto.*;
+import flor_de_lotus.paciente.dto.dashPaciente.GraficoNovosPacientesPorMes;
+import flor_de_lotus.paciente.dto.dashPaciente.GraficoTaxaRetencaoMes;
+import flor_de_lotus.paciente.dto.dashPaciente.ViewTop5paciente;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -8,11 +11,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -100,18 +103,18 @@ public class PacienteController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "quantidade de pacientes ativos"),
     })
-    @GetMapping("/qtdPacientes")
+    @GetMapping("/kpiPacientesAtivos")
     @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
     public ResponseEntity<Long> totalPacientes() {
         Long totalPacientes = service.totalPacientes();
         return ResponseEntity.status(200).body(totalPacientes);
     }
 
-    @Operation(summary = "Buscar quantidade de pacientes ativos por ano")
+    @Operation(summary = "Buscar quantidade de pacientes")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "quantidade de pacientes ativos por ano")
     })
-    @GetMapping("/qtdPacientes/ano/{ano}")
+    @GetMapping("/kpiPacientesAno/ano/{ano}")
     @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
     public ResponseEntity<Long> totalPacientes(@PathVariable @NotNull @Valid Integer ano) {
         Long totalPacientes = service.totalPacientesPorAno(ano);
@@ -148,4 +151,34 @@ public class PacienteController {
         return ResponseEntity.status(200).body(lista);
     }
 
+    @Operation(summary = "Grafico novos pacientes por mês no ano")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Valores do gráfico retornados")
+    })
+    @GetMapping("/graficoNovosPacientesPorMes")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<List<GraficoNovosPacientesPorMes>> graficoNovosPacientesMes () {
+        return ResponseEntity.status(200).body(service.graficoNovosPacientesPorMes());
+    }
+
+    @Operation(summary = "Grafico retencao por mês")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Valores do gráfico retornados")
+    })
+    @GetMapping("/graficoTaxaRetencaoMes")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<List<GraficoTaxaRetencaoMes>> graficoTaxaRetencaoMes () {
+        return ResponseEntity.status(200).body(service.graficoTaxaRetencaoMes());
+    }
+
+
+    @Operation(summary = "kpi taxa retencao")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Valores do gráfico retornados")
+    })
+    @GetMapping("/kpiTaxaRetencao")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<BigDecimal> kpiTaxaRetencao () {
+        return ResponseEntity.status(200).body(service.taxaRetencao());
+    }
 }

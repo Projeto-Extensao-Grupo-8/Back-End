@@ -1,7 +1,12 @@
 package flor_de_lotus.consulta;
 
-import flor_de_lotus.consulta.dto.ConsultaMapper;
-import flor_de_lotus.consulta.dto.ConsultaResponseBody;
+import flor_de_lotus.consulta.dto.*;
+import flor_de_lotus.consulta.dto.dashAgendamento.GraficoDesempenhoSemanal;
+import flor_de_lotus.consulta.dto.dashAgendamento.GraficoDistribuicaoHorario;
+import flor_de_lotus.consulta.dto.dashAgendamento.KpiCancelamentos;
+import flor_de_lotus.consulta.dto.dashFinanceiro.GraficoConsultaMes;
+import flor_de_lotus.consulta.dto.dashFinanceiro.GraficoFaturamentoMensal;
+import flor_de_lotus.consulta.dto.dashFinanceiro.KpiMelhorFaturamentoAno;
 import flor_de_lotus.exception.BadRequestException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.funcionario.Funcionario;
@@ -13,7 +18,6 @@ import flor_de_lotus.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -152,5 +156,53 @@ public class ConsultaService {
         pacienteService.buscarPorIdOuThrow(idPaciente);
         return repository.findTop4ProximasConsultasDoPaciente(idPaciente);
     }
+
+    public List<GraficoDistribuicaoHorario> graficoDistribuicaoHorario() {
+        return repository.graficoDistribuicaoHorario();
+    }
+
+    public List<GraficoDesempenhoSemanal> graficoDesempenhoSemanal() {
+        return repository.graficoDesempenhoSemanal();
+    }
+
+    public List<KpiCancelamentos> kpiCancelamentos() {
+        return repository.kpiCancelamentos();
+    }
+
+    public Long kpiConsultasRealizadas() {
+        return repository.kpiConsultasRealizadas().getQtd();
+    }
+
+    public String kpiTaxaComparecimento(){
+        return repository.kpiTaxaCompareciemento().getPercentual();
+    }
+
+    public Long kpiAgendamentosSemana(){
+        return repository.kpiAgendamentoSemana().getQtd();
+    }
+
+    public List<GraficoConsultaMes> graficoConsultaMes(){
+        return repository.graficoConsultaMes();
+    }
+
+    public List<GraficoFaturamentoMensal> graficoFaturamentoMensal(){
+        return repository.graficoFaturamentoMensal();
+    }
+
+    public Double kpiFaturamentoAno(){
+        return repository.kpiFaturamentoAno().getFaturamento();
+    }
+
+    public Double kpiFaturamentoMes(){
+        return repository.kpiFaturamentoMes().getFaturamento();
+    }
+
+    public List<KpiMelhorFaturamentoAno> kpiMelhorFaturamentoAno(){
+        return repository.kpiFaturamentoMelhorMes();
+    }
+
+
+
+
 
 }

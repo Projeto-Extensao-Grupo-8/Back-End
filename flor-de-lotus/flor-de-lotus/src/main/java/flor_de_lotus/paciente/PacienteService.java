@@ -2,13 +2,16 @@ package flor_de_lotus.paciente;
 
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.paciente.dto.PacientePostRequestBody;
-import flor_de_lotus.paciente.dto.ViewTop5paciente;
+import flor_de_lotus.paciente.dto.dashPaciente.GraficoNovosPacientesPorMes;
+import flor_de_lotus.paciente.dto.dashPaciente.GraficoTaxaRetencaoMes;
+import flor_de_lotus.paciente.dto.dashPaciente.ViewTop5paciente;
 import flor_de_lotus.usuario.Usuario;
 import flor_de_lotus.usuario.UsuarioRepository;
 import flor_de_lotus.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,7 +72,7 @@ public class PacienteService {
     }
 
     public  Long totalPacientesPorAno(Integer ano) {
-        return repository.totalPacientesPorAno(ano).getQtd();
+        return repository.totalPacientesNoAno(ano).getQtd();
     }
 
     public List<ViewTop5paciente> top5pacientes() {
@@ -78,5 +81,17 @@ public class PacienteService {
 
     public List<Paciente> listarPacientesAtivosPorFuncionario(Integer idFuncionario) {
         return repository.findPacientesAtivosByFkFuncionario(idFuncionario);
+    }
+
+    public List<GraficoNovosPacientesPorMes> graficoNovosPacientesPorMes(){
+        return repository.graficoNovosPacientesPorMes();
+    }
+
+    public List<GraficoTaxaRetencaoMes> graficoTaxaRetencaoMes(){
+        return repository.graficoTaxaRetencaoMes();
+    }
+
+    public BigDecimal taxaRetencao() {
+        return repository.kpiTaxaRetencao().getTaxaPercentual();
     }
 }

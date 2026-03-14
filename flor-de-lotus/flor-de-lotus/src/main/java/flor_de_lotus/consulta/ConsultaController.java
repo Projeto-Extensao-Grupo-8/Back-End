@@ -1,8 +1,14 @@
 package flor_de_lotus.consulta;
 
-import flor_de_lotus.consulta.dto.ConsultaMapper;
-import flor_de_lotus.consulta.dto.ConsultaPostRequestBody;
-import flor_de_lotus.consulta.dto.ConsultaResponseBody;
+import flor_de_lotus.consulta.dto.*;
+import flor_de_lotus.consulta.dto.dashAgendamento.GraficoDesempenhoSemanal;
+import flor_de_lotus.consulta.dto.dashAgendamento.GraficoDistribuicaoHorario;
+import flor_de_lotus.consulta.dto.dashAgendamento.KpiCancelamentos;
+import flor_de_lotus.consulta.dto.dashAgendamento.KpisDashAgendamentosResponse;
+import flor_de_lotus.consulta.dto.dashFinanceiro.GraficoConsultaMes;
+import flor_de_lotus.consulta.dto.dashFinanceiro.GraficoFaturamentoMensal;
+import flor_de_lotus.consulta.dto.dashFinanceiro.KpiMelhorFaturamentoAno;
+import flor_de_lotus.consulta.dto.dashFinanceiro.KpisDashFinanceiroResponse;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.exception.BadRequestException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +17,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -188,13 +193,102 @@ public class ConsultaController {
             @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
     })
-
     @GetMapping("pacienteConsultas/{idPaciente}")
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO','PACIENTE')")
     public ResponseEntity<List<ConsultaResponseBody>> listarPorProximasConsultasPacientes(@PathVariable Integer idPaciente) {
-        List<ConsultaResponseBody> lista = ConsultaMapper.toResponseList(service.listarConsultasPorPaciente(idPaciente));
+        List<ConsultaResponseBody> lista = ConsultaMapper.toResponseList(service.listarProximasConsultaPaciente(idPaciente));
         return ResponseEntity.status(200).body(lista);
     }
+    @Operation(summary = "Grafico de desempenho semanal das consultas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/graficoDesempenhoSemanal")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<List<GraficoDesempenhoSemanal>> graficoDesempenhoSemanal() {
+        return ResponseEntity.status(200).body(service.graficoDesempenhoSemanal());
+    }
+
+    @Operation(summary = "Grafico de distribuição de horários das consultas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/graficoPeriodo")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<List<GraficoDistribuicaoHorario>> graficoDistruibuicaoHorario() {
+        return ResponseEntity.status(200).body(service.graficoDistribuicaoHorario());
+    }
+
+    @Operation(summary = "Dados da kpi de cancelamentos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/kpiCancelamentos")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<List<KpiCancelamentos>> kpiCancelamentos() {
+        return ResponseEntity.status(200).body(service.kpiCancelamentos());
+    }
+
+    @Operation(summary = "Kpi da DashBoard de agendamentos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/kpisDashboardAgendamentos")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<KpisDashAgendamentosResponse> kpisDashboardAgendamentos() {
+        Long kpiAgendamentosSemana = service.kpiAgendamentosSemana();
+        String kpiTaxaComparecimento = service.kpiTaxaComparecimento();
+        Long kpiConsultasRealizadas = service.kpiConsultasRealizadas();
+        List<KpiCancelamentos> kpiCancelamentos = service.kpiCancelamentos();
+
+        KpisDashAgendamentosResponse response = new KpisDashAgendamentosResponse(kpiAgendamentosSemana, kpiTaxaComparecimento, kpiConsultasRealizadas, kpiCancelamentos);
+
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @Operation(summary = "Grafico consultas por mes")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/graficoConsultasMes")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<List<GraficoConsultaMes>> graficoConultaMes() {
+        return ResponseEntity.status(200).body(service.graficoConsultaMes());
+    }
+
+    @Operation(summary = "Grafico faturamento mensal")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/graficoFaturamentoMensal")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<List<GraficoFaturamentoMensal>> graficoFaturamentoMensal() {
+        return ResponseEntity.status(200).body(service.graficoFaturamentoMensal());
+    }
+
+    @Operation(summary = "Kpi da DashBoard de Financeiro")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/kpisDashboardFinanceira")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<KpisDashFinanceiroResponse> kpisDashboardFinanceiro() {
+        Double KpiFaturamentoMes = service.kpiFaturamentoMes();
+        Double KpiFaturamentoAno = service.kpiFaturamentoAno();
+        List<KpiMelhorFaturamentoAno> kpiMelhorFaturamentoAno = service.kpiMelhorFaturamentoAno();
+
+        KpisDashFinanceiroResponse response = new KpisDashFinanceiroResponse(KpiFaturamentoMes, KpiFaturamentoAno, kpiMelhorFaturamentoAno);
+
+        return ResponseEntity.status(200).body(response);
+    }
+
 
 
 }

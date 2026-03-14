@@ -1,9 +1,9 @@
-package flor_de_lotus.paciente.dto;
+package flor_de_lotus.paciente.dto.dashPaciente;
 
-public class ViewTotalPacientes {
+public class KpiTotalPacientes {
     private Long totalPacientesAtivos;
 
-    public ViewTotalPacientes(Long totalPacientesAtivos) {
+    public KpiTotalPacientes(Long totalPacientesAtivos) {
         this.totalPacientesAtivos = totalPacientesAtivos;
     }
 

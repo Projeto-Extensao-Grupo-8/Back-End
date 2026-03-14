@@ -1,4 +1,4 @@
-package flor_de_lotus.paciente.dto;
+package flor_de_lotus.paciente.dto.dashPaciente;
 
 public class ViewTop5paciente {
     private String nomePaciente;
