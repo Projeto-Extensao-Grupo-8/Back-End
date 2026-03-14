@@ -64,15 +64,19 @@ public class PacienteService {
     }
 
 
-    public Integer totalPacientes() {
+    public Long totalPacientes() {
         return repository.totalPacientes().getTotalPacientesAtivos();
     }
 
-    public Integer totalPacientesPorAno(Integer ano) {
+    public  Long totalPacientesPorAno(Integer ano) {
         return repository.totalPacientesPorAno(ano).getQtd();
     }
 
     public List<ViewTop5paciente> top5pacientes() {
         return repository.top5Pacientes();
+    }
+
+    public List<Paciente> listarPacientesAtivosPorFuncionario(Integer idFuncionario) {
+        return repository.findPacientesAtivosByFkFuncionario(idFuncionario);
     }
 }

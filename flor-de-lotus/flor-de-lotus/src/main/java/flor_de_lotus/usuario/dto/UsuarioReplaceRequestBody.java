@@ -42,6 +42,9 @@ public class UsuarioReplaceRequestBody {
     @Schema(description = "O usuário aceita ou não receber informações do newsletter", example = "true")
     private Boolean newsletter;
 
+    @Schema(description = "Nivel de permissão", example = "1")
+    private String nivelPermissao;
+
     @Schema(description = "Fk relacionado ao endereço", example = "1")
     private Endereco fkEndereco;
 

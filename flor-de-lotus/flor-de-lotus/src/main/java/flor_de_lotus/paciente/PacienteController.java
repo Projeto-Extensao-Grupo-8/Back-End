@@ -99,34 +99,26 @@ public class PacienteController {
     @Operation(summary = "Buscar quantidade de pacientes ativos")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "quantidade de pacientes ativos"),
-            @ApiResponse(responseCode = "204", description = "não possui pacientes")
     })
     @GetMapping("/qtdPacientes")
     @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
-    public ResponseEntity<Integer> totalPacientes() {
-        Integer totalPacientes = service.totalPacientes();
-        if (totalPacientes == 0) {
-            return ResponseEntity.status(204).build();
-        }
+    public ResponseEntity<Long> totalPacientes() {
+        Long totalPacientes = service.totalPacientes();
         return ResponseEntity.status(200).body(totalPacientes);
     }
 
     @Operation(summary = "Buscar quantidade de pacientes ativos por ano")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "quantidade de pacientes ativos por ano"),
-            @ApiResponse(responseCode = "204", description = "não possui pacientespoe ano")
+            @ApiResponse(responseCode = "200", description = "quantidade de pacientes ativos por ano")
     })
     @GetMapping("/qtdPacientes/ano/{ano}")
     @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
-    public ResponseEntity<Integer> totalPacientes(@PathVariable @NotNull @Valid Integer ano) {
-        Integer totalPacientes = service.totalPacientesPorAno(ano);
-        if (totalPacientes == 0) {
-            return ResponseEntity.status(204).build();
-        }
+    public ResponseEntity<Long> totalPacientes(@PathVariable @NotNull @Valid Integer ano) {
+        Long totalPacientes = service.totalPacientesPorAno(ano);
         return ResponseEntity.status(200).body(totalPacientes);
     }
 
-    @Operation(summary = "Buscar quantidade de pacientes ativos")
+    @Operation(summary = "Buscar top 5 pacientes")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "quantidade de pacientes ativos"),
             @ApiResponse(responseCode = "204", description = "não possui pacientes")
@@ -139,6 +131,21 @@ public class PacienteController {
             return ResponseEntity.status(204).build();
         }
         return ResponseEntity.status(200).body(totalPacientes);
+    }
+
+    @Operation(summary = "Listar pacientes ativos por funcionário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de pacientes do funcionário retornada"),
+            @ApiResponse(responseCode = "204", description = "O funcionário não possui pacientes")
+    })
+    @GetMapping("/funcionario/listarAtivos/{idFuncionario}")
+    @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
+    public ResponseEntity<List<PacienteResponseBody>> listarPacientesAtivosPorFuncionario(@PathVariable Integer idFuncionario) {
+        List<PacienteResponseBody> lista = PacienteMapper.toResponseList(service.listarPacientesAtivosPorFuncionario(idFuncionario));
+        if (lista.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(lista);
     }
 
 }

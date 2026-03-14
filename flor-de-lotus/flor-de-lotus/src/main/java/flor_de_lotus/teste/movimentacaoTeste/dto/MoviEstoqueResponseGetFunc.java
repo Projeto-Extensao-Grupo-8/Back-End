@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ public class MoviEstoqueResponseGetFunc {
     private Integer idMovimentacaoEstoque;
     private Integer qtd;
     @Schema(description = "Data em que a movimentação ocorreu.")
-    private LocalDate dataMovimentacao;
+    private LocalDateTime dataMovimentacao;
     @Schema(description = "Motivo ou tipo da movimentação")
     private String descricao;
     @Schema(description = "Referência ao Teste Psicológico que foi movimentado.")

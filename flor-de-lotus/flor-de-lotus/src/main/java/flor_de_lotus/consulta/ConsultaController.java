@@ -150,30 +150,51 @@ public class ConsultaController {
     @Operation(summary = "Listar próximas consultas de um funcionário específico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de consultas buscada com sucesso",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
-            @ApiResponse(responseCode = "204", description = "Funcionário não possui consultas cadastradas")
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class))))
     })
     @GetMapping("funcionarioConsultas/{idFuncionario}")
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO','PACIENTE')")
     public ResponseEntity<List<ConsultaResponseBody>> listarPorProximasConsultasFuncionario(@PathVariable Integer idFuncionario) {
-        List<ConsultaResponseBody> lista = ConsultaMapper.toResponseList(service.listarProximasConsulasFuncionario(idFuncionario));
-        if (lista.isEmpty()) {
-            return ResponseEntity.status(204).build();
-        }
+        List<ConsultaResponseBody> lista = ConsultaMapper.toResponseList(service.listarProximasConsultasFuncionario(idFuncionario));
         return ResponseEntity.status(200).body(lista);
     }
 
-    @Operation(summary = "Listar próximas consultas de um funcionário específico")
+    @Operation(summary = "Quantidade de consultas realizadas de um paciente específico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de consultas buscada com sucesso",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
-            @ApiResponse(responseCode = "204", description = "Funcionário não possui consultas cadastradas")
     })
-    @GetMapping("pacienteConsultas/{idPaciente}")
+    @GetMapping("qtdPacienteConsultas/{idPaciente}")
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO','PACIENTE')")
     public ResponseEntity<Integer> qtdSessoesRealizadasDoPaciente(@PathVariable Integer idPaciente) {
         Integer qtdSessoesRealizadas = service.qtdSessoesRealizadasDoPaciente(idPaciente);
         return ResponseEntity.status(200).body(qtdSessoesRealizadas);
     }
+
+    @Operation(summary = "Quantidade de consultas realizadas de um funionario específico")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("qtdFuncionarioConsultas/{idFuncionario}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO','PACIENTE')")
+    public ResponseEntity<Integer> qtdSessoesRealizadasDoFuncionario(@PathVariable Integer idFuncionario) {
+        Integer qtdSessoesRealizadas = service.qtdSessoesRealizadasDoFuncionario(idFuncionario);
+        return ResponseEntity.status(200).body(qtdSessoesRealizadas);
+    }
+
+    @Operation(summary = "Listar próximas consultas de um paciente específico")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+
+    @GetMapping("pacienteConsultas/{idPaciente}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO','PACIENTE')")
+    public ResponseEntity<List<ConsultaResponseBody>> listarPorProximasConsultasPacientes(@PathVariable Integer idPaciente) {
+        List<ConsultaResponseBody> lista = ConsultaMapper.toResponseList(service.listarConsultasPorPaciente(idPaciente));
+        return ResponseEntity.status(200).body(lista);
+    }
+
 
 }

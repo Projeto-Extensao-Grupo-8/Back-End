@@ -16,4 +16,10 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Integer> {
 
     @Query(value = "SELECT COUNT(*) FROM consulta WHERE fk_paciente = :idPaciente AND status = 'REALIZADA'", nativeQuery = true)
     Integer qtdSessoesRealizadasDoPaciente(@Param("idPaciente") Integer idPaciente);
+
+    @Query(value = "SELECT COUNT(*) FROM consulta WHERE fk_funcionario = :idFuncionario AND status = 'REALIZADA'", nativeQuery = true)
+    Integer qtdSessoesRealizadasDoFuncionario(@Param("idFuncionario") Integer idFuncionario);
+
+    @Query(value = "SELECT * FROM consulta WHERE fk_paciente = :idPaciente AND data >= CURRENT_DATE ORDER BY data ASC LIMIT 4", nativeQuery = true)
+    List<Consulta> findTop4ProximasConsultasDoPaciente(@Param("idPaciente") Integer idPaciente);
 }

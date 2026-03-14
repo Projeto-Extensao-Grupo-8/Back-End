@@ -2,11 +2,11 @@ package flor_de_lotus.paciente.dto;
 
 public class ViewTop5paciente {
     private String nomePaciente;
-    private Integer consultas;
+    private Long consultas;
     private Double valor;
     private Boolean ativo;
 
-    public ViewTop5paciente(String nomePaciente, Integer consultas, Double valor, Boolean ativo) {
+    public ViewTop5paciente(String nomePaciente, Long consultas, Double valor, Boolean ativo) {
         this.nomePaciente = nomePaciente;
         this.consultas = consultas;
         this.valor = valor;
@@ -17,7 +17,7 @@ public class ViewTop5paciente {
         return nomePaciente;
     }
 
-    public Integer getConsultas() {
+    public Long getConsultas() {
         return consultas;
     }
 

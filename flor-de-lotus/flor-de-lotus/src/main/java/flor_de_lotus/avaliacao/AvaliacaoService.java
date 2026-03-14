@@ -1,6 +1,8 @@
 package flor_de_lotus.avaliacao;
 
 import flor_de_lotus.avaliacao.dto.AvaliacaoMapper;
+import flor_de_lotus.avaliacao.dto.GraficoAvaliacaoPorConsulta;
+import flor_de_lotus.avaliacao.dto.GraficoAvaliacaoPorFuncionario;
 import flor_de_lotus.consulta.Consulta;
 import flor_de_lotus.consulta.ConsultaService;
 import flor_de_lotus.exception.EntidadeConflitoException;
@@ -42,4 +44,11 @@ public class AvaliacaoService {
         throw new EntidadeNaoEncontradoException("Avaliacao não encontrada");
     }
 
+    public List<GraficoAvaliacaoPorConsulta> graficoAvaliacaoPorConsulta() {
+        return repository.graficoAvaliacaoPorConsulta();
+    }
+
+    public List<GraficoAvaliacaoPorFuncionario> graficoAvaliacaoPorFuncionario() {
+        return repository.graficoAvaliacaoPorFuncionario();
+    }
 }

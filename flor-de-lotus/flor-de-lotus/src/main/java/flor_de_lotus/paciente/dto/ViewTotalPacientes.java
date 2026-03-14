@@ -1,13 +1,13 @@
 package flor_de_lotus.paciente.dto;
 
 public class ViewTotalPacientes {
-    private Integer totalPacientesAtivos;
+    private Long totalPacientesAtivos;
 
-    public ViewTotalPacientes(Integer totalPacientesAtivos) {
+    public ViewTotalPacientes(Long totalPacientesAtivos) {
         this.totalPacientesAtivos = totalPacientesAtivos;
     }
 
-    public Integer getTotalPacientesAtivos() {
+    public Long getTotalPacientesAtivos() {
         return totalPacientesAtivos;
     }
 }

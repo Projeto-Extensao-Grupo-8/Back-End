@@ -55,13 +55,7 @@ public class Usuario {
     @JoinColumn(name = "fk_endereco")
     private Endereco fkEndereco;
 
-    public Usuario(String nome, String email, LocalDate dataNascimento, String telefone, String cpf, String senha, String nivelPermissao) {
-        this.nome = nome;
-        this.email = email;
-        this.dataNascimento = dataNascimento;
-        this.telefone = telefone;
-        this.cpf = cpf;
-        this.senha = senha;
-        this.nivelPermissao = nivelPermissao;
-    }
+    @Schema(description = "Data do cadastro", example = "2024-10-20")
+    private LocalDate dataCadastro = LocalDate.now();
+
 }

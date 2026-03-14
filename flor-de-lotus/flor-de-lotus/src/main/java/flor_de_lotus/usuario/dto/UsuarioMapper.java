@@ -18,21 +18,8 @@ public class UsuarioMapper {
         entinty.setSenha(dto.getSenha());
         entinty.setFkEndereco(endereco);
         entinty.setNewsletter(dto.getNewsletter());
-
-        return entinty;
-    }
-
-    public static Usuario toEntity(UsuarioPostRequestBody dto) {
-        Usuario entinty = new Usuario();
-
-        entinty.setNome(dto.getNome());
-        entinty.setEmail(dto.getEmail());
-        entinty.setCpf(dto.getCpf());
+        entinty.setNivelPermissao(dto.getNivelPermissao());
         entinty.setDataNascimento(dto.getDataNascimento());
-        entinty.setTelefone(dto.getTelefone());
-        entinty.setSenha(dto.getSenha());
-        entinty.setNewsletter(dto.getNewsletter());
-
         return entinty;
     }
 
@@ -66,6 +53,10 @@ public class UsuarioMapper {
         usuarioResponseBody.setNome(usuario.getNome());
         usuarioResponseBody.setEmail(usuario.getEmail());
         usuarioResponseBody.setNivelPermissao(usuario.getNivelPermissao());
+        usuarioResponseBody.setTelefone(usuario.getTelefone());
+        usuarioResponseBody.setDataNascimento(usuario.getDataNascimento());
+        usuarioResponseBody.setDataCadastro(usuario.getDataCadastro());
+        usuarioResponseBody.setEndereco(usuario.getFkEndereco());
 
         return usuarioResponseBody;
     }

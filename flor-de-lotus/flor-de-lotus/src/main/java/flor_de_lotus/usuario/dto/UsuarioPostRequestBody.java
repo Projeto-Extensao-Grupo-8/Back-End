@@ -2,6 +2,7 @@ package flor_de_lotus.usuario.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import java.time.LocalDate;
 import java.util.Date;
 
-@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class UsuarioPostRequestBody {
@@ -37,6 +38,9 @@ public class UsuarioPostRequestBody {
     @Schema(description = "Senha do usuário para cadastro, deve conter ao menos 8 caracteres e no máximo 32, 2 letras maiúsculas e uma minúscula, 1 dígito e apenas letras e números", example = "P4sSwOrdExAmPl3")
     private String senha;
 
+    @Schema(description = "Nível de permissão do usuário", example = "01414001")
+    private String nivelPermissao;
+
     @Schema(description = "O usuário aceita ou não receber informações do newsletter", example = "true")
     private Boolean newsletter;
 
@@ -50,14 +54,5 @@ public class UsuarioPostRequestBody {
     @Schema(description = "Complemento do endereço",example = "Bloco A Apto 42")
     private String complemento;
 
-    public UsuarioPostRequestBody(String nome, String email, String telefone, String cpf, String senha, String cep, String numero, String complemento) {
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.cpf = cpf;
-        this.senha = senha;
-        this.cep = cep;
-        this.numero = numero;
-        this.complemento = complemento;
-    }
+
 }

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -22,7 +23,7 @@ public class MovimentacaoEstoque {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMovimentacaoEstoque;
     private Integer qtd;
-    private LocalDate dataMovimentacao;
+    private LocalDateTime dataMovimentacao;
     private String descricao;
     @ManyToOne
     @JoinColumn(name = "fk_teste", nullable = false)

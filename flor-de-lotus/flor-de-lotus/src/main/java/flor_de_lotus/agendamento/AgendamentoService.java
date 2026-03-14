@@ -8,6 +8,8 @@ import flor_de_lotus.funcionario.FuncionarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +33,7 @@ public class AgendamentoService {
         return repository.save(entity);
     }
 
-    private void validarDisponibilidade(Integer idFuncionario, LocalTime inicio, LocalTime fim, java.time.LocalDate dataDia) {
+    private void validarDisponibilidade(Integer idFuncionario, LocalTime inicio, LocalTime fim, LocalDate dataDia) {
         List<Agendamento> agendamentos = repository.findByFkFuncionario_IdFuncionarioAndDataDia(idFuncionario, dataDia);
 
         for (Agendamento existente : agendamentos) {
@@ -52,7 +54,7 @@ public class AgendamentoService {
     }
 
     public List<Agendamento> listarPorFuncionario(Integer idFuncionario) {
-        List<Agendamento> lista = repository.findByFkFuncionario_IdFuncionarioAndDataDia(idFuncionario, java.time.LocalDate.now());
+        List<Agendamento> lista = repository.findByFkFuncionario_IdFuncionarioAndDataDia(idFuncionario, LocalDate.now());
         return lista;
     }
 }

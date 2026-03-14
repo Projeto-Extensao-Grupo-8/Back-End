@@ -1,5 +1,6 @@
 package flor_de_lotus.usuario;
 
+import flor_de_lotus.endereco.Endereco;
 import flor_de_lotus.exception.BadRequestException;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
@@ -52,10 +53,10 @@ public class UsuarioController {
             )
     })
     public ResponseEntity<UsuarioResponseBody> cadastrar(@RequestBody @Valid UsuarioPostRequestBody body){
+        Endereco endereco = service.cadastrarEndereco(body.getCep(), body.getNumero(), body.getComplemento());
+        Usuario usuario = UsuarioMapper.toEntity(body, endereco);
 
-        Usuario usuario = UsuarioMapper.toEntity(body);
-
-        UsuarioResponseBody response = UsuarioMapper.toResponse(service.cadastrar(usuario, body.getCep(), body.getNumero(), body.getComplemento()));
+        UsuarioResponseBody response = UsuarioMapper.toResponse(service.cadastrar(usuario));
 
         return ResponseEntity.status(201).body(response);
     }

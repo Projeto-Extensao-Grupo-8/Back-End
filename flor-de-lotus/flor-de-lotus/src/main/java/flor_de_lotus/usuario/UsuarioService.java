@@ -50,17 +50,13 @@ public class UsuarioService {
         return enderecoRepository.save(endereco);
     }
 
-    public Usuario cadastrar(Usuario entity, String cep, String numero, String complemento){
+    public Usuario cadastrar(Usuario entity){
 
         checarDuplicidade(entity.getEmail(), entity.getCpf());
         checarRegrasSenha(entity.getSenha());
 
         String senhaCriptografada = passwordEncoder.encode(entity.getSenha());
         entity.setSenha(senhaCriptografada);
-
-        Endereco endereco = cadastrarEndereco(cep, numero, complemento);
-
-        entity.setFkEndereco(endereco);
 
         return repository.save(entity);
 

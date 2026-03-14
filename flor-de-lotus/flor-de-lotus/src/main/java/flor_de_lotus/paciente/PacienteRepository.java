@@ -29,6 +29,8 @@ public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
     @Query(value = "SELECT nome_paciente, consultas, valor, ativo FROM top_5_pacientes", nativeQuery = true)
     List<ViewTop5paciente> top5Pacientes();
 
+    @Query(value = "SELECT DISTINCT p.* FROM paciente p INNER JOIN consulta c ON p.id_paciente = c.fk_paciente WHERE c.fk_funcionario = :idFuncionario AND p.ativo = 1", nativeQuery = true)
+    List<Paciente> findPacientesAtivosByFkFuncionario(@Param("idFuncionario") Integer idFuncionario);
 
 }
 

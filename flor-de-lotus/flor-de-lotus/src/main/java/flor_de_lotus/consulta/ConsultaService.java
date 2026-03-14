@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,8 +48,8 @@ public class ConsultaService {
         return repository.save(entity);
     }
 
-    private void checarData(LocalDate dataConsulta) {
-        if (dataConsulta == null || dataConsulta.isBefore(LocalDate.now())) {
+    private void checarData(LocalDateTime dataConsulta) {
+        if (dataConsulta == null || dataConsulta.isBefore(LocalDateTime.now())) {
             throw new BadRequestException("A data da consulta deve ser igual ou posterior à data atual.");
         }
     }
@@ -131,7 +132,7 @@ public class ConsultaService {
         return repository.findByFkFuncionario_IdFuncionario(idFuncionario);
     }
 
-    public List<Consulta> listarProximasConsulasFuncionario(Integer idFuncionario) {
+    public List<Consulta> listarProximasConsultasFuncionario(Integer idFuncionario) {
         funcionarioService.buscarPorIdOuThrow(idFuncionario);
         return repository.findTop4ProximasConsultasDoFuncionario(idFuncionario);
     }
@@ -140,5 +141,16 @@ public class ConsultaService {
         pacienteService.buscarPorIdOuThrow(idPaciente);
         return repository.qtdSessoesRealizadasDoPaciente(idPaciente);
   }
+
+  public Integer qtdSessoesRealizadasDoFuncionario(Integer idFuncionario) {
+        funcionarioService.buscarPorIdOuThrow(idFuncionario);
+        return repository.qtdSessoesRealizadasDoFuncionario(idFuncionario);
+
+    }
+
+    public List<Consulta> listarProximasConsultaPaciente(Integer idPaciente) {
+        pacienteService.buscarPorIdOuThrow(idPaciente);
+        return repository.findTop4ProximasConsultasDoPaciente(idPaciente);
+    }
 
 }
