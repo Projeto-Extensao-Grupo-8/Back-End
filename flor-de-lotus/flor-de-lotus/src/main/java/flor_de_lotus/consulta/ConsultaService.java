@@ -112,18 +112,14 @@ public class ConsultaService {
 
     }
 
-    public List<ConsultaResponseBody> listarPorPaciente(Integer idPaciente) {
+    public List<Consulta> listarPorPaciente(Integer idPaciente) {
         pacienteService.buscarPorIdOuThrow(idPaciente);
-        return repository.findByFkPaciente_IdPaciente(idPaciente).stream()
-                .map(ConsultaMapper::toResponse)
-                .toList();
+        return repository.findByFkPaciente_IdPaciente(idPaciente);
     }
 
-    public List<ConsultaResponseBody> listarPorFuncionario(Integer idFuncionario) {
+    public List<Consulta> listarPorFuncionario(Integer idFuncionario) {
         funcionarioService.buscarPorIdOuThrow(idFuncionario);
-        return repository.findByFkFuncionario_IdFuncionario(idFuncionario).stream()
-                .map(ConsultaMapper::toResponse)
-                .toList();
+        return repository.findByFkFuncionario_IdFuncionario(idFuncionario);
     }
 
     public List<Consulta> listarConsultasPorPaciente(Integer idPaciente) {
@@ -201,7 +197,26 @@ public class ConsultaService {
         return repository.kpiFaturamentoMelhorMes();
     }
 
+    public Integer qtdSessoesRealizadasDoFuncionarioEsteMes(Integer idFuncionario) {
+        funcionarioService.buscarPorIdOuThrow(idFuncionario);
+        return repository.qtdSessoesRealizadasDoFuncionarioEsteMes(idFuncionario);
+    }
 
+    public Integer qtdSessoesRealizadasEsteMes() {
+        return repository.qtdSessoesRealizadasEsteMes();
+    }
+
+    public List<Consulta> consultasDoHoje(){
+        return repository.buscarConsultasDeHoje();
+    }
+
+    public Integer qtdConsultasDeHoje() {
+        return repository.qtdConsultasDeHoje();
+    }
+
+    public List<KardResumoFinanceiro> resumoFinanceiroMensal() {
+        return repository.resumoFinanceiroMensal();
+    }
 
 
 

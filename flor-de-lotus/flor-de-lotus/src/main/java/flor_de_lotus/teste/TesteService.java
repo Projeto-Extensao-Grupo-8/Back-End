@@ -61,4 +61,37 @@ public class TesteService {
         return repository.countByValidadeBetween(primeiroDiaDoMes, ultimoDiaDoMes);
     }
 
+    public Integer buscarQtdValidadeProxima90Dias() {
+        LocalDate hoje = LocalDate.now();
+        LocalDate daqui90Dias = hoje.plusDays(90);
+
+        return repository.countByValidadeBetween(hoje, daqui90Dias);
+    }
+
+    public Integer buscarQtdEstoqueCritico() {
+        return repository.countTestesEstoqueCritico();
+    }
+
+    public Integer buscarTotalUnidadesFisicas() {
+        return repository.sumUnidadesFisicas();
+    }
+
+    public Integer buscarTotalUnidadesDigitais() {
+        return repository.sumUnidadesDigitais();
+    }
+
+
+
+    public Double buscarValorTotalEstoque() {
+        return repository.sumValorTotalEstoque();
+    }
+
+    public Integer buscarTotalUnidadesAoTodo() {
+        return repository.sumTotalUnidades();
+    }
+
+    public Long buscarTotalTiposTestes() {
+        return repository.count();
+    }
+
 }

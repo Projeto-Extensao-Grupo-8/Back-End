@@ -25,8 +25,4 @@ public class MoviEstoqueResponseGetFunc {
     @Schema(description = "Referência a Consulta que foi movimentado os testes.")
     private Consulta fkConsulta;
 
-    public Boolean getIsValido() {
-        return LocalDate.now().isAfter(
-                LocalDate.of(dataMovimentacao.getYear()+1, dataMovimentacao.getMonth(), dataMovimentacao.getDayOfMonth()));
-    }
 }

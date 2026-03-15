@@ -32,5 +32,6 @@ public class TesteResponse {
     private Integer estoqueMinimo;
     @Schema(description = "Data de validade do lote atual do material do Teste.")
     private LocalDate validade;
+    private Integer qtd;
 
 }

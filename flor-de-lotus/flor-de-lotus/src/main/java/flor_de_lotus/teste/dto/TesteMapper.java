@@ -22,6 +22,7 @@ public class TesteMapper {
         teste.setPreco(dto.getPreco());
         teste.setEstoqueMinimo(dto.getEstoqueMinimo());
         teste.setValidade(dto.getValidade());
+        teste.setQtd(dto.getQtd());
 
         return teste;
 
@@ -45,6 +46,7 @@ public class TesteMapper {
         testeResposta.setPreco(teste.getPreco());
         testeResposta.setEstoqueMinimo(teste.getEstoqueMinimo());
         testeResposta.setValidade(teste.getValidade());
+        testeResposta.setQtd(teste.getQtd());
 
         return testeResposta;
     }

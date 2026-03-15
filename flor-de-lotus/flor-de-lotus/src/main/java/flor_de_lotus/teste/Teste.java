@@ -28,4 +28,5 @@ public class Teste {
     private Double preco;
     private Integer estoqueMinimo;
     private LocalDate validade;
+    private Integer qtd;
 }

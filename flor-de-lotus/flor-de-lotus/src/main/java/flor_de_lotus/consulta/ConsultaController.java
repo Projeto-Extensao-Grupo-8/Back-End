@@ -129,7 +129,7 @@ public class ConsultaController {
     @GetMapping("/paciente/{idPaciente}")
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE')")
     public ResponseEntity<List<ConsultaResponseBody>> listarPorPaciente(@PathVariable Integer idPaciente) {
-        List<ConsultaResponseBody> lista = service.listarPorPaciente(idPaciente);
+        List<ConsultaResponseBody> lista =ConsultaMapper.toResponseList(service.listarPorPaciente(idPaciente));
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
@@ -145,7 +145,7 @@ public class ConsultaController {
     @GetMapping("/funcionario/{idFuncionario}")
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO','PACIENTE')")
     public ResponseEntity<List<ConsultaResponseBody>> listarPorFuncionario(@PathVariable Integer idFuncionario) {
-        List<ConsultaResponseBody> lista = service.listarPorFuncionario(idFuncionario);
+        List<ConsultaResponseBody> lista = ConsultaMapper.toResponseList(service.listarPorFuncionario(idFuncionario));
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
@@ -289,6 +289,66 @@ public class ConsultaController {
         return ResponseEntity.status(200).body(response);
     }
 
+    @Operation(summary = "Quantidade de consultas realizadas no mes atual de um Funcionario específico")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/funcionario/qtdConsultasMesAtual/{idFuncionario}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    public ResponseEntity<Integer> qtdSessoesRealizadasDoFuncionarioEsteMes(@PathVariable Integer idFuncionario) {
+        Integer qtdSessoesRealizadas = service.qtdSessoesRealizadasDoFuncionarioEsteMes(idFuncionario);
+        return ResponseEntity.status(200).body(qtdSessoesRealizadas);
+    }
+
+    @Operation(summary = "Quantidade de consultas realizadas no mes atual")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/qtdConsultasMesAtual")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    public ResponseEntity<Integer> qtdSessoesRealizadasEsteMes() {
+        return ResponseEntity.status(200).body(service.qtdSessoesRealizadasEsteMes());
+    }
+
+    @Operation(summary = "Listar consultas do dia de hoje")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de consultas buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+            @ApiResponse(responseCode = "204", description = "Não possui consultas cadastradas")
+    })
+    @GetMapping("/filtrarConsultasHoje")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    public ResponseEntity<List<ConsultaResponseBody>> listarConsultasDeHoje() {
+        List<ConsultaResponseBody> lista = ConsultaMapper.toResponseList(service.consultasDoHoje());
+        if (lista.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(lista);
+    }
+
+    @Operation(summary = "Retorna quantidade de consultas do dia de hoje")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Quantidade de consultas buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/qtdConsultasHoje")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    public ResponseEntity<Integer> qtdConsultasDeHoje() {
+        return ResponseEntity.status(200).body(service.qtdConsultasDeHoje());
+    }
+
+    @Operation(summary = "Buscar os dados para o card de Resumo Financeiro do dashboard")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Resumo buscado com sucesso")
+    })
+    @GetMapping("/resumoFinanceiro")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    public ResponseEntity<List<KardResumoFinanceiro>> buscarResumoFinanceiro() {
+
+        return ResponseEntity.status(200).body(service.resumoFinanceiroMensal());
+    }
 
 
 }

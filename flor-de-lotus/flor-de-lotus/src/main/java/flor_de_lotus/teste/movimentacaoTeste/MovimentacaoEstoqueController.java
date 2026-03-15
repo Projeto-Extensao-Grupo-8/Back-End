@@ -116,4 +116,17 @@ public class MovimentacaoEstoqueController {
         return ResponseEntity.status(200).body(response);
     }
 
+    @Operation(summary = "Buscar o último teste realizado por um paciente")
+    @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", description = "Estoque Atualizado com sucesso", content = {
+                        @Content(schema = @Schema(implementation = TesteResponse.class))
+                })
+    })
+    @GetMapping("/ultimoTeste/{idpaciente}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE')")
+    public ResponseEntity<UltimoTestePacienteDTO> buscarUltimoTeste(@PathVariable Integer idpaciente){
+        UltimoTestePacienteDTO response = service.buscarUltimoTeste(idpaciente);
+        return ResponseEntity.status(200).body(response);
+    }
+
 }

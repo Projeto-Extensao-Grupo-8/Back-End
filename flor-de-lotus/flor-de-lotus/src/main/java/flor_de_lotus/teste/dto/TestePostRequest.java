@@ -61,6 +61,7 @@ public class TestePostRequest {
             example = "2026-12-31"
     )
     private LocalDate validade;
+    private Integer qtd;
 
 
 }

@@ -1,10 +1,15 @@
 package flor_de_lotus.funcionario;
 
+import flor_de_lotus.consulta.dto.ConsultaResponseBody;
+import flor_de_lotus.consulta.dto.dashFinanceiro.KpiMelhorFaturamentoAno;
+import flor_de_lotus.consulta.dto.dashFinanceiro.KpisDashFinanceiroResponse;
 import flor_de_lotus.funcionario.dto.FuncionarioPatchRequestBody;
 import flor_de_lotus.funcionario.dto.FuncionarioPostRequestBody;
 import flor_de_lotus.funcionario.dto.FuncionarioResponse;
+import flor_de_lotus.funcionario.dto.KpisGestaoFuncionarioResponse;
 import flor_de_lotus.funcionario.mapper.FuncionarioMapper;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -113,6 +118,25 @@ public class FuncionarioController {
     public ResponseEntity<FuncionarioResponse> atualizarParcial(@PathVariable Integer id, @RequestBody FuncionarioPatchRequestBody body ){
         Funcionario atualizado = service.atualizarParcial(id, body);
         return ResponseEntity.status(200).body(FuncionarioMapper.toResponse(atualizado));
+    }
+
+    @Operation(summary = "Kpis da Página de Gestão de Funcionários", description = "Retorna os KPIs relacionados à gestão de funcionários")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/kpisGestaoFuncionarios")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<KpisGestaoFuncionarioResponse> kpisDashboardFinanceiro() {
+        long totaisFuncionariosAtivos = service.totalFuncionariosAtivos();
+        long totaisFuncionarios = service.totalFuncionarios();
+        long totalFuncionariosDesativados = service.totalFuncionariosInativos();
+        long totalEspecialidades = service.qtdEspecialidades();
+
+
+        KpisGestaoFuncionarioResponse response = new KpisGestaoFuncionarioResponse(totaisFuncionariosAtivos, totaisFuncionarios, totalFuncionariosDesativados, totalEspecialidades);
+
+        return ResponseEntity.status(200).body(response);
     }
 
 }

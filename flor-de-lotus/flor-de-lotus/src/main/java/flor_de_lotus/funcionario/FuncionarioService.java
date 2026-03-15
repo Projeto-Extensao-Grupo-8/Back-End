@@ -88,4 +88,22 @@ public class FuncionarioService {
        return repository.save(funcionario);
     }
 
+    public long totalFuncionarios() {
+        return repository.count();
+    }
+
+    public long totalFuncionariosAtivos() {
+        return repository.countByAtivoTrue();
+    }
+
+    public long totalFuncionariosInativos() {
+        return repository.countByAtivoFalse();
+    }
+
+    public long qtdEspecialidades() {
+        return repository.countDistinctEspecialidades();
+    }
+
+
+
 }

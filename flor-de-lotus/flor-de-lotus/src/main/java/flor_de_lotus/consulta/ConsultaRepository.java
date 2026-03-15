@@ -1,5 +1,6 @@
 package flor_de_lotus.consulta;
 
+import flor_de_lotus.consulta.dto.KardResumoFinanceiro;
 import flor_de_lotus.consulta.dto.dashAgendamento.*;
 import flor_de_lotus.consulta.dto.dashFinanceiro.*;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -58,7 +59,19 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Integer> {
     @Query(value = "SELECT mes, qtd_consultas from grafico_consultas_mes", nativeQuery = true)
     List<GraficoConsultaMes> graficoConsultaMes();
 
+    @Query(value = "SELECT COUNT(*) FROM consulta WHERE fk_funcionario = :idFuncionario AND status = 'REALIZADA' AND MONTH(data) = MONTH(CURDATE()) AND YEAR(data) = YEAR(CURDATE())", nativeQuery = true)
+    Integer qtdSessoesRealizadasDoFuncionarioEsteMes(@Param("idFuncionario") Integer idFuncionario);
 
+    @Query(value = "SELECT COUNT(*) FROM consulta WHERE status = 'REALIZADA' AND MONTH(data) = MONTH(CURDATE()) AND YEAR(data) = YEAR(CURDATE())", nativeQuery = true)
+    Integer qtdSessoesRealizadasEsteMes();
 
+    @Query("SELECT c FROM Consulta c WHERE DATE(c.data) = CURRENT_DATE")
+    List<Consulta> buscarConsultasDeHoje();
+
+    @Query(value = "SELECT COUNT(*) FROM consulta WHERE DATE(data) = CURDATE()", nativeQuery = true)
+    Integer qtdConsultasDeHoje();
+
+    @Query(value = "SELECT faturamento_atual, faturamento_anterior, crescimento_percentual FROM resumo_financeiro_mes ", nativeQuery = true)
+    List<KardResumoFinanceiro> resumoFinanceiroMensal();
 
 }

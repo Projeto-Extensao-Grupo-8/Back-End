@@ -1,10 +1,10 @@
 package flor_de_lotus.teste;
 
+import flor_de_lotus.consulta.dto.ConsultaResponseBody;
 import flor_de_lotus.exception.EntidadeConflitoException;
-import flor_de_lotus.teste.dto.TesteMapper;
-import flor_de_lotus.teste.dto.TestePostRequest;
-import flor_de_lotus.teste.dto.TesteResponse;
+import flor_de_lotus.teste.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -146,6 +146,41 @@ public class TesteController {
         }
 
         return ResponseEntity.status(200).body(qtdTesteEncontrado);
+    }
+
+    @Operation(summary = "Kpi da página gestão de testes")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/kpisGestaoEstoque")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<KpisGestaoEstoqueResponse> kpisGestaoEstoque() {
+        Integer buscarQtdValidadeProxima90Dias = service.buscarQtdValidadeProxima90Dias();
+        Integer buscarQtdEstoqueCritico = service.buscarQtdEstoqueCritico();
+        Integer buscarTotalUnidadesFisicas = service.buscarTotalUnidadesFisicas();
+        Integer buscarTotalUnidadesDigitais = service.buscarTotalUnidadesDigitais();
+
+        KpisGestaoEstoqueResponse response = new KpisGestaoEstoqueResponse( buscarQtdValidadeProxima90Dias, buscarQtdEstoqueCritico, buscarTotalUnidadesFisicas, buscarTotalUnidadesDigitais);
+
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @Operation(summary = "Kpi de resumo do estoque gestao")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/kpisResumoEstoque")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<KpisResumoEstoqueResponse> kpisResumoEstoque() {
+        Double buscarValorTotalEstoque = service.buscarValorTotalEstoque();
+        Integer buscarTotalUnidadesAoTodo = service.buscarTotalUnidadesAoTodo();
+        Long buscarTotalTiposTestes = service.buscarTotalTiposTestes();
+
+        KpisResumoEstoqueResponse response = new KpisResumoEstoqueResponse( buscarValorTotalEstoque, buscarTotalUnidadesAoTodo, buscarTotalTiposTestes);
+
+        return ResponseEntity.status(200).body(response);
     }
 
 }
