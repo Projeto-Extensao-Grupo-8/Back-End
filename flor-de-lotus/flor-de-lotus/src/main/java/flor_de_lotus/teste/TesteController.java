@@ -183,4 +183,26 @@ public class TesteController {
         return ResponseEntity.status(200).body(response);
     }
 
+    @Operation(summary = "Listar alertas de estoque crítico")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/alertasEstoqueCritico")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<List<TesteAlertaResponseDTO>> listarAlertas() {
+
+        List<Teste> testesCriticos = service.buscarAlertasDeEstoque();
+
+        List<TesteAlertaResponseDTO> alertas = testesCriticos.stream()
+                .map(teste -> new TesteAlertaResponseDTO(
+                        teste.getNome(),
+                        teste.getQtd(),
+                        teste.getEstoqueMinimo()
+                ))
+                .toList();
+
+        return ResponseEntity.status(200).body(alertas);
+    }
+
 }

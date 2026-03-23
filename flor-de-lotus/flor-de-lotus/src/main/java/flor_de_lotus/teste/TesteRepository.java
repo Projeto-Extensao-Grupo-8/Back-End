@@ -29,6 +29,8 @@ public interface TesteRepository extends JpaRepository<Teste, Integer> {
     @Query("SELECT COALESCE(SUM(t.qtd), 0) FROM Teste t")
     Integer sumTotalUnidades();
 
+    List<Teste> findByStatusEstoqueOrderByQtdAsc(StatusEstoque statusEstoque);
+
 
 
 }

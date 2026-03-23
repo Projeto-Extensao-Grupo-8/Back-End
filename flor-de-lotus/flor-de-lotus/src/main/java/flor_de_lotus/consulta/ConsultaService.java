@@ -4,6 +4,7 @@ import flor_de_lotus.consulta.dto.*;
 import flor_de_lotus.consulta.dto.dashAgendamento.GraficoDesempenhoSemanal;
 import flor_de_lotus.consulta.dto.dashAgendamento.GraficoDistribuicaoHorario;
 import flor_de_lotus.consulta.dto.dashAgendamento.KpiCancelamentos;
+import flor_de_lotus.consulta.dto.dashFinanceiro.GraficoComparacaoCustoReceita;
 import flor_de_lotus.consulta.dto.dashFinanceiro.GraficoConsultaMes;
 import flor_de_lotus.consulta.dto.dashFinanceiro.GraficoFaturamentoMensal;
 import flor_de_lotus.consulta.dto.dashFinanceiro.KpiMelhorFaturamentoAno;
@@ -16,7 +17,9 @@ import flor_de_lotus.paciente.PacienteRepository;
 import flor_de_lotus.paciente.PacienteService;
 import flor_de_lotus.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -217,6 +220,27 @@ public class ConsultaService {
     public List<KardResumoFinanceiro> resumoFinanceiroMensal() {
         return repository.resumoFinanceiroMensal();
     }
+
+    public List<GraficoComparacaoCustoReceita> graficoComparacaoCustoReceitas(){
+        return repository.graficoComparacaoCustoReceita();
+    }
+
+    public Consulta atualizarStatus(Integer idConsulta, StatusConsulta novoStatus) {
+        Consulta consulta = buscarPorIdOuThrow(idConsulta);
+
+        switch (novoStatus) {
+            case CONFIRMADA -> consulta.confirmar();
+            case REALIZADA -> consulta.marcarComoRealizada();
+            case CANCELADA -> consulta.cancelar();
+            case PENDENTE -> throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Não é permitido alterar o status manualmente para PENDENTE."
+            );
+        }
+        return repository.save(consulta);
+    }
+
+
 
 
 

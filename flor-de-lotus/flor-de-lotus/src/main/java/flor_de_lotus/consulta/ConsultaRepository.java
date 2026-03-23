@@ -74,4 +74,7 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Integer> {
     @Query(value = "SELECT faturamento_atual, faturamento_anterior, crescimento_percentual FROM resumo_financeiro_mes ", nativeQuery = true)
     List<KardResumoFinanceiro> resumoFinanceiroMensal();
 
+    @Query(value = "SELECT valor_teste, valor_consulta, mes FROM grafico_comparacao_custo_receita", nativeQuery = true)
+    List<GraficoComparacaoCustoReceita> graficoComparacaoCustoReceita();
+
 }

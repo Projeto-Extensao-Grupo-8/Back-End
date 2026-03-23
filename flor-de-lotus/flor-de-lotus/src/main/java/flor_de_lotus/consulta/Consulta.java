@@ -31,4 +31,29 @@ public class Consulta {
     @JoinColumn(name = "fk_paciente")
     private Paciente fkPaciente;
 
+
+    public void confirmar() {
+        if (this.status == StatusConsulta.PENDENTE) {
+            this.status = StatusConsulta.CONFIRMADA;
+        } else {
+            throw new IllegalStateException("Apenas consultas pendentes podem ser confirmadas.");
+        }
+    }
+
+    public void cancelar() {
+        if (this.status != StatusConsulta.REALIZADA) {
+            this.status = StatusConsulta.CANCELADA;
+        } else {
+            throw new IllegalStateException("Uma consulta já realizada não pode ser cancelada.");
+        }
+    }
+
+    public void marcarComoRealizada() {
+        if (this.status == StatusConsulta.CONFIRMADA) {
+            this.status = StatusConsulta.REALIZADA;
+        } else {
+            throw new IllegalStateException("A consulta precisa estar confirmada para ser realizada.");
+        }
+    }
+
 }

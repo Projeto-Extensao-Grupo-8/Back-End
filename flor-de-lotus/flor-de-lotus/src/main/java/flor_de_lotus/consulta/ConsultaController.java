@@ -5,10 +5,7 @@ import flor_de_lotus.consulta.dto.dashAgendamento.GraficoDesempenhoSemanal;
 import flor_de_lotus.consulta.dto.dashAgendamento.GraficoDistribuicaoHorario;
 import flor_de_lotus.consulta.dto.dashAgendamento.KpiCancelamentos;
 import flor_de_lotus.consulta.dto.dashAgendamento.KpisDashAgendamentosResponse;
-import flor_de_lotus.consulta.dto.dashFinanceiro.GraficoConsultaMes;
-import flor_de_lotus.consulta.dto.dashFinanceiro.GraficoFaturamentoMensal;
-import flor_de_lotus.consulta.dto.dashFinanceiro.KpiMelhorFaturamentoAno;
-import flor_de_lotus.consulta.dto.dashFinanceiro.KpisDashFinanceiroResponse;
+import flor_de_lotus.consulta.dto.dashFinanceiro.*;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.exception.BadRequestException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,11 +17,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.mapper.Mapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+
+import static flor_de_lotus.consulta.dto.ConsultaMapper.toResponse;
 
 @RestController
 @RequestMapping("/consultas")
@@ -49,7 +51,7 @@ public class ConsultaController {
 
         Consulta cadastrada = service.cadastrar(consulta, body.getFkUsuario(), body.getFkFuncionario());
 
-        ConsultaResponseBody response = ConsultaMapper.toResponse(cadastrada);
+        ConsultaResponseBody response = toResponse(cadastrada);
 
         return ResponseEntity.status(201).body(response);
     }
@@ -79,7 +81,7 @@ public class ConsultaController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO','PACIENTE')")
     public ResponseEntity<ConsultaResponseBody> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.status(200).body(ConsultaMapper.toResponse(service.buscarPorIdOuThrow(id)));
+        return ResponseEntity.status(200).body(toResponse(service.buscarPorIdOuThrow(id)));
     }
 
     @Operation(summary = "Deletar consulta via ID")
@@ -114,7 +116,7 @@ public class ConsultaController {
 
         Consulta consultaAtualizada = service.atualizarParcial(id, atualizacao, body.getFkFuncionario(), body.getFkUsuario());
 
-        ConsultaResponseBody response = ConsultaMapper.toResponse(consultaAtualizada);
+        ConsultaResponseBody response = toResponse(consultaAtualizada);
 
         return ResponseEntity.status(200).body(response);
 
@@ -348,6 +350,40 @@ public class ConsultaController {
     public ResponseEntity<List<KardResumoFinanceiro>> buscarResumoFinanceiro() {
 
         return ResponseEntity.status(200).body(service.resumoFinanceiroMensal());
+    }
+
+    @Operation(summary = "Buscar os dados para o grafico de comparação custo" )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados do gráfico buscado com sucesso")
+    })
+    @GetMapping("/graficoComparacaoCusto")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    public ResponseEntity<List<GraficoComparacaoCustoReceita>> graficoCustoReceita() {
+
+        return ResponseEntity.status(200).body(service.graficoComparacaoCustoReceitas());
+    }
+
+    @Operation(summary = "Atualizar status uma consulta existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Consulta atualizada com sucesso",
+                    content = @Content(schema = @Schema(implementation = ConsultaResponseBody.class))),
+            @ApiResponse(responseCode = "404", description = "Consulta não encontrada",
+                    content = @Content(schema = @Schema(implementation = EntidadeNaoEncontradoException.class))),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos",
+                    content = @Content(schema = @Schema(implementation = BadRequestException.class)))
+    })
+
+    @PatchMapping("/status/{idConsulta}")
+    public ResponseEntity<ConsultaResponseBody> atualizarStatusConsulta(@PathVariable Integer idConsulta, @RequestBody @Valid AtualizarStatusRequestDTO dto) {
+
+        try {
+            Consulta consultaAtualizada = service.atualizarStatus(idConsulta, dto.novoStatus());
+            return ResponseEntity.status(200).body(toResponse(consultaAtualizada));
+
+        } catch (IllegalStateException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+
     }
 
 

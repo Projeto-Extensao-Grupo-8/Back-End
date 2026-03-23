@@ -94,4 +94,9 @@ public class TesteService {
         return repository.count();
     }
 
+    public List<Teste> buscarAlertasDeEstoque() {
+        List<Teste> testesCriticos = repository.findByStatusEstoqueOrderByQtdAsc(StatusEstoque.CRITICO);
+        return testesCriticos;
+    }
+
 }
