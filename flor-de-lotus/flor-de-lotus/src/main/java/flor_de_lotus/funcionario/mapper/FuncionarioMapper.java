@@ -51,7 +51,8 @@ public class FuncionarioMapper {
                 entity.getDtAdmissao(),
                 entity.isAtivo(),
                 entity.getIdUsuario(),
-                entity.getNome()
+                entity.getNome(),
+                entity.getFkUsuario().getEmail()
         );
     }
 

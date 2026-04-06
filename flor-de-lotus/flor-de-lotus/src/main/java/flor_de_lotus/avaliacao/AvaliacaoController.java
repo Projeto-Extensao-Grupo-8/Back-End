@@ -31,9 +31,7 @@ public class AvaliacaoController {
     @PreAuthorize("hasAnyRole('ADMIN', 'PACIENTE')")
     public ResponseEntity<AvaliacaoResponse> cadastrar(@RequestBody @Valid AvaliacaoRequest body){
 
-        Avaliacao avaliacao = AvaliacaoMapper.toEntity(body);
-
-        Avaliacao avaliacaoCadastrada = service.cadastrar(avaliacao, body.getFkConsulta());
+        Avaliacao avaliacaoCadastrada = service.cadastrar(body);
 
         AvaliacaoResponse response = AvaliacaoMapper.toResponse(avaliacaoCadastrada);
 

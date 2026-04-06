@@ -1,5 +1,7 @@
 package flor_de_lotus.paciente;
 
+import flor_de_lotus.funcionario.dto.FuncionarioResponse;
+import flor_de_lotus.funcionario.mapper.FuncionarioMapper;
 import flor_de_lotus.paciente.dto.*;
 import flor_de_lotus.paciente.dto.dashPaciente.GraficoNovosPacientesPorMes;
 import flor_de_lotus.paciente.dto.dashPaciente.GraficoTaxaRetencaoMes;
@@ -180,5 +182,19 @@ public class PacienteController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<BigDecimal> kpiTaxaRetencao () {
         return ResponseEntity.status(200).body(service.taxaRetencao());
+    }
+
+    @GetMapping("/buscarPorTermo/{termo}")
+    @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
+    public ResponseEntity<List<PacienteResponseBody>> buscarPorTermo(@PathVariable String termo){
+        List<PacienteResponseBody> response = PacienteMapper.toResponseList(service.buscarPorTermo(termo));
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @GetMapping("/buscarPorStatus")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO',)")
+    public ResponseEntity<List<PacienteResponseBody>> buscarPorStatus(@RequestParam boolean ativo) {
+        List<PacienteResponseBody> response = PacienteMapper.toResponseList(service.buscarPorStatus(ativo));
+        return ResponseEntity.status(200).body(response);
     }
 }

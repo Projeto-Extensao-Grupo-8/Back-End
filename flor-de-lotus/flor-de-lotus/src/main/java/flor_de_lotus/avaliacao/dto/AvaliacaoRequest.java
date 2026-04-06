@@ -7,4 +7,5 @@ public class AvaliacaoRequest {
     private String descricao;
     private Integer estrelas;
     private Integer fkConsulta;
+    private Integer fkFuncionario;
 }

@@ -5,6 +5,7 @@ import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.funcionario.dto.FuncionarioPatchRequestBody;
 import flor_de_lotus.funcionario.dto.FuncionarioPostRequestBody;
 import flor_de_lotus.funcionario.mapper.FuncionarioMapper;
+import flor_de_lotus.paciente.Paciente;
 import flor_de_lotus.usuario.Usuario;
 import flor_de_lotus.usuario.UsuarioRepository;
 import flor_de_lotus.usuario.UsuarioService;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class FuncionarioService {
+public class    FuncionarioService {
     private final FuncionarioRepository repository;
     private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
@@ -102,6 +103,17 @@ public class FuncionarioService {
 
     public long qtdEspecialidades() {
         return repository.countDistinctEspecialidades();
+    }
+
+    public List<Funcionario> buscarPorTermo(String termo) {
+        System.out.println(">>> Termo: [" + termo + "]");
+        List<Funcionario> resultado = repository.findByTermo(termo.trim());
+        System.out.println(">>> Total: " + resultado.size());
+        return resultado;
+    }
+
+    public List<Funcionario> buscarPorStatus(boolean ativo) {
+        return repository.findByAtivo(ativo);
     }
 
 

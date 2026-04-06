@@ -1,5 +1,6 @@
 package flor_de_lotus.paciente;
 
+import flor_de_lotus.funcionario.Funcionario;
 import flor_de_lotus.paciente.dto.dashPaciente.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -38,10 +39,10 @@ public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
     @Query(value = "SELECT mes, percentual_retencao FROM taxa_retencao_mes", nativeQuery = true )
     List<GraficoTaxaRetencaoMes> graficoTaxaRetencaoMes();
 
+    @Query("SELECT p FROM Paciente p JOIN p.fkUsuario u WHERE LOWER(u.nome) LIKE LOWER(CONCAT('%', :termo, '%')) OR LOWER(u.email) LIKE LOWER(CONCAT('%', :termo, '%')) OR LOWER(u.cpf) LIKE LOWER(CONCAT('%', :termo, '%'))")
+    List<Paciente> findByTermo(@Param("termo") String termo);
 
-
-
-
+    @Query("SELECT p FROM Paciente p WHERE p.ativo = :ativo")
+    List<Paciente> findByAtivo(@Param("ativo") boolean ativo);
 
 }
-

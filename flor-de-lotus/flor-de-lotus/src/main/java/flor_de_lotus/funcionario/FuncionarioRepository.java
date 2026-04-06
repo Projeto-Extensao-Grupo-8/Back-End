@@ -1,7 +1,11 @@
 package flor_de_lotus.funcionario;
 
+import flor_de_lotus.paciente.Paciente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Integer> {
     Boolean existsByCrp(String crp);
@@ -10,4 +14,10 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
 
     @Query("SELECT COUNT(DISTINCT f.especialidade) FROM Funcionario f WHERE f.especialidade IS NOT NULL")
     long countDistinctEspecialidades();
+
+    @Query("SELECT f FROM Funcionario f JOIN f.fkUsuario u WHERE LOWER(u.nome) LIKE LOWER(CONCAT('%', :termo, '%')) OR LOWER(u.email) LIKE LOWER(CONCAT('%', :termo, '%')) OR LOWER(f.crp) LIKE LOWER(CONCAT('%', :termo, '%'))")
+    List<Funcionario> findByTermo(@Param("termo") String termo);
+
+    @Query("SELECT p FROM Funcionario p WHERE p.ativo = :ativo")
+    List<Funcionario> findByAtivo(@Param("ativo") boolean ativo);
 }

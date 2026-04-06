@@ -8,6 +8,8 @@ import flor_de_lotus.funcionario.dto.FuncionarioPostRequestBody;
 import flor_de_lotus.funcionario.dto.FuncionarioResponse;
 import flor_de_lotus.funcionario.dto.KpisGestaoFuncionarioResponse;
 import flor_de_lotus.funcionario.mapper.FuncionarioMapper;
+import flor_de_lotus.paciente.dto.PacienteMapper;
+import flor_de_lotus.paciente.dto.PacienteResponseBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -138,5 +140,22 @@ public class FuncionarioController {
 
         return ResponseEntity.status(200).body(response);
     }
+
+    @GetMapping("/buscarPorTermo/{termo}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<List<FuncionarioResponse>> buscarPorTermo(@PathVariable String termo){
+
+        List<FuncionarioResponse> response = FuncionarioMapper.toResponseList(service.buscarPorTermo(termo));
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @GetMapping("/buscarPorStatus")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO',)")
+    public ResponseEntity<List<FuncionarioResponse>> buscarPorStatus(@RequestParam boolean ativo) {
+        List<FuncionarioResponse> response = FuncionarioMapper.toResponseList(service.buscarPorStatus(ativo));
+        return ResponseEntity.status(200).body(response);
+    }
+
+
 
 }

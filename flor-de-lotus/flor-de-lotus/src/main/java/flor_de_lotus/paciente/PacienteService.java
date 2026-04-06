@@ -1,6 +1,7 @@
 package flor_de_lotus.paciente;
 
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
+import flor_de_lotus.funcionario.Funcionario;
 import flor_de_lotus.paciente.dto.PacientePostRequestBody;
 import flor_de_lotus.paciente.dto.dashPaciente.GraficoNovosPacientesPorMes;
 import flor_de_lotus.paciente.dto.dashPaciente.GraficoTaxaRetencaoMes;
@@ -93,5 +94,13 @@ public class PacienteService {
 
     public BigDecimal taxaRetencao() {
         return repository.kpiTaxaRetencao().getTaxaPercentual();
+    }
+
+    public List<Paciente> buscarPorTermo(String termo) {
+        return repository.findByTermo(termo);
+    }
+
+    public List<Paciente> buscarPorStatus(boolean ativo) {
+        return repository.findByAtivo(ativo);
     }
 }
