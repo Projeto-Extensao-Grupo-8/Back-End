@@ -116,6 +116,10 @@ public class    FuncionarioService {
         return repository.findByAtivo(ativo);
     }
 
+    public List<Funcionario> buscarPorTipoAtendimento(TipoAtendimento tipo) {
+        return repository.findByTipoAtendimento(tipo);
+    }
+
 
 
 }

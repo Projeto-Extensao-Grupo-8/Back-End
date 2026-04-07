@@ -20,4 +20,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
 
     @Query("SELECT p FROM Funcionario p WHERE p.ativo = :ativo")
     List<Funcionario> findByAtivo(@Param("ativo") boolean ativo);
+
+    @Query("SELECT f FROM Funcionario f JOIN f.tiposAtendimento t WHERE t = :tipo AND f.ativo = true")
+    List<Funcionario> findByTipoAtendimento(@Param("tipo") TipoAtendimento tipo);
 }

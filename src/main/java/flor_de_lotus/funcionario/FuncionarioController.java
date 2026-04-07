@@ -156,6 +156,12 @@ public class FuncionarioController {
         return ResponseEntity.status(200).body(response);
     }
 
+    @GetMapping("/buscarPorTipoAtendimento/{tipo}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    public ResponseEntity<List<FuncionarioResponse>> buscarPorTipo(@PathVariable TipoAtendimento tipo) {
+        return ResponseEntity.ok(FuncionarioMapper.toResponseList(service.buscarPorTipoAtendimento(tipo)));
+    }
+
 
 
 }
