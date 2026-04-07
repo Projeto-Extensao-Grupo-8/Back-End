@@ -74,12 +74,12 @@ public class UsuarioService {
 
     public void checarRegrasSenha(String senha){
         //Aceitar apenas caracteres alfanuméricos: A-Z, a-z, 0- Ter entre 8 e 32 caracteres ao todo//
-        // Exigir que a senha tenha ao menos: 1 letra maiúscula, 1 minúscula e 1 número.//
+        // Exigir que a senha tenha ao menos: 1 letra maiúscula, 1 minúscula e 1 número, caracter especial.//
         // Permite qualquer caractere na senha, desde que cumpra as 4 regras de obrigatoriedade
         Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,32}$");
         Matcher matcher = pattern.matcher(senha);
         if (!matcher.find()){
-            throw new BadRequestException("Verifique os requisitos");
+            throw new BadRequestException("Verifique os requisitos da senha");
         }
     }
 

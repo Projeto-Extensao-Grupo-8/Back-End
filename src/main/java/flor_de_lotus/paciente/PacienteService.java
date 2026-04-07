@@ -103,4 +103,12 @@ public class PacienteService {
     public List<Paciente> buscarPorStatus(boolean ativo) {
         return repository.findByAtivo(ativo);
     }
+
+    public Paciente buscarPorIdOuThrowUsuario(Integer id) {
+        Optional<Paciente> pacienteOpt = repository.findByFkUsuario_IdUsuario(id);
+        if (pacienteOpt.isEmpty()) {
+            throw new EntidadeNaoEncontradoException("Paciente não encontrado.");
+        }
+        return pacienteOpt.get();
+    }
 }

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -27,12 +29,17 @@ public class Funcionario {
 
     private LocalDate dtAdmissao;
 
+    private String descricao;
+    private String formacaoAcademica;
+    private String idiomasAtendidos;
+
     @Column(nullable = false)
     private boolean ativo = true;
 
     @OneToOne
     @JoinColumn(name = "fk_usuario", nullable = false)
     private Usuario fkUsuario;
+
 
     public String getNome() {
         return fkUsuario != null ? fkUsuario.getNome() : null;
@@ -41,4 +48,11 @@ public class Funcionario {
     public Integer getIdUsuario() {
         return fkUsuario != null ? fkUsuario.getIdUsuario() : null;
     }
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "funcionario_tipos_atendimento", joinColumns = @JoinColumn(name = "fk_funcionario"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_atendimento")
+    private List<TipoAtendimento> tiposAtendimento = new ArrayList<>();
+
 }

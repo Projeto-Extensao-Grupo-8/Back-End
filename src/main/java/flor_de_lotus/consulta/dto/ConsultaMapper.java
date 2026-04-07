@@ -52,6 +52,11 @@ public class ConsultaMapper {
                 consulta.getFkPaciente() != null ? consulta.getFkPaciente().getNome() : null
         );
 
+        response.setIdFuncionario(
+                consulta.getFkFuncionario() != null ? consulta.getFkFuncionario().getIdFuncionario() : null
+        );
+
+        response.setIdPaciente(consulta.getFkPaciente().getIdPaciente());
         return response;
     }
 

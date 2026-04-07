@@ -1,11 +1,21 @@
 package flor_de_lotus.funcionario.dto;
 
+import flor_de_lotus.funcionario.TipoAtendimento;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
 public class FuncionarioPatchRequestBody {
     private String crp;
     private String especialidade;
+    private String descricao;
+    private String formacaoAcademica;
+    private String idiomasAtendidos;
+    private boolean ativo;
+
+    private List<TipoAtendimento> tiposAtendimento;
 }

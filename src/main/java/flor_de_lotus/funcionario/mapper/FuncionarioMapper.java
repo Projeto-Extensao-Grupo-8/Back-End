@@ -19,8 +19,12 @@ public class FuncionarioMapper {
                 dto.getCrp(),
                 dto.getEspecialidade(),
                 LocalDate.now(),
+                dto.getDescricao(),
+                dto.getFormacaoAcademica(),
+                dto.getIdiomasAtendidos(),
                 true,
-                entity
+                entity,
+                dto.getTiposAtendimento()
         );
     }
 
@@ -34,8 +38,12 @@ public class FuncionarioMapper {
                 dto.getCrp(),
                 dto.getEspecialidade(),
                 LocalDate.now(),
+                dto.getDescricao(),
+                dto.getFormacaoAcademica(),
+                dto.getIdiomasAtendidos(),
                 true,
-                null
+                null,
+                dto.getTiposAtendimento()
         );
     }
 
@@ -47,12 +55,16 @@ public class FuncionarioMapper {
         return new FuncionarioResponse(
                 entity.getIdFuncionario(),
                 entity.getCrp(),
-                entity.getEspecialidade(),
                 entity.getDtAdmissao(),
                 entity.isAtivo(),
                 entity.getIdUsuario(),
                 entity.getNome(),
-                entity.getFkUsuario().getEmail()
+                entity.getFkUsuario().getEmail(),
+                entity.getTiposAtendimento(),
+                entity.getEspecialidade(),
+                entity.getDescricao(),
+                entity.getFormacaoAcademica(),
+                entity.getIdiomasAtendidos()
         );
     }
 

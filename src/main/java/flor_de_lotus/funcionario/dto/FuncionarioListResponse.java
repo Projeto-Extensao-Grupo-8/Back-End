@@ -1,10 +1,12 @@
 package flor_de_lotus.funcionario.dto;
 
+import flor_de_lotus.funcionario.TipoAtendimento;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -17,6 +19,11 @@ public class FuncionarioListResponse {
     private String especialidade;
     private LocalDate dtAdmissao;
     private boolean ativo;
+
+    private List<TipoAtendimento> tiposAtendimento;
+    private String descricao;
+    private String formacaoAcademica;
+    private String idiomasAtendidos;
 
 
     public FuncionarioListResponse(String crp, boolean ativo) {

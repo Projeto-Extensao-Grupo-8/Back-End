@@ -15,6 +15,8 @@ public class ConsultaResponseBody {
     private String especialidade;
     private String tipo;
     private StatusConsulta status;
+    private Integer idFuncionario;
+    private Integer idPaciente;
     private String nomeFuncionario;
     private String nomePaciente;
 }

@@ -44,7 +44,6 @@ public class PacienteController {
         return ResponseEntity.status(201).body(response);
     }
 
-    // ...existing code...
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de pacientes retornada"),
             @ApiResponse(responseCode = "204", description = "Não há pacientes cadastrados")
@@ -197,4 +196,13 @@ public class PacienteController {
         List<PacienteResponseBody> response = PacienteMapper.toResponseList(service.buscarPorStatus(ativo));
         return ResponseEntity.status(200).body(response);
     }
+
+    @GetMapping("/buscarPorUsuario/{idUsuario}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO',)")
+    public ResponseEntity<PacienteResponseBody> buscarPacientePorIdUsuario(@PathVariable Integer idUsuario) {
+        PacienteResponseBody response = PacienteMapper.toResponse(service.buscarPorIdOuThrowUsuario(idUsuario));
+        return ResponseEntity.status(200).body(response);
+    }
+
+
 }
