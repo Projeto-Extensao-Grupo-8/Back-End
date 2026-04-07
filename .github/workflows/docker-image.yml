@@ -34,5 +34,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            seu-usuario/seu-repo:latest
-            seu-usuario/seu-repo:${{ github.sha }}
+            ${{secrets.DOCKER_USERNAME}}/fdl-backend:latest
+            ${{secrets.DOCKER_USERNAME}}/fdl-backend:${{ github.sha }}
