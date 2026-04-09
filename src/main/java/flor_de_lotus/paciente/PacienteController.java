@@ -198,7 +198,7 @@ public class PacienteController {
     }
 
     @GetMapping("/buscarPorUsuario/{idUsuario}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO',)")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE')")
     public ResponseEntity<PacienteResponseBody> buscarPacientePorIdUsuario(@PathVariable Integer idUsuario) {
         PacienteResponseBody response = PacienteMapper.toResponse(service.buscarPorIdOuThrowUsuario(idUsuario));
         return ResponseEntity.status(200).body(response);
@@ -206,3 +206,4 @@ public class PacienteController {
 
 
 }
+

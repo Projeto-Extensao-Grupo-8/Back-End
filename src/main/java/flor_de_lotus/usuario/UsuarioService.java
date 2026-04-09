@@ -129,8 +129,10 @@ public class UsuarioService {
     public Usuario atualizarParcial(Integer id, Usuario entity){
         Usuario usuario = buscarEntidadePorIdOuThrow(id);
 
-        if (entity.getEmail() != null) {
-            checarDuplicidade(entity.getEmail(), usuario.getCpf());
+        if (entity.getEmail() != null && !entity.getEmail().equals(usuario.getEmail())) {
+            if (repository.existsByEmail(entity.getEmail())) {
+                throw new EntidadeConflitoException("Esse email já está em uso");
+            }
             usuario.setEmail(entity.getEmail());
         }
 

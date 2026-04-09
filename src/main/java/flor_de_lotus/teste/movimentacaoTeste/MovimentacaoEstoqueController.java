@@ -67,7 +67,7 @@ public class MovimentacaoEstoqueController {
             @ApiResponse(responseCode = "204", description = "Não possui testes cadastrados")
     })
     @GetMapping("/{idPaciente}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE')")
     public ResponseEntity<List<MoviEstoqueResponseGet>> listarPorPaciente(@PathVariable Integer idPaciente){
 
         List<MoviEstoqueResponseGet> listaResponseGet = MovimentacaoEstoqueMapper.toResponseListGet(service.listarPorPaciente(idPaciente));
