@@ -9,6 +9,8 @@ import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.endereco.EnderecoRepository;
 import flor_de_lotus.endereco.dto.EnderecoResponse;
+import flor_de_lotus.paciente.PacienteRepository;
+import flor_de_lotus.funcionario.FuncionarioRepository;
 import flor_de_lotus.usuario.dto.*;
 import flor_de_lotus.endereco.EnderecoService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,8 @@ public class UsuarioService {
     public final UsuarioRepository repository;
     private final EnderecoService enderecoService;
     private final EnderecoRepository enderecoRepository;
+    private final PacienteRepository pacienteRepository;
+    private final FuncionarioRepository funcionarioRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -98,7 +102,26 @@ public class UsuarioService {
 
         final String token = gerenciadorTokenJwt.generateToken(authentication);
 
-        return UsuarioMapper.toTokenResponse(usuarioAutenticado,token);
+        // Buscar IDs adicionais baseado no nível de permissão
+        Integer idPaciente = null;
+        Integer idFuncionario = null;
+
+        // 1 = USUARIO/ADMIN, 2 = PACIENTE, 3 = FUNCIONARIO
+        if ("2".equals(usuarioAutenticado.getNivelPermissao())) {
+            // Buscar ID do Paciente
+            var paciente = pacienteRepository.findByFkUsuario_IdUsuario(usuarioAutenticado.getIdUsuario());
+            if (paciente.isPresent()) {
+                idPaciente = paciente.get().getIdPaciente();
+            }
+        } else if ("3".equals(usuarioAutenticado.getNivelPermissao())) {
+            // Buscar ID do Funcionário
+            var funcionario = funcionarioRepository.findByFkUsuario_IdUsuario(usuarioAutenticado.getIdUsuario());
+            if (funcionario.isPresent()) {
+                idFuncionario = funcionario.get().getIdFuncionario();
+            }
+        }
+
+        return UsuarioMapper.toTokenResponse(usuarioAutenticado, token, idPaciente, idFuncionario);
 
     }
 

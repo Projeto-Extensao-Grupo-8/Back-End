@@ -79,4 +79,10 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Integer> {
 
     @Query("SELECT c FROM Consulta c WHERE DATE(c.data) = CURRENT_DATE AND c.fkFuncionario.idFuncionario = :idFuncionario")
     List<Consulta> buscarConsultasDeHojePorFuncionario(@Param("idFuncionario") Integer idFuncionario);
+
+    @Query(value = "SELECT COUNT(*) FROM consulta WHERE fk_paciente = ?1 AND fk_funcionario = ?2", nativeQuery = true)
+    Integer qtdSessoesPacientePorFuncionario(Integer idPaciente, Integer idFuncionario);
+
+    @Query(value = "SELECT c.data FROM consulta c WHERE c.fk_paciente = ?1 AND c.fk_funcionario = ?2 AND c.data > NOW() ORDER BY c.data ASC LIMIT 1", nativeQuery = true)
+    String buscarProximaConsultaPacientePorFuncionario(Integer idPaciente, Integer idFuncionario);
 }

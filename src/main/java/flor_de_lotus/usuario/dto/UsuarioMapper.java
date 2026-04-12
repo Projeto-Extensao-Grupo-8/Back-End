@@ -64,11 +64,25 @@ public class UsuarioMapper {
     public static UsuarioTokenResponseBody toTokenResponse(Usuario usuario, String token) {
         UsuarioTokenResponseBody usuarioTokenResponseBody = new UsuarioTokenResponseBody();
 
-        usuarioTokenResponseBody.setUserId(usuario.getIdUsuario());
+        usuarioTokenResponseBody.setIdUsuario(usuario.getIdUsuario());
         usuarioTokenResponseBody.setEmail(usuario.getEmail());
         usuarioTokenResponseBody.setNome(usuario.getNome());
         usuarioTokenResponseBody.setNivelPermissao(usuario.getNivelPermissao());
         usuarioTokenResponseBody.setToken(token);
+
+        return usuarioTokenResponseBody;
+    }
+
+    public static UsuarioTokenResponseBody toTokenResponse(Usuario usuario, String token, Integer idPaciente, Integer idFuncionario) {
+        UsuarioTokenResponseBody usuarioTokenResponseBody = new UsuarioTokenResponseBody();
+
+        usuarioTokenResponseBody.setIdUsuario(usuario.getIdUsuario());
+        usuarioTokenResponseBody.setEmail(usuario.getEmail());
+        usuarioTokenResponseBody.setNome(usuario.getNome());
+        usuarioTokenResponseBody.setNivelPermissao(usuario.getNivelPermissao());
+        usuarioTokenResponseBody.setToken(token);
+        usuarioTokenResponseBody.setIdPaciente(idPaciente);
+        usuarioTokenResponseBody.setIdFuncionario(idFuncionario);
 
         return usuarioTokenResponseBody;
     }

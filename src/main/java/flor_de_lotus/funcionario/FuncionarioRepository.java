@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Integer> {
     Boolean existsByCrp(String crp);
@@ -25,4 +26,6 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
 
     @Query(value = "SELECT * FROM funcionario ORDER BY id_funcionario LIMIT ?1 OFFSET ?2", nativeQuery = true)
     List<Funcionario> findAllWithPagination(int limit, int offset);
+
+    Optional<Funcionario> findByFkUsuario_IdUsuario(Integer idUsuario);
 }

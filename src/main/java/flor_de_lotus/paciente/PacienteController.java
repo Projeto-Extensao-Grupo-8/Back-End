@@ -94,7 +94,15 @@ public class PacienteController {
     @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
     //GET /pacientes/funcionario/1?pagina=1&tamanho=10
     public ResponseEntity<List<PacienteResponseBody>> listarPacientesPorFuncionario(@PathVariable Integer idFuncionario, @RequestParam int pagina, @RequestParam int tamanho) {
-        List<PacienteResponseBody> lista = PacienteMapper.toResponseList(service.listarPacientesPorFuncionarioOffset(idFuncionario, pagina, tamanho));
+        List<Paciente> pacientes = service.listarPacientesPorFuncionarioOffset(idFuncionario, pagina, tamanho);
+
+
+
+        List<PacienteResponseBody> lista = PacienteMapper.toResponseListWithProximaConsulta(
+                pacientes,
+                paciente -> service.qtdSessoesPacientePorFuncionario(paciente.getIdPaciente(), idFuncionario),
+                paciente -> service.buscarProximaConsultaPacientePorFuncionario(paciente.getIdPaciente(), idFuncionario)
+        );
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }

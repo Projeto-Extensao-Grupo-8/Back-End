@@ -1,5 +1,6 @@
 package flor_de_lotus.paciente;
 
+import flor_de_lotus.consulta.ConsultaRepository;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.funcionario.Funcionario;
 import flor_de_lotus.paciente.dto.PacientePostRequestBody;
@@ -22,6 +23,7 @@ public class PacienteService {
     private final UsuarioRepository userRepository;
     private final PacienteRepository repository;
     private final UsuarioService usuarioService;
+    private final ConsultaRepository consultaRepository;
 
 
     public Paciente cadastrar(Integer idUsuario) {
@@ -114,5 +116,13 @@ public class PacienteService {
             throw new EntidadeNaoEncontradoException("Paciente não encontrado.");
         }
         return pacienteOpt.get();
+    }
+
+    public Integer qtdSessoesPacientePorFuncionario(Integer idPaciente, Integer idFuncionario) {
+        return consultaRepository.qtdSessoesPacientePorFuncionario(idPaciente, idFuncionario);
+    }
+
+    public String buscarProximaConsultaPacientePorFuncionario(Integer idPaciente, Integer idFuncionario) {
+        return consultaRepository.buscarProximaConsultaPacientePorFuncionario(idPaciente, idFuncionario);
     }
 }

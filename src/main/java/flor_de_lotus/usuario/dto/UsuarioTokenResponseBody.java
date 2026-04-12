@@ -11,7 +11,7 @@ import lombok.Setter;
 public class UsuarioTokenResponseBody {
 
     @Schema(description = "Id do usuário", example = "1")
-    private Integer userId;
+    private Integer idUsuario;
 
     @Schema(description = "Nome do usuário", example = "Luíza Oliveira")
     private String nome;
@@ -25,4 +25,9 @@ public class UsuarioTokenResponseBody {
     @Schema(description = "Token para autorização na API")
     private String token;
 
+    @Schema(description = "ID do Paciente (quando nível de permissão é 2)", example = "1")
+    private Integer idPaciente;
+
+    @Schema(description = "ID do Funcionário (quando nível de permissão é 3)", example = "1")
+    private Integer idFuncionario;
 }
