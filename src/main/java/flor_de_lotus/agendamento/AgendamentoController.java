@@ -55,7 +55,7 @@ public class AgendamentoController {
 
     @Operation(summary = "Listar todos os agendamentos")
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<AgendamentoResponse>> listarTodos() {
         List<AgendamentoResponse> lista = service.listarTodos()
                                                             .stream()
@@ -67,7 +67,7 @@ public class AgendamentoController {
 
     @Operation(summary = "Listar agendamentos de um funcionário")
     @GetMapping("/funcionario/{idFuncionario}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE', 'USUARIO')")
     public ResponseEntity<List<AgendamentoResponse>> listarPorFuncionario(@PathVariable Integer idFuncionario) {
         List<AgendamentoResponse> lista = service.listarPorFuncionario(idFuncionario).stream().map(AgendamentoMapper::toResponse).collect(Collectors.toList());;
         if (lista.isEmpty()) return ResponseEntity.noContent().build();

@@ -1,6 +1,6 @@
 package flor_de_lotus.funcionario.dto;
 
-import flor_de_lotus.funcionario.TipoAtendimento;
+import flor_de_lotus.funcionario.TipoAtendimentoPreco;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +20,7 @@ public class FuncionarioListResponse {
     private LocalDate dtAdmissao;
     private boolean ativo;
 
-    private List<TipoAtendimento> tiposAtendimento;
+    private List<TipoAtendimentoPreco> tiposAtendimento;
     private String descricao;
     private String formacaoAcademica;
     private String idiomasAtendidos;

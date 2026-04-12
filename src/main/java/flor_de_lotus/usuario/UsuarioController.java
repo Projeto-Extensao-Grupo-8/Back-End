@@ -191,7 +191,7 @@ public class UsuarioController {
             )
     })
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<UsuarioResponseBody>> listarTodos(){
 
         List<UsuarioResponseBody> lista = UsuarioMapper.toResponseList(service.listarTodos());

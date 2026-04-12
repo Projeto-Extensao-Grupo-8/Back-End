@@ -1,6 +1,5 @@
 package flor_de_lotus.funcionario;
 
-import flor_de_lotus.paciente.Paciente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,6 +20,6 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
     @Query("SELECT p FROM Funcionario p WHERE p.ativo = :ativo")
     List<Funcionario> findByAtivo(@Param("ativo") boolean ativo);
 
-    @Query("SELECT f FROM Funcionario f JOIN f.tiposAtendimento t WHERE t = :tipo AND f.ativo = true")
+    @Query("SELECT f FROM Funcionario f JOIN f.tiposAtendimento t WHERE t.tipoAtendimento = :tipo AND f.ativo = true")
     List<Funcionario> findByTipoAtendimento(@Param("tipo") TipoAtendimento tipo);
 }

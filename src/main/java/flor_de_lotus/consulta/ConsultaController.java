@@ -91,7 +91,7 @@ public class ConsultaController {
                     content = @Content(schema = @Schema(implementation = EntidadeNaoEncontradoException.class)))
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE')")
     public ResponseEntity<Void> deletarPorId(@PathVariable Integer id) {
         service.deletarPorId(id);
         return ResponseEntity.status(200).build();

@@ -45,7 +45,7 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "204", description = "Nenhuma avaliação encontrada", content = @Content)
     })
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<AvaliacaoResponse>> listarTodos(){
         List<Avaliacao> listaTodos = service.listarTodos();
 
@@ -64,7 +64,7 @@ public class AvaliacaoController {
                     content = @Content(schema = @Schema(implementation = AvaliacaoResponse.class))),
     })
     @GetMapping("/graficoPorConsulta")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<GraficoAvaliacaoPorConsulta>> graficoAvaliacaoPorConsulta(){
         return ResponseEntity.status(200).body(service.graficoAvaliacaoPorConsulta());
     }
@@ -76,7 +76,7 @@ public class AvaliacaoController {
                     content = @Content(schema = @Schema(implementation = AvaliacaoResponse.class))),
     })
     @GetMapping("/graficoPorFuncionario")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<GraficoAvaliacaoPorFuncionario>> graficoAvaliacaoPorFuncionario(){
         return ResponseEntity.status(200).body(service.graficoAvaliacaoPorFuncionario());
     }

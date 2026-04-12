@@ -52,7 +52,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "204", description = "Nenhum funcionário encontrado", content = @Content)
     })
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE', 'USUARIO')")
     public ResponseEntity<List<FuncionarioResponse>> listarTodos(){
         List<Funcionario> listaTodos = service.listarTodos();
         if (listaTodos.isEmpty()){
@@ -68,7 +68,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "404", description = "Funcionário não encontrado", content = @Content)
     })
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE', 'USUARIO')")
     public ResponseEntity<FuncionarioResponse> buscarPorId(@PathVariable Integer id){
         return ResponseEntity.status(200).body(FuncionarioMapper.toResponse(service.buscarPorIdOuThrow(id)));
     }
@@ -142,7 +142,7 @@ public class FuncionarioController {
     }
 
     @GetMapping("/buscarPorTermo/{termo}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE', 'USUARIO')")
     public ResponseEntity<List<FuncionarioResponse>> buscarPorTermo(@PathVariable String termo){
 
         List<FuncionarioResponse> response = FuncionarioMapper.toResponseList(service.buscarPorTermo(termo));
@@ -150,18 +150,17 @@ public class FuncionarioController {
     }
 
     @GetMapping("/buscarPorStatus")
-    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO',)")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE', 'USUARIO')")
     public ResponseEntity<List<FuncionarioResponse>> buscarPorStatus(@RequestParam boolean ativo) {
         List<FuncionarioResponse> response = FuncionarioMapper.toResponseList(service.buscarPorStatus(ativo));
         return ResponseEntity.status(200).body(response);
     }
 
     @GetMapping("/buscarPorTipoAtendimento/{tipo}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE', 'USUARIO')")
     public ResponseEntity<List<FuncionarioResponse>> buscarPorTipo(@PathVariable TipoAtendimento tipo) {
         return ResponseEntity.ok(FuncionarioMapper.toResponseList(service.buscarPorTipoAtendimento(tipo)));
     }
-
 
 
 }

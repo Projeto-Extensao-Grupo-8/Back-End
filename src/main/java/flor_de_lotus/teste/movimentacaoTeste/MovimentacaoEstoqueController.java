@@ -47,7 +47,7 @@ public class MovimentacaoEstoqueController {
             @ApiResponse(responseCode = "204", description = "Não possui testes cadastrados")
     })
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<MovimentacaoEstoqueResponse>> listar(){
         List<MovimentacaoEstoque> todos = service.listar();
 

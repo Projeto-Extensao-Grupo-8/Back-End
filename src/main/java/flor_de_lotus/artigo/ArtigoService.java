@@ -51,15 +51,15 @@ public class ArtigoService {
     }
 
     public Optional<Artigo> atualizar(Integer id, Artigo entity, Integer idFunc) {
-        Funcionario autor = funcionarioRepository.findById(idFunc)
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+        Funcionario autor = idFunc != null ? funcionarioRepository.findById(idFunc)
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado")) : null;
 
         return artigoRepository.findById(id)
                 .map(existing -> {
-                    existing.setTitulo(entity.getTitulo());
-                    existing.setDescricao(entity.getDescricao());
-                    existing.setDtPublicacao(entity.getDtPublicacao());
-                    existing.setFkFuncionario(autor);
+                    if (entity.getTitulo() != null) existing.setTitulo(entity.getTitulo());
+                    if (entity.getDescricao() != null) existing.setDescricao(entity.getDescricao());
+                    if (entity.getDtPublicacao() != null) existing.setDtPublicacao(entity.getDtPublicacao());
+                    if (autor != null) existing.setFkFuncionario(autor);
 
                     Artigo salvo = artigoRepository.save(existing);
                     return salvo;

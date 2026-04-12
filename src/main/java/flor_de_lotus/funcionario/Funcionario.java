@@ -51,8 +51,6 @@ public class Funcionario {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "funcionario_tipos_atendimento", joinColumns = @JoinColumn(name = "fk_funcionario"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_atendimento")
-    private List<TipoAtendimento> tiposAtendimento = new ArrayList<>();
+    private List<TipoAtendimentoPreco> tiposAtendimento = new ArrayList<>();
 
 }

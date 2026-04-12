@@ -55,7 +55,7 @@ public class TesteController {
                     content = @Content(schema = @Schema(implementation = EntidadeConflitoException.class)))
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<Void> deletarPorId(@PathVariable Integer id){
         service.deletarPorId(id);
         return ResponseEntity.status(200).build();
@@ -78,7 +78,7 @@ public class TesteController {
             @ApiResponse(responseCode = "204", description = "Não possui testes cadastrados")
     })
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<TesteResponse>> listarTodos(){
 
         List<Teste> lista = service.listarTodos();
@@ -99,7 +99,7 @@ public class TesteController {
             @ApiResponse(responseCode = "204", description = "Não possui testes cadastrados com essa categoria")
     })
     @GetMapping("/{categoria}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<TesteResponse>> listarPorCategoria(@PathVariable String categoria){
         List<Teste> listaTodos = service.listarPorCategoria(categoria);
         if (listaTodos.isEmpty()){
@@ -118,7 +118,7 @@ public class TesteController {
             @ApiResponse(responseCode = "204", description = "Não possui testes cadastrados com esse tipo")
     })
     @GetMapping("/{tipo}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<TesteResponse>> listarPorTipo (@PathVariable String tipo){
         List<Teste> listaTodos = service.listarPorTipo(tipo);
         if (listaTodos.isEmpty()){
@@ -138,7 +138,7 @@ public class TesteController {
 
     })
     @GetMapping("/validade")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<Integer> buscarPorValidade(){
         Integer qtdTesteEncontrado = service.buscarQtdTesteComValidadeProxima();
         if (qtdTesteEncontrado == null){
@@ -154,7 +154,7 @@ public class TesteController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
     })
     @GetMapping("/kpisGestaoEstoque")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<KpisGestaoEstoqueResponse> kpisGestaoEstoque() {
         Integer buscarQtdValidadeProxima90Dias = service.buscarQtdValidadeProxima90Dias();
         Integer buscarQtdEstoqueCritico = service.buscarQtdEstoqueCritico();
@@ -172,7 +172,7 @@ public class TesteController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
     })
     @GetMapping("/kpisResumoEstoque")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<KpisResumoEstoqueResponse> kpisResumoEstoque() {
         Double buscarValorTotalEstoque = service.buscarValorTotalEstoque();
         Integer buscarTotalUnidadesAoTodo = service.buscarTotalUnidadesAoTodo();
@@ -189,7 +189,7 @@ public class TesteController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
     })
     @GetMapping("/alertasEstoqueCritico")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<TesteAlertaResponseDTO>> listarAlertas() {
 
         List<Teste> testesCriticos = service.buscarAlertasDeEstoque();

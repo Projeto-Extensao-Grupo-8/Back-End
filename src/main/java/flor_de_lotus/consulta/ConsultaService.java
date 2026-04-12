@@ -83,7 +83,7 @@ public class ConsultaService {
         repository.delete(buscarPorIdOuThrow(id));
     }
 
-    public Consulta atualizarParcial(Integer id, Consulta entity, Integer idFuncionario, Integer idPaciente) {
+    public Consulta atualizarParcial(Integer id, Consulta entity, Integer idFuncionario, Integer idUsuario) {
 
         Consulta consulta = buscarPorIdOuThrow(id);
 
@@ -100,14 +100,18 @@ public class ConsultaService {
         if (entity.getEspecialidade() != null) {
             consulta.setEspecialidade(entity.getEspecialidade());
         }
+        
+        if (entity.getTipo() != null) {
+            consulta.setTipo(entity.getTipo());
+        }
 
         if (entity.getFkFuncionario() != null && idFuncionario != null) {
             Funcionario funcionario = funcionarioService.buscarPorIdOuThrow(idFuncionario);
             consulta.setFkFuncionario(funcionario);
         }
 
-        if (entity.getFkPaciente() != null && idPaciente != null) {
-            Paciente paciente = pacienteService.buscarPorIdOuThrow(idPaciente);
+        if (idUsuario != null) {
+            Paciente paciente = pacienteService.buscarPorIdOuThrowUsuario(idUsuario);
             consulta.setFkPaciente(paciente);
         }
 
@@ -239,9 +243,5 @@ public class ConsultaService {
         }
         return repository.save(consulta);
     }
-
-
-
-
 
 }

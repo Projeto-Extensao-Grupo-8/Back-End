@@ -34,7 +34,7 @@ public class PacienteController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
     @PostMapping
-    @PreAuthorize("hasAnyRole('PACIENTE', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('PACIENTE', 'ADMIN', 'USUARIO')")
     public ResponseEntity<PacienteResponseBody> cadastrar(@RequestBody @Valid PacienteCadastroRequest body) {
 
         Paciente pacienteCadastrado = service.cadastrar(body.getFkUsuario());
@@ -49,7 +49,7 @@ public class PacienteController {
             @ApiResponse(responseCode = "204", description = "Não há pacientes cadastrados")
     })
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<List<PacienteResponseBody>> listarTodos() {
         List<PacienteResponseBody> lista = PacienteMapper.toResponseList(service.listarTodos());
         if (lista.isEmpty()) {
@@ -60,7 +60,7 @@ public class PacienteController {
 
     @Operation(summary = "Buscar paciente por ID")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('PACIENTE','FUNCIONARIO' ,'ADMIN')")
+    @PreAuthorize("hasAnyRole('PACIENTE', 'FUNCIONARIO' ,'ADMIN')")
     public ResponseEntity<PacienteResponseBody> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.status(200).body(PacienteMapper.toResponse(service.buscarPorIdOuThrow(id)));
     }
@@ -204,6 +204,4 @@ public class PacienteController {
         return ResponseEntity.status(200).body(response);
     }
 
-
 }
-

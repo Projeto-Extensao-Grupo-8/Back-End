@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class    MovimentacaoEstoqueService {
+public class MovimentacaoEstoqueService {
     private final MovimentacaoEstoqueRepository repository;
     private final TesteService testeService;
     private final ConsultaService consultaService;
@@ -55,7 +55,7 @@ public class    MovimentacaoEstoqueService {
     public MovimentacaoEstoque buscarPorIdOuThrow(Integer id) {
         Optional<MovimentacaoEstoque> MoviEstoqueOpt = repository.findById(id);
         if (MoviEstoqueOpt.isEmpty()) {
-            throw new EntidadeNaoEncontradoException("Paciente não encontrado.");
+            throw new EntidadeNaoEncontradoException("Movimentação não encontrada.");
         }
         return MoviEstoqueOpt.get();
     }
@@ -88,9 +88,47 @@ public class    MovimentacaoEstoqueService {
 
     public MovimentacaoEstoque atualizarParcial(Integer idMovi, MovimentacaoEstoque entity, Integer idConsulta, Integer idTeste) {
         MovimentacaoEstoque movimentacaoEstoque = buscarPorIdOuThrow(idMovi);
-        if (idTeste != null){
-            Teste fkTeste = testeService.findByIdOrThrow(idTeste);
-            movimentacaoEstoque.setTeste(fkTeste);
+        
+        if (entity.getQtd() != null && !entity.getQtd().equals(movimentacaoEstoque.getQtd())) {
+            Teste testeAtual = movimentacaoEstoque.getTeste();
+            
+            int diff = entity.getQtd() - movimentacaoEstoque.getQtd();
+            int estoqueAtual = testeAtual.getQtd() != null ? testeAtual.getQtd() : 0;
+            
+            if (estoqueAtual - diff < 0) {
+                throw new EntidadeConflitoException(
+                    "Estoque insuficiente para o teste: " + testeAtual.getNome() +
+                    ". Alteração solicitada excederia o estoque. Disponível: " + estoqueAtual
+                );
+            }
+            
+            testeAtual.setQtd(estoqueAtual - diff);
+            testeRepository.save(testeAtual);
+            
+            movimentacaoEstoque.setQtd(entity.getQtd());
+        }
+
+        if (idTeste != null && !idTeste.equals(movimentacaoEstoque.getTeste().getIdTeste())){
+            
+            Teste testeAntigo = movimentacaoEstoque.getTeste();
+            testeAntigo.setQtd(testeAntigo.getQtd() + movimentacaoEstoque.getQtd());
+            testeRepository.save(testeAntigo);
+
+            Teste testeNovo = testeService.findByIdOrThrow(idTeste);
+            int estoqueAtual = testeNovo.getQtd() != null ? testeNovo.getQtd() : 0;
+            int qtdSolicitada = movimentacaoEstoque.getQtd();
+
+            if (estoqueAtual - qtdSolicitada < 0) {
+                 throw new EntidadeConflitoException(
+                    "Estoque insuficiente para o novo teste selecionado: " + testeNovo.getNome() +
+                    ". Disponível: " + estoqueAtual
+                );
+            }
+
+            testeNovo.setQtd(estoqueAtual - qtdSolicitada);
+            testeRepository.save(testeNovo);
+
+            movimentacaoEstoque.setTeste(testeNovo);
         }
 
         if (idConsulta != null){
@@ -98,7 +136,6 @@ public class    MovimentacaoEstoqueService {
             movimentacaoEstoque.setConsulta(fkConsulta);
         }
 
-        if(entity.getQtd() != null) movimentacaoEstoque.setQtd(entity.getQtd());
         if(entity.getDescricao() != null) movimentacaoEstoque.setDescricao(entity.getDescricao());
 
         return repository.save(movimentacaoEstoque);

@@ -17,6 +17,17 @@ public class ArtigoMapper {
 
         return artigo;
     }
+    
+    public static Artigo toEntity(ArtigoPatchRequest dto) {
+        if (dto == null) return null;
+
+        Artigo artigo = new Artigo();
+        artigo.setTitulo(dto.getTitulo());
+        artigo.setDescricao(dto.getDescricao());
+        artigo.setDtPublicacao(dto.getDtPublicacao());
+
+        return artigo;
+    }
 
     public static ArtigoResponse toResponse(Artigo artigo) {
         if (artigo == null) return null;

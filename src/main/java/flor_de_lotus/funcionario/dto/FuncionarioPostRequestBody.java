@@ -1,6 +1,6 @@
 package flor_de_lotus.funcionario.dto;
 
-import flor_de_lotus.funcionario.TipoAtendimento;
+import flor_de_lotus.funcionario.TipoAtendimentoPreco;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -21,5 +21,5 @@ public class FuncionarioPostRequestBody {
     @NotNull
     private Integer fkUsuario;
 
-    private List<TipoAtendimento> tiposAtendimento;
+    private List<TipoAtendimentoPreco> tiposAtendimento;
 }

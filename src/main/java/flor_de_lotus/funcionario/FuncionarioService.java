@@ -3,9 +3,6 @@ package flor_de_lotus.funcionario;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.funcionario.dto.FuncionarioPatchRequestBody;
-import flor_de_lotus.funcionario.dto.FuncionarioPostRequestBody;
-import flor_de_lotus.funcionario.mapper.FuncionarioMapper;
-import flor_de_lotus.paciente.Paciente;
 import flor_de_lotus.usuario.Usuario;
 import flor_de_lotus.usuario.UsuarioRepository;
 import flor_de_lotus.usuario.UsuarioService;
@@ -17,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class    FuncionarioService {
+public class FuncionarioService {
     private final FuncionarioRepository repository;
     private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
@@ -86,6 +83,23 @@ public class    FuncionarioService {
            funcionario.setEspecialidade(dto.getEspecialidade());
        }
 
+       if (dto.getDescricao() != null) {
+           funcionario.setDescricao(dto.getDescricao());
+       }
+
+       if (dto.getFormacaoAcademica() != null) {
+           funcionario.setFormacaoAcademica(dto.getFormacaoAcademica());
+       }
+
+       if (dto.getIdiomasAtendidos() != null) {
+           funcionario.setIdiomasAtendidos(dto.getIdiomasAtendidos());
+       }
+       
+       if (dto.getTiposAtendimento() != null) {
+           funcionario.getTiposAtendimento().clear();
+           funcionario.getTiposAtendimento().addAll(dto.getTiposAtendimento());
+       }
+
        return repository.save(funcionario);
     }
 
@@ -119,7 +133,5 @@ public class    FuncionarioService {
     public List<Funcionario> buscarPorTipoAtendimento(TipoAtendimento tipo) {
         return repository.findByTipoAtendimento(tipo);
     }
-
-
 
 }

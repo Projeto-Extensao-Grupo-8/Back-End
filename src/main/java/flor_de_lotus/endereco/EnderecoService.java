@@ -40,18 +40,18 @@ public class EnderecoService {
 
         if (dto.getCep() != null){
            EnderecoResponse cepBusca = buscarCEP(dto.getCep());
-           enderecoSavo = EnderecoMapper.toEntityPatch(dto);
-           repository.save(enderecoSavo);
-           EnderecoResponsePatch enderecoResponse = EnderecoMapper.toResponse(enderecoSavo);
-
-           return  enderecoResponse;
+           enderecoSavo.setCep(cepBusca.getCep());
+           enderecoSavo.setLogradouro(cepBusca.getLogradouro());
+           enderecoSavo.setBairro(cepBusca.getBairro());
+           enderecoSavo.setCidade(cepBusca.getCidade());
+           enderecoSavo.setEstado(cepBusca.getEstado());
         }
 
         if (dto.getComplemento() != null) enderecoSavo.setComplemento(dto.getComplemento());
         if (dto.getNumero() != null) enderecoSavo.setNumero(dto.getNumero());
-        EnderecoResponsePatch enderecoResponse = EnderecoMapper.toResponse(enderecoSavo);
+        
         repository.save(enderecoSavo);
-        return  enderecoResponse;
+        return EnderecoMapper.toResponse(enderecoSavo);
 
     }
 

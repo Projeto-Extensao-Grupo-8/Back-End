@@ -2,6 +2,7 @@ package flor_de_lotus.artigo;
 
 import flor_de_lotus.artigo.dto.ArtigoMapper;
 import flor_de_lotus.artigo.dto.ArtigoPostRequest;
+import flor_de_lotus.artigo.dto.ArtigoPatchRequest;
 import flor_de_lotus.artigo.dto.ArtigoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -51,7 +52,7 @@ public class ArtigoController {
 
     @Operation(summary = "Cadastrar novos artigos no sistema")
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<ArtigoResponse> cadastrar(@Valid @RequestBody ArtigoPostRequest dto) {
 
         Artigo artigo = ArtigoMapper.toEntity(dto);
@@ -61,12 +62,12 @@ public class ArtigoController {
 
     }
 
-    @Operation(summary = "Atualizar Artigo por ID")
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ArtigoResponse> atualizar(
+    @Operation(summary = "Atualizar Parcialmente Artigo por ID")
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    public ResponseEntity<ArtigoResponse> atualizarParcial(
             @PathVariable Integer id,
-            @Valid @RequestBody ArtigoPostRequest dto) {
+            @Valid @RequestBody ArtigoPatchRequest dto) {
 
         Artigo atualizacao = ArtigoMapper.toEntity(dto);
 
@@ -79,7 +80,7 @@ public class ArtigoController {
 
     @Operation(summary = "Deletar Artigo por ID")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         artigoService.deletar(id);
         return ResponseEntity.noContent().build();
