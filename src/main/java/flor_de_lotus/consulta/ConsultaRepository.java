@@ -77,4 +77,6 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Integer> {
     @Query(value = "SELECT valor_teste, valor_consulta, mes FROM grafico_comparacao_custo_receita", nativeQuery = true)
     List<GraficoComparacaoCustoReceita> graficoComparacaoCustoReceita();
 
+    @Query("SELECT c FROM Consulta c WHERE DATE(c.data) = CURRENT_DATE AND c.fkFuncionario.idFuncionario = :idFuncionario")
+    List<Consulta> buscarConsultasDeHojePorFuncionario(@Param("idFuncionario") Integer idFuncionario);
 }

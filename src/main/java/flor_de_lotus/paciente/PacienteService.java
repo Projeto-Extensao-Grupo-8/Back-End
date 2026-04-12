@@ -67,6 +67,10 @@ public class PacienteService {
         return repository.findPacientesByFkFuncionario_IdFuncionario(idFuncionario);
     }
 
+    public List<Paciente> listarPacientesPorFuncionarioOffset(Integer idFuncionario, int pagina, int tamanho) {
+        int offset = Math.max((pagina - 1) * tamanho, 0);
+        return repository.findPacientesByFkFuncionario_IdFuncionarioWithPagination(idFuncionario, tamanho, offset);
+    }
 
     public Long totalPacientes() {
         return repository.totalPacientes().getTotalPacientesAtivos();

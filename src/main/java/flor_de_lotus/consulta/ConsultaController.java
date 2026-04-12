@@ -386,5 +386,20 @@ public class ConsultaController {
 
     }
 
-
+    @Operation(summary = "Listar consultas de hoje por funcionário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de consultas retornada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+            @ApiResponse(responseCode = "204", description = "Não possui consultas cadastradas para o funcionário hoje")
+    })
+    @GetMapping("/filtrarConsultasHoje/{idFuncionario}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    public ResponseEntity<List<ConsultaResponseBody>> listarConsultasDeHojePorFuncionario(@PathVariable Integer idFuncionario) {
+        List<ConsultaResponseBody> lista = ConsultaMapper.toResponseList(service.consultasDoHojePorFuncionario(idFuncionario));
+        if (lista.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(lista);
+    }
 }
+

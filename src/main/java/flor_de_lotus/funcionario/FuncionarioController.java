@@ -45,16 +45,17 @@ public class FuncionarioController {
         return ResponseEntity.status(201).body(FuncionarioMapper.toResponse(cadastrado));
     }
 
-    @Operation(summary = "Listar todos os funcionários", description = "Retorna uma lista de todos os funcionários cadastrados.")
+    @Operation(summary = "Listar todos os funcionários com paginação", description = "Retorna uma lista paginada de todos os funcionários cadastrados.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso",
-                    content = @Content(schema = @Schema(implementation = FuncionarioResponse.class))),
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = FuncionarioResponse.class)))),
             @ApiResponse(responseCode = "204", description = "Nenhum funcionário encontrado", content = @Content)
     })
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE', 'USUARIO')")
-    public ResponseEntity<List<FuncionarioResponse>> listarTodos(){
-        List<Funcionario> listaTodos = service.listarTodos();
+    //http://localhost:8080/funcionarios?pagina=2&tamanho=5
+    public ResponseEntity<List<FuncionarioResponse>> listarTodos(@RequestParam int pagina, @RequestParam int tamanho){
+        List<Funcionario> listaTodos = service.buscarTodosOffset(pagina, tamanho);
         if (listaTodos.isEmpty()){
             return ResponseEntity.status(204).build();
         }

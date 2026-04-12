@@ -92,8 +92,9 @@ public class PacienteController {
     })
     @GetMapping("/funcionario/{idFuncionario}")
     @PreAuthorize("hasAnyRole('FUNCIONARIO', 'ADMIN')")
-    public ResponseEntity<List<PacienteResponseBody>> listarPacientesPorFuncionario(@PathVariable Integer idFuncionario) {
-        List<PacienteResponseBody> lista = PacienteMapper.toResponseList(service.listarPacientesPorFuncionario(idFuncionario));
+    //GET /pacientes/funcionario/1?pagina=1&tamanho=10
+    public ResponseEntity<List<PacienteResponseBody>> listarPacientesPorFuncionario(@PathVariable Integer idFuncionario, @RequestParam int pagina, @RequestParam int tamanho) {
+        List<PacienteResponseBody> lista = PacienteMapper.toResponseList(service.listarPacientesPorFuncionarioOffset(idFuncionario, pagina, tamanho));
         if (lista.isEmpty()) {
             return ResponseEntity.status(204).build();
         }

@@ -74,7 +74,7 @@ public class MovimentacaoEstoqueService {
     }
 
     public List<MovimentacaoEstoque> listarPorFuncionario(Integer idFuncionario) {
-        List<Consulta> listaConsulta = consultaService.listarConsultasPorFuncionario(idFuncionario);
+        List<Consulta> listaConsulta = consultaService.listarPorFuncionario(idFuncionario);
         List<MovimentacaoEstoque> movimentacoes = new ArrayList<>();
 
         for (Consulta c:listaConsulta){

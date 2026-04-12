@@ -134,10 +134,6 @@ public class ConsultaService {
         return repository.findByFkPaciente_IdPaciente(idPaciente);
     }
 
-    public List<Consulta> listarConsultasPorFuncionario(Integer idFuncionario) {
-        funcionarioService.buscarPorIdOuThrow(idFuncionario);
-        return repository.findByFkFuncionario_IdFuncionario(idFuncionario);
-    }
 
     public List<Consulta> listarProximasConsultasFuncionario(Integer idFuncionario) {
         funcionarioService.buscarPorIdOuThrow(idFuncionario);
@@ -244,4 +240,7 @@ public class ConsultaService {
         return repository.save(consulta);
     }
 
+    public List<Consulta> consultasDoHojePorFuncionario(Integer idFuncionario){
+        return repository.buscarConsultasDeHojePorFuncionario(idFuncionario);
+    }
 }

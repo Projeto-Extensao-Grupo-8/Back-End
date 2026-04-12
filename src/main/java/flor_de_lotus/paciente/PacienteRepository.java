@@ -18,6 +18,9 @@ public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
     @Query(value = "SELECT DISTINCT p.* FROM paciente p INNER JOIN consulta c ON p.id_paciente = c.fk_paciente WHERE c.fk_funcionario = :idFuncionario", nativeQuery = true)
     List<Paciente> findPacientesByFkFuncionario_IdFuncionario(@Param("idFuncionario") Integer idFuncionario);
 
+    @Query(value = "SELECT DISTINCT p.* FROM paciente p INNER JOIN consulta c ON p.id_paciente = c.fk_paciente WHERE c.fk_funcionario = ?1 ORDER BY p.id_paciente LIMIT ?2 OFFSET ?3", nativeQuery = true)
+    List<Paciente> findPacientesByFkFuncionario_IdFuncionarioWithPagination(Integer idFuncionario, int limit, int offset);
+
     @Query(value = "SELECT total_pacientes_ativos FROM total_pacientes", nativeQuery = true)
     KpiTotalPacientes totalPacientes();
 

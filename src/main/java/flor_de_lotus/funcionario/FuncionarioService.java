@@ -134,4 +134,8 @@ public class FuncionarioService {
         return repository.findByTipoAtendimento(tipo);
     }
 
+    public List<Funcionario> buscarTodosOffset(int pagina, int tamanho) {
+        int offset = Math.max((pagina - 1) * tamanho, 0);
+        return repository.findAllWithPagination(tamanho, offset);
+    }
 }

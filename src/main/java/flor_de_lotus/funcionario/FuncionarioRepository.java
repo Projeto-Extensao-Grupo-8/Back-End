@@ -22,4 +22,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
 
     @Query("SELECT f FROM Funcionario f JOIN f.tiposAtendimento t WHERE t.tipoAtendimento = :tipo AND f.ativo = true")
     List<Funcionario> findByTipoAtendimento(@Param("tipo") TipoAtendimento tipo);
+
+    @Query(value = "SELECT * FROM funcionario ORDER BY id_funcionario LIMIT ?1 OFFSET ?2", nativeQuery = true)
+    List<Funcionario> findAllWithPagination(int limit, int offset);
 }
