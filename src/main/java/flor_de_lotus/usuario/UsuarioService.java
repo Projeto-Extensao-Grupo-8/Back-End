@@ -16,13 +16,18 @@ import flor_de_lotus.endereco.EnderecoService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -174,6 +179,59 @@ public class UsuarioService {
 
         return repository.save(usuario);
 
+    }
+
+    public String gerarLinkWhatsapp(
+            String data,
+            String horario,
+            String status,
+            String email
+    ) {
+
+        System.out.println("Data: " + data);
+        System.out.println("Horário: " + horario);
+        System.out.println("Status: " + status);
+        System.out.println("Email: " + email);
+
+        Usuario usuario = repository.findByEmail(email)
+                .orElseThrow(() -> new EntidadeNaoEncontradoException("Usuário não encontrado"));
+
+        String mensagem;
+
+        if (status.equalsIgnoreCase("Confirmada")) {
+            mensagem = String.format(
+                    "Olá, %s! \n" +
+                            "\n" +
+                            "Sua consulta foi *confirmada com sucesso*! ✨\n" +
+                            "\n" +
+                            "*Data:* %s\n" +
+                            "*Horário:* %s\n" +
+                            "\n" +
+                            "Ficamos felizes em te acompanhar nesse momento.\n" +
+                            "Qualquer dúvida ou necessidade de reagendamento, estamos por aqui. \n" +
+                            "\n" +
+                            "Com carinho,\n" +
+                            "*Flor de Lótus* \n",
+                    usuario.getNome(), data, horario
+            );
+        } else {
+            mensagem = String.format(
+                    "Olá, %s! \n" +
+                            "\n" +
+                            "Informamos que sua consulta foi *cancelada*.\n" +
+                            "\n" +
+                            "Sabemos que imprevistos acontecem, e estamos aqui para te ajudar.\n" +
+                            "Se quiser reagendar, será um prazer te atender novamente. \n" +
+                            "\n" +
+                            "Com carinho,\n" +
+                            "*Flor de Lótus* \n",
+                    usuario.getNome()
+            );
+        }
+
+        String mensagemEncoded = URLEncoder.encode(mensagem, StandardCharsets.UTF_8);
+
+        return "https://wa.me/" + usuario.getTelefone() + "?text=" + mensagemEncoded;
     }
 
     public List<Usuario> listarTodos(){
