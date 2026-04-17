@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -242,5 +243,12 @@ public class ConsultaService {
 
     public List<Consulta> consultasDoHojePorFuncionario(Integer idFuncionario){
         return repository.buscarConsultasDeHojePorFuncionario(idFuncionario);
+    }
+
+    public List<String> horariosOcupados(Integer idFuncionario, LocalDate data) {
+        return repository.findByFuncionarioAndData(idFuncionario, data)
+                .stream()
+                .map(c -> String.format("%02d:%02d", c.getData().getHour(), c.getData().getMinute()))
+                .collect(java.util.stream.Collectors.toList());
     }
 }

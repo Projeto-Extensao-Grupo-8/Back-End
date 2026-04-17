@@ -18,12 +18,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.mapper.Mapper;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static flor_de_lotus.consulta.dto.ConsultaMapper.toResponse;
@@ -384,6 +386,15 @@ public class ConsultaController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
 
+    }
+
+    @Operation(summary = "Listar horários já ocupados de um funcionário em uma data (formato YYYY-MM-DD). Retorna lista de strings 'HH:mm'.")
+    @GetMapping("/funcionario/{idFuncionario}/horariosOcupados")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE')")
+    public ResponseEntity<List<String>> horariosOcupados(
+            @PathVariable Integer idFuncionario,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        return ResponseEntity.ok(service.horariosOcupados(idFuncionario, data));
     }
 
     @Operation(summary = "Listar consultas de hoje por funcionário")

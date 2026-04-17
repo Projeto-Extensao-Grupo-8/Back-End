@@ -8,9 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,11 +68,15 @@ public class AgendamentoController {
         return ResponseEntity.ok(lista);
     }
 
-    @Operation(summary = "Listar agendamentos de um funcionário")
+    @Operation(summary = "Listar agendamentos de um funcionário. Parâmetro 'data' (YYYY-MM-DD) opcional; omitido usa hoje.")
     @GetMapping("/funcionario/{idFuncionario}")
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE', 'USUARIO')")
-    public ResponseEntity<List<AgendamentoResponse>> listarPorFuncionario(@PathVariable Integer idFuncionario) {
-        List<AgendamentoResponse> lista = service.listarPorFuncionario(idFuncionario).stream().map(AgendamentoMapper::toResponse).collect(Collectors.toList());;
+    public ResponseEntity<List<AgendamentoResponse>> listarPorFuncionario(
+            @PathVariable Integer idFuncionario,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        LocalDate dataBusca = (data != null) ? data : LocalDate.now();
+        List<AgendamentoResponse> lista = service.listarPorFuncionario(idFuncionario, dataBusca)
+                .stream().map(AgendamentoMapper::toResponse).collect(Collectors.toList());
         if (lista.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(lista);
     }

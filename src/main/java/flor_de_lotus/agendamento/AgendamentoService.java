@@ -53,8 +53,7 @@ public class AgendamentoService {
         return repository.findAll();
     }
 
-    public List<Agendamento> listarPorFuncionario(Integer idFuncionario) {
-        List<Agendamento> lista = repository.findByFkFuncionario_IdFuncionarioAndDataDia(idFuncionario, LocalDate.now());
-        return lista;
+    public List<Agendamento> listarPorFuncionario(Integer idFuncionario, LocalDate data) {
+        return repository.findByFkFuncionario_IdFuncionarioAndDataDia(idFuncionario, data);
     }
 }
