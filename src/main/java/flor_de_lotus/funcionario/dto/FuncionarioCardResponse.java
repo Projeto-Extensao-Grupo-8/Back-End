@@ -3,24 +3,19 @@ package flor_de_lotus.funcionario.dto;
 import flor_de_lotus.funcionario.Especialidade;
 import flor_de_lotus.funcionario.Modalidade;
 import flor_de_lotus.funcionario.TipoAtendimentoPreco;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter
 @Setter
-public class FuncionarioPatchRequestBody {
-    private String crp;
-    
+@NoArgsConstructor
+@AllArgsConstructor
+public class FuncionarioCardResponse {
+    private String nomeUsuario;
     private List<Especialidade> especialidades;
-
-    private String descricao;
-    private String formacaoAcademica;
-    private String idiomasAtendidos;
-    private boolean ativo;
     private Modalidade modalidade;
-
-    private List<TipoAtendimentoPreco> tiposAtendimento;
 }

@@ -1,15 +1,8 @@
 package flor_de_lotus.funcionario;
 
 import flor_de_lotus.consulta.dto.ConsultaResponseBody;
-import flor_de_lotus.consulta.dto.dashFinanceiro.KpiMelhorFaturamentoAno;
-import flor_de_lotus.consulta.dto.dashFinanceiro.KpisDashFinanceiroResponse;
-import flor_de_lotus.funcionario.dto.FuncionarioPatchRequestBody;
-import flor_de_lotus.funcionario.dto.FuncionarioPostRequestBody;
-import flor_de_lotus.funcionario.dto.FuncionarioResponse;
-import flor_de_lotus.funcionario.dto.KpisGestaoFuncionarioResponse;
+import flor_de_lotus.funcionario.dto.*;
 import flor_de_lotus.funcionario.mapper.FuncionarioMapper;
-import flor_de_lotus.paciente.dto.PacienteMapper;
-import flor_de_lotus.paciente.dto.PacienteResponseBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -60,6 +53,21 @@ public class FuncionarioController {
             return ResponseEntity.status(204).build();
         }
         return ResponseEntity.status(200).body(FuncionarioMapper.toResponseList(listaTodos));
+    }
+    
+    @Operation(summary = "Listar todos os funcionários em formato de card (resumo)", description = "Retorna uma lista resumida paginada de todos os funcionários cadastrados.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = FuncionarioCardResponse.class)))),
+            @ApiResponse(responseCode = "204", description = "Nenhum funcionário encontrado", content = @Content)
+    })
+    @GetMapping("/cards")
+    public ResponseEntity<List<FuncionarioCardResponse>> listarTodosCards(){
+        List<Funcionario> listaTodos = service.listarTodos();
+        if (listaTodos.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(FuncionarioMapper.toCardResponseList(listaTodos));
     }
 
     @Operation(summary = "Buscar funcionário por ID", description = "Busca um funcionário específico pelo seu ID.")

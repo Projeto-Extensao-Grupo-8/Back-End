@@ -53,7 +53,8 @@ public class SecurityConfiguracao {
             "/v3/api-docs/**",
             "/actuator/*",
             "/usuarios/login",
-            "/usuarios/cadastro"
+            "/usuarios/cadastro",
+            "/funcionarios/cards"
     };
 
     @Bean

@@ -1,6 +1,7 @@
 package flor_de_lotus.funcionario.dto;
 
 import flor_de_lotus.funcionario.Especialidade;
+import flor_de_lotus.funcionario.Modalidade;
 import flor_de_lotus.funcionario.TipoAtendimentoPreco;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,5 +28,6 @@ public class FuncionarioResponse {
     private String descricao;
     private String formacaoAcademica;
     private String idiomasAtendidos;
+    private Modalidade modalidade;
 
 }

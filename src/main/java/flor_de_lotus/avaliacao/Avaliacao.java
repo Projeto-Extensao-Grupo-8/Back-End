@@ -24,6 +24,7 @@ public class Avaliacao {
     private Integer estrelas;
     private LocalDateTime dataAvaliacao;
 
+
     @OneToOne
     @JoinColumn(name = "fk_consulta", nullable = false)
     private Consulta fkConsulta;

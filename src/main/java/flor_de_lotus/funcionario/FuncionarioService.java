@@ -100,6 +100,10 @@ public class FuncionarioService {
        if (dto.getIdiomasAtendidos() != null) {
            funcionario.setIdiomasAtendidos(dto.getIdiomasAtendidos());
        }
+
+       if (dto.getModalidade() != null) {
+           funcionario.setModalidade(dto.getModalidade());
+       }
        
        if (dto.getTiposAtendimento() != null) {
            funcionario.getTiposAtendimento().clear();

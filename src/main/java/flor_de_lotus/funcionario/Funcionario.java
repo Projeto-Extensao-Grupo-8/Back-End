@@ -31,6 +31,8 @@ public class Funcionario {
     private String formacaoAcademica;
     private String idiomasAtendidos;
 
+    @Enumerated(EnumType.STRING)
+    private Modalidade modalidade;
 
     @Column(nullable = false)
     private boolean ativo = true;
