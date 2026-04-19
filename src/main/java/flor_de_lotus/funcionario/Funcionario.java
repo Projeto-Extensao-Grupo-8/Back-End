@@ -25,13 +25,12 @@ public class Funcionario {
     @Column(unique = true)
     private String crp;
 
-    private String especialidade;
-
     private LocalDate dtAdmissao;
 
     private String descricao;
     private String formacaoAcademica;
     private String idiomasAtendidos;
+
 
     @Column(nullable = false)
     private boolean ativo = true;
@@ -52,5 +51,9 @@ public class Funcionario {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "funcionario_tipos_atendimento", joinColumns = @JoinColumn(name = "fk_funcionario"))
     private List<TipoAtendimentoPreco> tiposAtendimento = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "funcionario_especialidade", joinColumns = @JoinColumn(name = "fk_funcionario"))
+    private List<Especialidade> especialidades = new ArrayList<>();
 
 }

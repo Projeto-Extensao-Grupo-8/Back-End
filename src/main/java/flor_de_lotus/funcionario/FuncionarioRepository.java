@@ -12,7 +12,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
     long countByAtivoTrue();
     long countByAtivoFalse();
 
-    @Query("SELECT COUNT(DISTINCT f.especialidade) FROM Funcionario f WHERE f.especialidade IS NOT NULL")
+    @Query("SELECT COUNT(DISTINCT e.nome) FROM Funcionario f JOIN f.especialidades e")
     long countDistinctEspecialidades();
 
     @Query("SELECT f FROM Funcionario f JOIN f.fkUsuario u WHERE LOWER(u.nome) LIKE LOWER(CONCAT('%', :termo, '%')) OR LOWER(u.email) LIKE LOWER(CONCAT('%', :termo, '%')) OR LOWER(f.crp) LIKE LOWER(CONCAT('%', :termo, '%'))")
@@ -28,4 +28,5 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
     List<Funcionario> findAllWithPagination(int limit, int offset);
 
     Optional<Funcionario> findByFkUsuario_IdUsuario(Integer idUsuario);
+    Boolean existsByFkUsuario_IdUsuario(Integer idUsuario);
 }

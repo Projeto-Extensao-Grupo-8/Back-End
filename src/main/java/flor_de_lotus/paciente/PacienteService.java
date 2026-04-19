@@ -1,8 +1,8 @@
 package flor_de_lotus.paciente;
 
 import flor_de_lotus.consulta.ConsultaRepository;
+import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
-import flor_de_lotus.funcionario.Funcionario;
 import flor_de_lotus.paciente.dto.PacientePostRequestBody;
 import flor_de_lotus.paciente.dto.dashPaciente.GraficoNovosPacientesPorMes;
 import flor_de_lotus.paciente.dto.dashPaciente.GraficoTaxaRetencaoMes;
@@ -29,6 +29,10 @@ public class PacienteService {
     public Paciente cadastrar(Integer idUsuario) {
 
         Usuario usuario = usuarioService.buscarEntidadePorIdOuThrow(idUsuario);
+
+        if (repository.existsByFkUsuario_IdUsuario(idUsuario)) {
+            throw new EntidadeConflitoException("Já existe um paciente cadastrado para este usuário.");
+        }
 
         usuario.setNivelPermissao("2");
         userRepository.save(usuario);

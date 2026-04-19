@@ -20,7 +20,12 @@ public class FuncionarioService {
     private final UsuarioRepository usuarioRepository;
 
     public Funcionario cadastrar(Funcionario body, Integer idUsuario) {
+
         Usuario usuarioCa = usuarioService.buscarEntidadePorIdOuThrow(idUsuario);
+
+        if (repository.existsByFkUsuario_IdUsuario(idUsuario)) {
+            throw new EntidadeConflitoException("Já existe um funcionário cadastrado para este usuário.");
+        }
 
         if (repository.existsByCrp(body.getCrp())) {
             throw new EntidadeConflitoException("Conflito no campo CRP");
@@ -79,8 +84,9 @@ public class FuncionarioService {
            funcionario.setCrp(dto.getCrp());
        }
 
-       if (dto.getEspecialidade() != null) {
-           funcionario.setEspecialidade(dto.getEspecialidade());
+       if (dto.getEspecialidades() != null) {
+           funcionario.getEspecialidades().clear();
+           funcionario.getEspecialidades().addAll(dto.getEspecialidades());
        }
 
        if (dto.getDescricao() != null) {
@@ -138,4 +144,5 @@ public class FuncionarioService {
         int offset = Math.max((pagina - 1) * tamanho, 0);
         return repository.findAllWithPagination(tamanho, offset);
     }
+
 }

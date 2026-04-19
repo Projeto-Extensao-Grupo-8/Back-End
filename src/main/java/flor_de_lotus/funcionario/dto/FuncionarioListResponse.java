@@ -1,5 +1,6 @@
 package flor_de_lotus.funcionario.dto;
 
+import flor_de_lotus.funcionario.Especialidade;
 import flor_de_lotus.funcionario.TipoAtendimentoPreco;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class FuncionarioListResponse {
     private String nome;
     private String email;
     private String crp;
-    private String especialidade;
+    private List<Especialidade> especialidades;
     private LocalDate dtAdmissao;
     private boolean ativo;
 
@@ -24,7 +25,6 @@ public class FuncionarioListResponse {
     private String descricao;
     private String formacaoAcademica;
     private String idiomasAtendidos;
-
 
     public FuncionarioListResponse(String crp, boolean ativo) {
         this.crp = crp;

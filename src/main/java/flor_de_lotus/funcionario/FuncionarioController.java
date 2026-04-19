@@ -38,7 +38,7 @@ public class FuncionarioController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content)
     })
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<FuncionarioResponse> cadastrar(@RequestBody @Valid FuncionarioPostRequestBody body){
         Funcionario funcionario = FuncionarioMapper.toEntity(body);
         Funcionario cadastrado = service.cadastrar(funcionario, body.getFkUsuario());

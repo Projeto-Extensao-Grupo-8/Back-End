@@ -1,5 +1,6 @@
 package flor_de_lotus.funcionario.dto;
 
+import flor_de_lotus.funcionario.Especialidade;
 import flor_de_lotus.funcionario.TipoAtendimentoPreco;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,8 +14,9 @@ import java.util.List;
 public class FuncionarioPostRequestBody {
     @NotBlank
     private String crp;
-    @NotBlank
-    private String especialidade;
+    
+    private List<Especialidade> especialidades;
+
     private String descricao;
     private String formacaoAcademica;
     private String idiomasAtendidos;
