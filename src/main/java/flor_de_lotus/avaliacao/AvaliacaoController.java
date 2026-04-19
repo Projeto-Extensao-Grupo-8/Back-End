@@ -81,4 +81,24 @@ public class AvaliacaoController {
         return ResponseEntity.status(200).body(service.graficoAvaliacaoPorFuncionario());
     }
 
+    @Operation(summary = "Listar avaliações de consultas", description = "Retorna uma lista de avaliações de consultas com nome do paciente, data e descrição.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso",
+                    content = @Content(schema = @Schema(implementation = AvaliacaoConsultaResponse.class))),
+            @ApiResponse(responseCode = "204", description = "Nenhuma avaliação encontrada", content = @Content)
+    })
+    @GetMapping("/consultas")
+    public ResponseEntity<List<AvaliacaoConsultaResponse>> listarAvaliacoesConsultas(){
+        List<Avaliacao> listaTodos = service.listarTodos().stream()
+                .filter(a -> a.getFkConsulta() != null)
+                .toList();
+
+        if (listaTodos.isEmpty()){
+            return ResponseEntity.status(204).build();
+        }
+
+        List<AvaliacaoConsultaResponse> response = AvaliacaoMapper.toConsultaResponseList(listaTodos);
+
+        return ResponseEntity.status(200).body(response);
+    }
 }

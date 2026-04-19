@@ -13,7 +13,6 @@ import flor_de_lotus.funcionario.FuncionarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +48,6 @@ public class AvaliacaoService {
         }
 
         Avaliacao avaliacao = AvaliacaoMapper.toEntity(request, consulta, funcionario);
-        avaliacao.setDataAvaliacao(LocalDateTime.now());
 
         return repository.save(avaliacao);
     }

@@ -13,7 +13,7 @@ public class AvaliacaoMapper {
                 return null;
             }
 
-            return new Avaliacao(null, dto.getDescricao(), dto.getEstrelas(), null, consulta, funcionario);
+            return new Avaliacao(null, dto.getDescricao(), dto.getEstrelas(), LocalDateTime.now(), consulta, funcionario);
         }
 
         public static Avaliacao toEntity(AvaliacaoRequest dto) {
@@ -21,7 +21,7 @@ public class AvaliacaoMapper {
                 return null;
             }
 
-            return new Avaliacao(null, dto.getDescricao(), dto.getEstrelas(), null, null, null);
+            return new Avaliacao(null, dto.getDescricao(), dto.getEstrelas(), LocalDateTime.now(), null, null);
         }
 
         public static AvaliacaoResponse toResponse(Avaliacao entity) {
@@ -66,6 +66,32 @@ public class AvaliacaoMapper {
 
             return entities.stream()
                     .map(AvaliacaoMapper::toResponse)
+                    .toList();
+        }
+
+        public static AvaliacaoConsultaResponse toConsultaResponse(Avaliacao entity) {
+            if (entity == null) {
+                return null;
+            }
+
+            String descricao = entity.getDescricao();
+            LocalDateTime data = entity.getDataAvaliacao();
+            String nomePaciente = null;
+
+            if (entity.getFkConsulta() != null && entity.getFkConsulta().getFkPaciente() != null) {
+                nomePaciente = entity.getFkConsulta().getFkPaciente().getNome();
+            }
+
+            return new AvaliacaoConsultaResponse(nomePaciente, data, descricao);
+        }
+
+        public static List<AvaliacaoConsultaResponse> toConsultaResponseList(List<Avaliacao> entities) {
+            if (entities == null) {
+                return null;
+            }
+
+            return entities.stream()
+                    .map(AvaliacaoMapper::toConsultaResponse)
                     .toList();
         }
 }

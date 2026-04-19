@@ -54,7 +54,8 @@ public class SecurityConfiguracao {
             "/actuator/*",
             "/usuarios/login",
             "/usuarios/cadastro",
-            "/funcionarios/cards"
+            "/funcionarios/cards",
+            "/avaliacoes/consultas"
     };
 
     @Bean
