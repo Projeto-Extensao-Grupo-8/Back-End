@@ -3,6 +3,7 @@ package flor_de_lotus.teste;
 import flor_de_lotus.consulta.dto.ConsultaResponseBody;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.teste.dto.*;
+import flor_de_lotus.teste.dto.TestePatchRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -181,6 +182,19 @@ public class TesteController {
         KpisResumoEstoqueResponse response = new KpisResumoEstoqueResponse( buscarValorTotalEstoque, buscarTotalUnidadesAoTodo, buscarTotalTiposTestes);
 
         return ResponseEntity.status(200).body(response);
+    }
+
+    @Operation(summary = "Atualizar parcialmente um teste")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Teste atualizado com sucesso",
+                    content = @Content(schema = @Schema(implementation = TesteResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Teste não encontrado")
+    })
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    public ResponseEntity<TesteResponse> atualizarParcial(@PathVariable Integer id, @RequestBody TestePatchRequest body) {
+        Teste atualizado = service.atualizarParcial(id, body);
+        return ResponseEntity.status(200).body(TesteMapper.toResponse(atualizado));
     }
 
     @Operation(summary = "Listar alertas de estoque crítico")

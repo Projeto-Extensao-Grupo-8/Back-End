@@ -99,4 +99,19 @@ public class TesteService {
         return testesCriticos;
     }
 
+    public Teste atualizarParcial(Integer id, flor_de_lotus.teste.dto.TestePatchRequest dto) {
+        Teste teste = findByIdOrThrow(id);
+        if (dto.getCodigo() != null) teste.setCodigo(dto.getCodigo());
+        if (dto.getNome() != null) teste.setNome(dto.getNome());
+        if (dto.getCategoria() != null) teste.setCategoria(dto.getCategoria());
+        if (dto.getSubCategoria() != null) teste.setSubCategoria(dto.getSubCategoria());
+        if (dto.getEditora() != null) teste.setEditora(dto.getEditora());
+        if (dto.getTipo() != null) teste.setTipo(dto.getTipo());
+        if (dto.getPreco() != null) teste.setPreco(dto.getPreco());
+        if (dto.getEstoqueMinimo() != null) teste.setEstoqueMinimo(dto.getEstoqueMinimo());
+        if (dto.getValidade() != null) teste.setValidade(dto.getValidade());
+        if (dto.getQtd() != null) teste.setQtd(dto.getQtd());
+        return repository.save(teste);
+    }
+
 }
