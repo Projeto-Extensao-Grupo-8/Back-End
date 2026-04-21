@@ -12,7 +12,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
     long countByAtivoTrue();
     long countByAtivoFalse();
 
-    @Query("SELECT COUNT(DISTINCT e.nome) FROM Funcionario f JOIN f.especialidades e")
+    @Query(value = "SELECT COUNT(DISTINCT especialidade) FROM funcionario_especialidade", nativeQuery = true)
     long countDistinctEspecialidades();
 
     @Query("SELECT f FROM Funcionario f JOIN f.fkUsuario u WHERE LOWER(u.nome) LIKE LOWER(CONCAT('%', :termo, '%')) OR LOWER(u.email) LIKE LOWER(CONCAT('%', :termo, '%')) OR LOWER(f.crp) LIKE LOWER(CONCAT('%', :termo, '%'))")

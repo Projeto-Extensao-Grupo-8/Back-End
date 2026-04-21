@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,7 +23,7 @@ public class Avaliacao {
 
     private String descricao;
     private Integer estrelas;
-    private LocalDateTime dataAvaliacao;
+    private LocalDate dataAvaliacao;
 
 
     @OneToOne

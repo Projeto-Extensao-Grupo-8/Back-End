@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 public class AvaliacaoResponse {
     private String descricao;
     private Integer estrelas;
-    private LocalDateTime dataAvaliacao;
+    private LocalDate dataAvaliacao;
     private Integer idFuncionario;
     private String nomeFuncionario;
     private String emailFuncionario;

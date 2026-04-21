@@ -4,6 +4,7 @@ import flor_de_lotus.avaliacao.Avaliacao;
 import flor_de_lotus.consulta.Consulta;
 import flor_de_lotus.funcionario.Funcionario;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class AvaliacaoMapper {
                 return null;
             }
 
-            return new Avaliacao(null, dto.getDescricao(), dto.getEstrelas(), LocalDateTime.now(), consulta, funcionario);
+            return new Avaliacao(null, dto.getDescricao(), dto.getEstrelas(), LocalDate.now(), consulta, funcionario);
         }
 
         public static Avaliacao toEntity(AvaliacaoRequest dto) {
@@ -21,7 +22,7 @@ public class AvaliacaoMapper {
                 return null;
             }
 
-            return new Avaliacao(null, dto.getDescricao(), dto.getEstrelas(), LocalDateTime.now(), null, null);
+            return new Avaliacao(null, dto.getDescricao(), dto.getEstrelas(), LocalDate.now(), null, null);
         }
 
         public static AvaliacaoResponse toResponse(Avaliacao entity) {
@@ -31,7 +32,7 @@ public class AvaliacaoMapper {
 
             String descricao = entity.getDescricao();
             Integer estrelas = entity.getEstrelas();
-            LocalDateTime dataAvaliacao = entity.getDataAvaliacao();
+            LocalDate dataAvaliacao = entity.getDataAvaliacao();
 
             Integer idFuncionario = null;
             String nomeFuncionario = null;
@@ -75,14 +76,15 @@ public class AvaliacaoMapper {
             }
 
             String descricao = entity.getDescricao();
-            LocalDateTime data = entity.getDataAvaliacao();
+            LocalDate data = entity.getDataAvaliacao();
             String nomePaciente = null;
+            Integer id = entity.getIdAvaliacao();
 
             if (entity.getFkConsulta() != null && entity.getFkConsulta().getFkPaciente() != null) {
                 nomePaciente = entity.getFkConsulta().getFkPaciente().getNome();
             }
 
-            return new AvaliacaoConsultaResponse(nomePaciente, data, descricao);
+            return new AvaliacaoConsultaResponse(id, nomePaciente, data, descricao);
         }
 
         public static List<AvaliacaoConsultaResponse> toConsultaResponseList(List<Avaliacao> entities) {

@@ -46,7 +46,7 @@ public class FuncionarioController {
     })
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE', 'USUARIO')")
-    //http://localhost:8080/funcionarios?pagina=2&tamanho=5
+    //http://localhost:8080/funcionarios?pagina=1&tamanho=5
     public ResponseEntity<List<FuncionarioResponse>> listarTodos(@RequestParam int pagina, @RequestParam int tamanho){
         List<Funcionario> listaTodos = service.buscarTodosOffset(pagina, tamanho);
         if (listaTodos.isEmpty()){

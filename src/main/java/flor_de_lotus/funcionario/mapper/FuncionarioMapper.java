@@ -77,11 +77,12 @@ public class FuncionarioMapper {
             return null;
         }
 
-        return new FuncionarioCardResponse(
-                entity.getNome(),
-                entity.getEspecialidades(),
-                entity.getModalidade()
-        );
+        FuncionarioCardResponse dto = new FuncionarioCardResponse();
+        dto.setIdFuncionario(entity.getIdFuncionario());
+        dto.setNomeUsuario(entity.getNome());
+        dto.setEspecialidades(entity.getEspecialidades());
+        dto.setModalidade(entity.getModalidade());
+        return dto;
     }
 
     public static List<FuncionarioResponse> toResponseList(List<Funcionario> entities) {
