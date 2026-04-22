@@ -1,5 +1,6 @@
 package flor_de_lotus.teste;
 
+import flor_de_lotus.teste.projection.AlertaEstoqueProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -31,6 +32,7 @@ public interface TesteRepository extends JpaRepository<Teste, Integer> {
 
     List<Teste> findByStatusEstoqueOrderByQtdAsc(StatusEstoque statusEstoque);
 
-
+    @Query(value = "SELECT * FROM alerta_estoque_testes", nativeQuery = true)
+    List<AlertaEstoqueProjection> getAlertasDeEstoque();
 
 }
