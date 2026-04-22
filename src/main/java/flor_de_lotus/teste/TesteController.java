@@ -4,6 +4,7 @@ import flor_de_lotus.consulta.dto.ConsultaResponseBody;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.teste.dto.*;
 import flor_de_lotus.teste.dto.TestePatchRequest;
+import flor_de_lotus.teste.projection.AlertaEstoqueProjection;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -218,5 +219,26 @@ public class TesteController {
 
         return ResponseEntity.status(200).body(alertas);
     }
+
+        @Operation(summary = "Listar testes com estoque acabando")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "qtd buscada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsultaResponseBody.class)))),
+    })
+    @GetMapping("/alertasEstoqueAcabando")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    public ResponseEntity<List<TesteAlertaResponseDTO>> getAlertasEstoque() {
+            List<AlertaEstoqueProjection> alertasProjection = service.getAlertasEstoque();
+
+            List<TesteAlertaResponseDTO> alertas = alertasProjection.stream()
+                    .map(a -> new TesteAlertaResponseDTO(
+                            a.getNome(),
+                            a.getQtd(),
+                            a.getEstoqueMinimo()
+                    ))
+                    .toList();
+
+            return ResponseEntity.ok(alertas);
+        }
 
 }

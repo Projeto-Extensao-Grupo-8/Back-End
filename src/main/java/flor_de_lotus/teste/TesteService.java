@@ -2,6 +2,7 @@ package flor_de_lotus.teste;
 
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
+import flor_de_lotus.teste.projection.AlertaEstoqueProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -97,6 +98,11 @@ public class TesteService {
     public List<Teste> buscarAlertasDeEstoque() {
         List<Teste> testesCriticos = repository.findByStatusEstoqueOrderByQtdAsc(StatusEstoque.CRITICO);
         return testesCriticos;
+    }
+
+    public List<AlertaEstoqueProjection> getAlertasEstoque() {
+        List<AlertaEstoqueProjection> testesAcabando = repository.getAlertasDeEstoque();
+        return testesAcabando;
     }
 
     public Teste atualizarParcial(Integer id, flor_de_lotus.teste.dto.TestePatchRequest dto) {
