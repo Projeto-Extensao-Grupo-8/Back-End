@@ -1,6 +1,7 @@
 package flor_de_lotus.usuario.dto;
 
 import flor_de_lotus.endereco.Endereco;
+import flor_de_lotus.funcionario.dto.FuncionarioPostRequestBody;
 import flor_de_lotus.usuario.Usuario;
 
 import java.util.List;
@@ -23,11 +24,36 @@ public class UsuarioMapper {
         return entinty;
     }
 
+    public static Usuario toEntityUsuario(FuncionarioPostRequestBody dto) {
+        Usuario entinty = new Usuario();
+        System.out.println(dto.getEmail());
+        System.out.println(dto.getSenha());
+        System.out.println(dto.getCpf());
+
+        Endereco endereco = new Endereco();
+        entinty.setNome(dto.getNome());
+        entinty.setEmail(dto.getEmail());
+        entinty.setDataNascimento(dto.getDataNascimento());
+        entinty.setCpf(dto.getCpf());
+        entinty.setTelefone(dto.getTelefone());
+        entinty.setSenha(dto.getSenha());
+        endereco.setCep(dto.getCep());
+        endereco.setCidade(dto.getCidade());
+        endereco.setEstado(dto.getEstado());
+        endereco.setLogradouro(dto.getLogradouro());
+        endereco.setNumero(dto.getNumero());
+        endereco.setComplemento(dto.getComplemento());
+        entinty.setFkEndereco(endereco);
+        entinty.setDataNascimento(dto.getDataNascimento());
+        return entinty;
+    }
+
     public static Usuario toEntity(UsuarioReplaceRequestBody dto) {
         Usuario entinty = new Usuario();
 
         entinty.setNome(dto.getNome());
         entinty.setEmail(dto.getEmail());
+        entinty.setDataNascimento(dto.getDataNascimento());
         entinty.setCpf(dto.getCpf());
         entinty.setTelefone(dto.getTelefone());
         entinty.setSenha(dto.getSenha());

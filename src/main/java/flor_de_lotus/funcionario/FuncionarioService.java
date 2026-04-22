@@ -1,5 +1,8 @@
 package flor_de_lotus.funcionario;
 
+import flor_de_lotus.endereco.Endereco;
+import flor_de_lotus.endereco.EnderecoRepository;
+import flor_de_lotus.endereco.EnderecoService;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.funcionario.dto.FuncionarioPatchRequestBody;
@@ -17,27 +20,24 @@ import java.util.Optional;
 public class FuncionarioService {
     private final FuncionarioRepository repository;
     private final UsuarioService usuarioService;
+    private final EnderecoRepository enderecoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public Funcionario cadastrar(Funcionario body, Integer idUsuario) {
-
-        Usuario usuarioCa = usuarioService.buscarEntidadePorIdOuThrow(idUsuario);
-
-        if (repository.existsByFkUsuario_IdUsuario(idUsuario)) {
-            throw new EntidadeConflitoException("Já existe um funcionário cadastrado para este usuário.");
-        }
-
+    public Funcionario cadastrar(Funcionario body, Usuario usuario) {
         if (repository.existsByCrp(body.getCrp())) {
             throw new EntidadeConflitoException("Conflito no campo CRP");
         }
 
-        usuarioCa.setNivelPermissao("3");
+        Endereco endereco = enderecoRepository.save(usuario.getFkEndereco());
 
-        usuarioRepository.save(usuarioCa);
+        usuario.setFkEndereco(endereco);
+        usuario.setNivelPermissao("3");
+        Usuario usuarioCa = usuarioService.cadastrar(usuario);
 
         body.setFkUsuario(usuarioCa);
         return repository.save(body);
     }
+
 
     public List<Funcionario> listarTodos(){
         return repository.findAll();
@@ -147,6 +147,10 @@ public class FuncionarioService {
     public List<Funcionario> buscarTodosOffset(int pagina, int tamanho) {
         int offset = Math.max((pagina - 1) * tamanho, 0);
         return repository.findAllWithPagination(tamanho, offset);
+    }
+
+    public List<Especialidade> buscarEspecialidades() {
+        return repository.findAllEspecialidades();
     }
 
 }

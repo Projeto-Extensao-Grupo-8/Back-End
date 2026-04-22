@@ -1,8 +1,10 @@
 package flor_de_lotus.endereco.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class EnderecoPatchRequestBody {
     private String logradouro;
     private String numero;

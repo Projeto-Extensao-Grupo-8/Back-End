@@ -19,13 +19,13 @@ public class FuncionarioMapper {
                 null,
                 dto.getCrp(),
                 LocalDate.now(),
-                dto.getDescricao(),
-                dto.getFormacaoAcademica(),
-                dto.getIdiomasAtendidos(),
-                dto.getModalidade(),
+                null,
+                null,
+                null,
+                null,
                 true,
                 entity,
-                dto.getTiposAtendimento(),
+                null,
                 dto.getEspecialidades()
         );
     }
@@ -39,13 +39,13 @@ public class FuncionarioMapper {
                 null,
                 dto.getCrp(),
                 LocalDate.now(),
-                dto.getDescricao(),
-                dto.getFormacaoAcademica(),
-                dto.getIdiomasAtendidos(),
-                dto.getModalidade(),
+                null,
+                null,
+                null,
+                null,
                 true,
                 null,
-                dto.getTiposAtendimento(),
+                null            ,
                 dto.getEspecialidades()
         );
     }

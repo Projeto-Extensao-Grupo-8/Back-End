@@ -4,6 +4,8 @@ package flor_de_lotus.usuario;
 import flor_de_lotus.config.GerenciadorTokenJwt;
 import flor_de_lotus.endereco.Endereco;
 import flor_de_lotus.endereco.dto.EnderecoMapper;
+import flor_de_lotus.endereco.dto.EnderecoPatchRequestBody;
+import flor_de_lotus.endereco.dto.EnderecoResponsePatch;
 import flor_de_lotus.exception.BadRequestException;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
@@ -154,7 +156,7 @@ public class UsuarioService {
         repository.delete(buscarEntidadePorIdOuThrow(id));
     }
 
-    public Usuario atualizarParcial(Integer id, Usuario entity){
+    public Usuario      atualizarParcial(Integer id, Usuario entity){
         Usuario usuario = buscarEntidadePorIdOuThrow(id);
 
         if (entity.getEmail() != null && !entity.getEmail().equals(usuario.getEmail())) {
@@ -175,6 +177,31 @@ public class UsuarioService {
 
         if (entity.getTelefone() != null) {
             usuario.setTelefone(entity.getTelefone());
+        }
+
+        if (entity.getDataNascimento() != null) {
+            usuario.setDataNascimento(entity.getDataNascimento());
+        }
+
+        if (entity.getNivelPermissao() != null) {
+            usuario.setNivelPermissao(entity.getNivelPermissao());
+        }
+
+        if (entity.getFkEndereco() != null) {
+            System.out.println(entity.getFkEndereco());
+            Endereco enderecoDoPayload = entity.getFkEndereco();
+            Integer idEndereco = entity.getFkEndereco().getIdEndereco();
+
+            EnderecoPatchRequestBody request = new EnderecoPatchRequestBody();
+            request.setCep(enderecoDoPayload.getCep());
+            request.setLogradouro(enderecoDoPayload.getLogradouro());
+            request.setNumero(enderecoDoPayload.getNumero());
+            request.setComplemento(enderecoDoPayload.getComplemento());
+            request.setBairro(enderecoDoPayload.getBairro());
+            request.setCidade(enderecoDoPayload.getCidade());
+            request.setEstado(enderecoDoPayload.getEstado());
+
+            enderecoService.atualizarParcial(idEndereco, request);
         }
 
         return repository.save(usuario);

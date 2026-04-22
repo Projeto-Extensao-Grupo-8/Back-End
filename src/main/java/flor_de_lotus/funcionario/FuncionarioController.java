@@ -3,6 +3,8 @@ package flor_de_lotus.funcionario;
 import flor_de_lotus.consulta.dto.ConsultaResponseBody;
 import flor_de_lotus.funcionario.dto.*;
 import flor_de_lotus.funcionario.mapper.FuncionarioMapper;
+import flor_de_lotus.usuario.Usuario;
+import flor_de_lotus.usuario.dto.UsuarioMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,8 +35,9 @@ public class FuncionarioController {
     @PostMapping
 //    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<FuncionarioResponse> cadastrar(@RequestBody @Valid FuncionarioPostRequestBody body){
+        Usuario usuario = UsuarioMapper.toEntityUsuario(body);
         Funcionario funcionario = FuncionarioMapper.toEntity(body);
-        Funcionario cadastrado = service.cadastrar(funcionario, body.getFkUsuario());
+        Funcionario cadastrado = service.cadastrar(funcionario, usuario);
         return ResponseEntity.status(201).body(FuncionarioMapper.toResponse(cadastrado));
     }
 
@@ -169,6 +172,12 @@ public class FuncionarioController {
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE', 'USUARIO')")
     public ResponseEntity<List<FuncionarioResponse>> buscarPorTipo(@PathVariable TipoAtendimento tipo) {
         return ResponseEntity.ok(FuncionarioMapper.toResponseList(service.buscarPorTipoAtendimento(tipo)));
+    }
+
+    @GetMapping("/especialidades")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'PACIENTE', 'USUARIO')")
+    public ResponseEntity<List<Especialidade>> buscarEspecialidades() {
+        return ResponseEntity.ok(service.buscarEspecialidades());
     }
 
 

@@ -29,4 +29,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
 
     Optional<Funcionario> findByFkUsuario_IdUsuario(Integer idUsuario);
     Boolean existsByFkUsuario_IdUsuario(Integer idUsuario);
+
+    @Query(value = "SELECT DISTINCT especialidade FROM funcionario_especialidade", nativeQuery = true)
+    List<Especialidade> findAllEspecialidades();
 }

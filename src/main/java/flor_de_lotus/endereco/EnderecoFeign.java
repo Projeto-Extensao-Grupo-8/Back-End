@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface EnderecoFeign {
 
     @GetMapping("{cep}/json")
-    Optional<EnderecoResponse> buscaEnderecoCep(@PathVariable("cep") String cep);
+    Optional<ViaCepResponse> buscaEnderecoCep(@PathVariable("cep") String cep);
 
 }

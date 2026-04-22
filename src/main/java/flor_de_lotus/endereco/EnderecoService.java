@@ -17,9 +17,9 @@ public class EnderecoService {
     private final EnderecoRepository repository;
 
     public EnderecoResponse buscarCEP(String cep){
-        Optional<EnderecoResponse> enderecoEncontrado = enderecoFeign.buscaEnderecoCep(cep);
+        Optional<ViaCepResponse> enderecoEncontrado = enderecoFeign.buscaEnderecoCep(cep);
         if (enderecoEncontrado.isPresent()){
-            return enderecoEncontrado.get();
+            return new EnderecoResponse(enderecoEncontrado.get());
         }
 
         throw new EntidadeNaoEncontradoException("CEP não encontrado");
@@ -40,6 +40,7 @@ public class EnderecoService {
 
         if (dto.getCep() != null){
            EnderecoResponse cepBusca = buscarCEP(dto.getCep());
+            System.out.println(cepBusca.getCidade());
            enderecoSavo.setCep(cepBusca.getCep());
            enderecoSavo.setLogradouro(cepBusca.getLogradouro());
            enderecoSavo.setBairro(cepBusca.getBairro());
@@ -47,11 +48,17 @@ public class EnderecoService {
            enderecoSavo.setEstado(cepBusca.getEstado());
         }
 
+        if (dto.getLogradouro() != null) enderecoSavo.setLogradouro(dto.getLogradouro());
+        if (dto.getBairro() != null) enderecoSavo.setBairro(dto.getBairro());
+        if (dto.getCidade() != null) enderecoSavo.setCidade(dto.getCidade());
+        if (dto.getEstado() != null) enderecoSavo.setEstado(dto.getEstado());
+
+
         if (dto.getComplemento() != null) enderecoSavo.setComplemento(dto.getComplemento());
         if (dto.getNumero() != null) enderecoSavo.setNumero(dto.getNumero());
         
-        repository.save(enderecoSavo);
-        return EnderecoMapper.toResponse(enderecoSavo);
+        Endereco endereco = repository.save(enderecoSavo);
+        return EnderecoMapper.toResponse(endereco);
 
     }
 

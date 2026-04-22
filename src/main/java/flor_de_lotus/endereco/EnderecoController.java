@@ -15,8 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-//@RestController
-//@RequestMapping("/endereco")
+@RestController
+@RequestMapping("/endereco")
 @Tag(name = "Endereços", description = "Endpoints utilizados para gerenciar os endereços")
 public class EnderecoController {
     private final EnderecoService service;
@@ -29,8 +29,8 @@ public class EnderecoController {
             @ApiResponse(responseCode = "404", description = "CEP não encontrado",
                     content = @Content(schema = @Schema(implementation = EntidadeNaoEncontradoException.class)))
     })
-    @GetMapping("/consulta")
-    public ResponseEntity<EnderecoResponse> consultaCep(@RequestBody String cep){
+    @GetMapping("/consulta/{cep}")
+    public ResponseEntity<EnderecoResponse> consultaCep(@PathVariable String cep){
         return ResponseEntity.ok(service.buscarCEP(cep));
     }
 
