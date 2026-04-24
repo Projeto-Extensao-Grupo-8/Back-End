@@ -376,6 +376,7 @@ public class ConsultaController {
     })
 
     @PatchMapping("/status/{idConsulta}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<ConsultaResponseBody> atualizarStatusConsulta(@PathVariable Integer idConsulta, @RequestBody @Valid AtualizarStatusRequestDTO dto) {
 
         try {

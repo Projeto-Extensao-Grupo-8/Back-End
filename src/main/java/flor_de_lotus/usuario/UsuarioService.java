@@ -11,6 +11,7 @@ import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.endereco.EnderecoRepository;
 import flor_de_lotus.endereco.dto.EnderecoResponse;
+import flor_de_lotus.paciente.Paciente;
 import flor_de_lotus.paciente.PacienteRepository;
 import flor_de_lotus.funcionario.FuncionarioRepository;
 import flor_de_lotus.usuario.dto.*;
@@ -212,51 +213,61 @@ public class UsuarioService {
             String data,
             String horario,
             String status,
-            String email
+            Integer idPaciente
     ) {
 
-        System.out.println("Data: " + data);
-        System.out.println("Horário: " + horario);
-        System.out.println("Status: " + status);
-        System.out.println("Email: " + email);
+        Paciente paciente = pacienteRepository.findById(idPaciente)
+                .orElseThrow(() -> new EntidadeNaoEncontradoException("Paciente não encontrado"));
 
-        Usuario usuario = repository.findByEmail(email)
+        Usuario usuario = repository.findById(paciente.getFkUsuario().getIdUsuario())
                 .orElseThrow(() -> new EntidadeNaoEncontradoException("Usuário não encontrado"));
 
         String mensagem;
 
         if (status.equalsIgnoreCase("Confirmada")) {
             mensagem = String.format(
-                    "Olá, %s! \n" +
+                    "Ola, %s!\n" +
                             "\n" +
-                            "Sua consulta foi *confirmada com sucesso*! ✨\n" +
+                            "Sua consulta esta *confirmada* e estamos te esperando!\n" +
                             "\n" +
                             "*Data:* %s\n" +
-                            "*Horário:* %s\n" +
+                            "*Horario:* %s\n" +
                             "\n" +
-                            "Ficamos felizes em te acompanhar nesse momento.\n" +
-                            "Qualquer dúvida ou necessidade de reagendamento, estamos por aqui. \n" +
+                            "Caso precise reagendar ou tenha alguma duvida, e so nos chamar aqui.\n" +
                             "\n" +
                             "Com carinho,\n" +
-                            "*Flor de Lótus* \n",
+                            "*Flor de Lotus*\n",
                     usuario.getNome(), data, horario
             );
-        } else {
+        } else if (status.equalsIgnoreCase("Cancelada")) {
             mensagem = String.format(
-                    "Olá, %s! \n" +
+                    "Ola, %s!\n" +
                             "\n" +
-                            "Informamos que sua consulta foi *cancelada*.\n" +
+                            "Sua consulta do dia *%s* as *%s* foi *cancelada*.\n" +
                             "\n" +
-                            "Sabemos que imprevistos acontecem, e estamos aqui para te ajudar.\n" +
-                            "Se quiser reagendar, será um prazer te atender novamente. \n" +
+                            "Sabemos que imprevistos acontecem. Quando quiser reagendar, estaremos aqui para te receber com muito cuidado.\n" +
                             "\n" +
                             "Com carinho,\n" +
-                            "*Flor de Lótus* \n",
+                            "*Flor de Lotus*\n",
+                    usuario.getNome(), data, horario
+            );
+        } else if (status.equalsIgnoreCase("Realizada")) {
+            mensagem = String.format(
+                    "Ola, %s!\n" +
+                            "\n" +
+                            "Foi um prazer te atender hoje!\n" +
+                            "\n" +
+                            "Esperamos que a sessao tenha sido especial para voce. Quando quiser agendar o proximo encontro, e so nos chamar.\n" +
+                            "\n" +
+                            "Cuide-se muito,\n" +
+                            "*Flor de Lotus*\n",
                     usuario.getNome()
             );
+        } else {
+            throw new IllegalArgumentException("Status invalido para geracao de link");
         }
 
-        String mensagemEncoded = URLEncoder.encode(mensagem, StandardCharsets.UTF_8);
+        String mensagemEncoded = URLEncoder.encode(mensagem, StandardCharsets.UTF_8).replace("+", "%20");;
 
         return "https://wa.me/" + usuario.getTelefone() + "?text=" + mensagemEncoded;
     }

@@ -82,6 +82,33 @@ public class UsuarioController {
         return ResponseEntity.status(200).body(service.login(body));
     }
 
+    @Operation(
+            summary = "Gerar link do WhatsApp",
+            description = "Gera o link com mensagem de confirmação/cancelamento de consulta para o usuário."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Link gerado com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuário não encontrado",
+                    content = @Content(schema = @Schema(implementation = EntidadeNaoEncontradoException.class))
+            )
+    })
+    @GetMapping("/whatsapp-link")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    public ResponseEntity<Map<String, String>> gerarLinkWhatsapp(
+            @RequestParam String data,
+            @RequestParam String horario,
+            @RequestParam String status,
+            @RequestParam Integer idPaciente
+    ) {
+        String link = service.gerarLinkWhatsapp(data, horario, status, idPaciente);
+        return ResponseEntity.ok(Map.of("link", link));
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(
@@ -197,33 +224,6 @@ public class UsuarioController {
         List<UsuarioResponseBody> lista = UsuarioMapper.toResponseList(service.listarTodos());
         return ResponseEntity.status(200).body(lista);
 
-    }
-
-    @Operation(
-            summary = "Gerar link do WhatsApp",
-            description = "Gera o link com mensagem de confirmação/cancelamento de consulta para o usuário."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Link gerado com sucesso"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Usuário não encontrado",
-                    content = @Content(schema = @Schema(implementation = EntidadeNaoEncontradoException.class))
-            )
-    })
-    @GetMapping("/whatsapp-link")
-    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
-    public ResponseEntity<Map<String, String>> gerarLinkWhatsapp(
-            @RequestParam String data,
-            @RequestParam String horario,
-            @RequestParam String status,
-            @RequestParam String email
-    ) {
-        String link = service.gerarLinkWhatsapp(data, horario, status, email);
-        return ResponseEntity.ok(Map.of("link", link));
     }
 
 
