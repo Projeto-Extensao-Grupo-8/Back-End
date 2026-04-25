@@ -37,4 +37,7 @@ public interface TesteRepository extends JpaRepository<Teste, Integer> {
     @Query(value = "SELECT nome, qtd, estoque_minimo AS estoqueMinimo FROM alerta_estoque_testes", nativeQuery = true)
     List<AlertaEstoqueProjection> getAlertasDeEstoque();
 
+    @Query(value = "SELECT DISTINCT COUNT(nome) FROM alerta_estoque_testes", nativeQuery = true)
+    Integer getQtdAlertasDeEstoque();
+
 }

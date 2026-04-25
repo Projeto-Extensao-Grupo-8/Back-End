@@ -159,7 +159,7 @@ public class TesteController {
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
     public ResponseEntity<KpisGestaoEstoqueResponse> kpisGestaoEstoque() {
         Integer buscarQtdValidadeProxima90Dias = service.buscarQtdValidadeProxima90Dias();
-        Integer buscarQtdEstoqueCritico = service.buscarQtdEstoqueCritico();
+        Integer buscarQtdEstoqueCritico = service.buscarTotalEstoqueCritico();
         Integer buscarTotalUnidadesFisicas = service.buscarTotalUnidadesFisicas();
         Integer buscarTotalUnidadesDigitais = service.buscarTotalUnidadesDigitais();
 
