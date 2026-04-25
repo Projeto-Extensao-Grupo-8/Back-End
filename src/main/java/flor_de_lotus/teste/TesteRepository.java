@@ -34,7 +34,7 @@ public interface TesteRepository extends JpaRepository<Teste, Integer> {
 
     List<Teste> findByStatusEstoqueOrderByQtdAsc(StatusEstoque statusEstoque);
 
-    @Query(value = "SELECT nome, qtd, estoque_minimo AS estoqueMinimo FROM teste WHERE qtd > estoque_minimo AND qtd <= estoque_minimo * 2 ORDER BY qtd ASC", nativeQuery = true)
+    @Query(value = "SELECT nome, qtd, estoque_minimo AS estoqueMinimo FROM alerta_estoque_testes", nativeQuery = true)
     List<AlertaEstoqueProjection> getAlertasDeEstoque();
 
 }
