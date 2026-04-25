@@ -79,11 +79,11 @@ public class PacienteService {
     }
 
     public Long totalPacientes() {
-        return repository.totalPacientes().getTotalPacientesAtivos();
+        return repository.totalPacientesAtivos();
     }
 
-    public  Long totalPacientesPorAno(Integer ano) {
-        return repository.totalPacientesNoAno(ano).getQtd();
+    public Long totalPacientesPorAno(Integer ano) {
+        return repository.totalPacientesNoAno(ano);
     }
 
     public List<ViewTop5paciente> top5pacientes() {
@@ -103,7 +103,7 @@ public class PacienteService {
     }
 
     public BigDecimal taxaRetencao() {
-        return repository.kpiTaxaRetencao().getTaxaPercentual();
+        return repository.kpiTaxaRetencao();
     }
 
     public List<Paciente> buscarPorTermo(String termo) {
