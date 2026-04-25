@@ -185,6 +185,17 @@ public class TesteController {
         return ResponseEntity.status(200).body(response);
     }
 
+    @Operation(summary = "Buscar teste por código")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Teste encontrado"),
+            @ApiResponse(responseCode = "404", description = "Teste não encontrado")
+    })
+    @GetMapping("/buscarPorCodigo/{codigo}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO')")
+    public ResponseEntity<TesteResponse> buscarPorCodigo(@PathVariable String codigo) {
+        return ResponseEntity.status(200).body(TesteMapper.toResponse(service.buscarPorCodigo(codigo)));
+    }
+
     @Operation(summary = "Atualizar parcialmente um teste")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Teste atualizado com sucesso",

@@ -8,8 +8,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+
 public interface TesteRepository extends JpaRepository<Teste, Integer> {
     boolean existsByCodigo(String codigo);
+    Optional<Teste> findByCodigo(String codigo);
     List<Teste> findByTipo(String tipo);
     List<Teste> findByCategoria(String categoria);
     Integer countByValidadeBetween(LocalDate dataInicial, LocalDate dataFinal);
@@ -32,7 +34,7 @@ public interface TesteRepository extends JpaRepository<Teste, Integer> {
 
     List<Teste> findByStatusEstoqueOrderByQtdAsc(StatusEstoque statusEstoque);
 
-    @Query(value = "SELECT * FROM alerta_estoque_testes", nativeQuery = true)
+    @Query(value = "SELECT nome, qtd, estoque_minimo AS estoqueMinimo FROM teste WHERE qtd > estoque_minimo AND qtd <= estoque_minimo * 2 ORDER BY qtd ASC", nativeQuery = true)
     List<AlertaEstoqueProjection> getAlertasDeEstoque();
 
 }

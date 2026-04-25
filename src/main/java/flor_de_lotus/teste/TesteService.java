@@ -33,6 +33,11 @@ public class TesteService {
         return  teste;
     }
 
+    public Teste buscarPorCodigo(String codigo) {
+        return repository.findByCodigo(codigo)
+                .orElseThrow(() -> new EntidadeNaoEncontradoException("Nenhum teste encontrado com o código informado"));
+    }
+
     public void deletarPorId(Integer id){
         Teste teste = repository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradoException("Teste não encontrado"));
