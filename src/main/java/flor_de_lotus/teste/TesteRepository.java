@@ -34,7 +34,7 @@ public interface TesteRepository extends JpaRepository<Teste, Integer> {
 
     List<Teste> findByStatusEstoqueOrderByQtdAsc(StatusEstoque statusEstoque);
 
-    @Query(value = "SELECT CONCAT(nome, ' (', codigo, ')') AS nome, qtd, estoque_minimo FROM teste WHERE qtd < estoque_minimo", nativeQuery = true)
+    @Query(value = "SELECT CONCAT(nome, ' (', codigo, ')') AS nome, qtd, estoque_minimo FROM teste WHERE qtd <= estoque_minimo", nativeQuery = true)
     List<AlertaEstoqueProjection> getAlertasDeEstoque();
 
     @Query(value = "SELECT DISTINCT COUNT(nome) FROM alerta_estoque_testes", nativeQuery = true)

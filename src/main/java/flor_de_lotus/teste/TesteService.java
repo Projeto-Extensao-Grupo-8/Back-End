@@ -74,7 +74,9 @@ public class TesteService {
         return repository.countByValidadeBetween(hoje, daqui90Dias);
     }
 
-
+    public Integer buscarQtdEstoqueCritico() {
+        return repository.countTestesEstoqueCritico();
+    }
 
     public Integer buscarTotalUnidadesFisicas() {
         return repository.sumUnidadesFisicas();
