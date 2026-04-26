@@ -1,10 +1,7 @@
 package flor_de_lotus.consulta;
 
 import flor_de_lotus.consulta.dto.*;
-import flor_de_lotus.consulta.dto.dashAgendamento.GraficoDesempenhoSemanal;
-import flor_de_lotus.consulta.dto.dashAgendamento.GraficoDistribuicaoHorario;
-import flor_de_lotus.consulta.dto.dashAgendamento.KpiCancelamentos;
-import flor_de_lotus.consulta.dto.dashAgendamento.KpisDashAgendamentosResponse;
+import flor_de_lotus.consulta.dto.dashAgendamento.*;
 import flor_de_lotus.consulta.dto.dashFinanceiro.*;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
 import flor_de_lotus.exception.BadRequestException;
@@ -210,8 +207,8 @@ public class ConsultaController {
     })
     @GetMapping("/graficoDesempenhoSemanal")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<List<GraficoDesempenhoSemanal>> graficoDesempenhoSemanal() {
-        return ResponseEntity.status(200).body(service.graficoDesempenhoSemanal());
+    public ResponseEntity<List<GraficoDesempenhoSemanalResponse>> graficoDesempenhoSemanal() {
+        return ResponseEntity.ok(service.graficoDesempenhoSemanal());
     }
 
     @Operation(summary = "Grafico de distribuição de horários das consultas")

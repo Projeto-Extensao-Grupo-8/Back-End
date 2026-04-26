@@ -33,7 +33,7 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Integer> {
     @Query(value = "SELECT quantidade,periodo FROM grafico_distribuicao_horario", nativeQuery = true)
     List<GraficoDistribuicaoHorario> graficoDistribuicaoHorario();
 
-    @Query(value = "SELECT status, quantidade FROM grafico_desempenho_semanal", nativeQuery = true)
+    @Query(value = "SELECT DAYOFWEEK(data) AS dia, SUM(CASE WHEN status = 'CONFIRMADA' THEN 1 ELSE 0 END) AS confirmadas, SUM(CASE WHEN status = 'REALIZADA' THEN 1 ELSE 0 END) AS realizadas, SUM(CASE WHEN status = 'CANCELADA' THEN 1 ELSE 0 END) AS canceladas, SUM(CASE WHEN status = 'PENDENTE' THEN 1 ELSE 0 END) AS pendentes FROM consulta WHERE data >= CURDATE() - INTERVAL 7 DAY GROUP BY DAYOFWEEK(data) ORDER BY DAYOFWEEK(data) ", nativeQuery = true)
     List<GraficoDesempenhoSemanal> graficoDesempenhoSemanal();
 
     @Query(value = "SELECT qtd_canceladas, percentual FROM kpi_cancelamentos", nativeQuery = true)

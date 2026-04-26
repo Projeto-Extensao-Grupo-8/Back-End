@@ -2,6 +2,7 @@ package flor_de_lotus.consulta;
 
 import flor_de_lotus.consulta.dto.*;
 import flor_de_lotus.consulta.dto.dashAgendamento.GraficoDesempenhoSemanal;
+import flor_de_lotus.consulta.dto.dashAgendamento.GraficoDesempenhoSemanalResponse;
 import flor_de_lotus.consulta.dto.dashAgendamento.GraficoDistribuicaoHorario;
 import flor_de_lotus.consulta.dto.dashAgendamento.KpiCancelamentos;
 import flor_de_lotus.consulta.dto.dashFinanceiro.GraficoComparacaoCustoReceita;
@@ -161,8 +162,30 @@ public class ConsultaService {
         return repository.graficoDistribuicaoHorario();
     }
 
-    public List<GraficoDesempenhoSemanal> graficoDesempenhoSemanal() {
-        return repository.graficoDesempenhoSemanal();
+    public List<GraficoDesempenhoSemanalResponse> graficoDesempenhoSemanal() {
+        return repository.graficoDesempenhoSemanal()
+                .stream()
+                .map(r -> new GraficoDesempenhoSemanalResponse(
+                        mapDia(r.getDia()),
+                        r.getConfirmadas(),
+                        r.getRealizadas(),
+                        r.getCanceladas(),
+                        r.getPendentes()
+                ))
+                .toList();
+    }
+
+    private String mapDia(Integer dia) {
+        return switch (dia) {
+            case 1 -> "Dom";
+            case 2 -> "Seg";
+            case 3 -> "Ter";
+            case 4 -> "Qua";
+            case 5 -> "Qui";
+            case 6 -> "Sex";
+            case 7 -> "Sab";
+            default -> "";
+        };
     }
 
     public List<KpiCancelamentos> kpiCancelamentos() {
