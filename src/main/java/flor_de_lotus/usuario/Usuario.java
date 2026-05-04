@@ -58,4 +58,7 @@ public class Usuario {
     @Schema(description = "Data do cadastro", example = "2024-10-20")
     private LocalDate dataCadastro = LocalDate.now();
 
+    @Schema(description = "URL da foto de perfil do usuário")
+    private String fotoPerfil;
+
 }

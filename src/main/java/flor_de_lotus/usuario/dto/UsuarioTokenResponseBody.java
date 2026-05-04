@@ -30,4 +30,7 @@ public class UsuarioTokenResponseBody {
 
     @Schema(description = "ID do Funcionário (quando nível de permissão é 3)", example = "1")
     private Integer idFuncionario;
+
+    @Schema(description = "URL da foto de perfil do usuário")
+    private String fotoPerfil;
 }

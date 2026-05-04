@@ -38,4 +38,7 @@ public class UsuarioResponseBody {
     @Schema(description = "Endereço do usuário")
     private Endereco endereco;
 
+    @Schema(description = "URL da foto de perfil do usuário")
+    private String fotoPerfil;
+
 }

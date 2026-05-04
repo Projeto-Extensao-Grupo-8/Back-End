@@ -83,6 +83,7 @@ public class UsuarioMapper {
         usuarioResponseBody.setDataNascimento(usuario.getDataNascimento());
         usuarioResponseBody.setDataCadastro(usuario.getDataCadastro());
         usuarioResponseBody.setEndereco(usuario.getFkEndereco());
+        usuarioResponseBody.setFotoPerfil(usuario.getFotoPerfil());
 
         return usuarioResponseBody;
     }
@@ -109,6 +110,7 @@ public class UsuarioMapper {
         usuarioTokenResponseBody.setToken(token);
         usuarioTokenResponseBody.setIdPaciente(idPaciente);
         usuarioTokenResponseBody.setIdFuncionario(idFuncionario);
+        usuarioTokenResponseBody.setFotoPerfil(usuario.getFotoPerfil());
 
         return usuarioTokenResponseBody;
     }

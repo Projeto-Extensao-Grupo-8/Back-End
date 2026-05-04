@@ -19,6 +19,11 @@ import flor_de_lotus.endereco.EnderecoService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,9 +31,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -45,6 +55,10 @@ public class UsuarioService {
     private final EnderecoRepository enderecoRepository;
     private final PacienteRepository pacienteRepository;
     private final FuncionarioRepository funcionarioRepository;
+    private final RestTemplate restTemplate;
+
+    @Value("${microservico.arquivos.url}")
+    private String microservicoArquivosUrl;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -270,6 +284,43 @@ public class UsuarioService {
         String mensagemEncoded = URLEncoder.encode(mensagem, StandardCharsets.UTF_8).replace("+", "%20");;
 
         return "https://wa.me/" + usuario.getTelefone() + "?text=" + mensagemEncoded;
+    }
+
+    public Usuario atualizarFotoPerfil(Integer id, MultipartFile foto) {
+        Usuario usuario = buscarEntidadePorIdOuThrow(id);
+
+        String nomeOriginal = foto.getOriginalFilename();
+        String extensao = (nomeOriginal != null && nomeOriginal.contains("."))
+                ? nomeOriginal.substring(nomeOriginal.lastIndexOf("."))
+                : "";
+        String nomeArquivo = "perfil-" + id + extensao;
+
+        try {
+            byte[] bytes = foto.getBytes();
+
+            ByteArrayResource resource = new ByteArrayResource(bytes) {
+                @Override
+                public String getFilename() {
+                    return nomeArquivo;
+                }
+            };
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("file", resource);
+
+            HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
+            restTemplate.postForEntity(microservicoArquivosUrl + "/upload", request, String.class);
+
+        } catch (IOException e) {
+            throw new BadRequestException("Erro ao processar o arquivo de foto");
+        }
+
+        String urlFoto = microservicoArquivosUrl + "/arquivos/perfil/" + id;
+        usuario.setFotoPerfil(urlFoto);
+        return repository.save(usuario);
     }
 
     public List<Usuario> listarTodos(){

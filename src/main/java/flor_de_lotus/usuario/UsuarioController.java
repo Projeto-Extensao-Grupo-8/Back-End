@@ -15,9 +15,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -226,5 +228,40 @@ public class UsuarioController {
 
     }
 
+    @Operation(
+            summary = "Atualizar foto de perfil",
+            description = "Recebe uma imagem, envia ao microserviço de arquivos (S3) e salva a URL no cadastro do usuário"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Foto de perfil atualizada com sucesso",
+                    content = @Content(schema = @Schema(implementation = UsuarioResponseBody.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Arquivo inválido ou erro ao processar a imagem",
+                    content = @Content(schema = @Schema(implementation = BadRequestException.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Token JWT não validado ou nível de permissão insuficiente",
+                    content = @Content(schema = @Schema(implementation = UnauthorizedException.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuário não encontrado",
+                    content = @Content(schema = @Schema(implementation = EntidadeNaoEncontradoException.class))
+            )
+    })
+    @PatchMapping(value = "/{id}/foto-perfil", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'USUARIO', 'PACIENTE')")
+    public ResponseEntity<UsuarioResponseBody> atualizarFotoPerfil(
+            @PathVariable Integer id,
+            @RequestPart("foto") MultipartFile foto) {
+
+        UsuarioResponseBody response = UsuarioMapper.toResponse(service.atualizarFotoPerfil(id, foto));
+        return ResponseEntity.ok(response);
+    }
 
 }
