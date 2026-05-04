@@ -14,4 +14,5 @@ public class PacienteResponseBody {
     private String telefoneUsuario;
     private Integer qtdSessoes;
     private String dataProximaConsulta;
+    private String fotoPerfil;
 }

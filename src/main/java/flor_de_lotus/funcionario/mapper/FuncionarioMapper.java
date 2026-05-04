@@ -68,7 +68,8 @@ public class FuncionarioMapper {
                 entity.getDescricao(),
                 entity.getFormacaoAcademica(),
                 entity.getIdiomasAtendidos(),
-                entity.getModalidade()
+                entity.getModalidade(),
+                entity.getFkUsuario().getFotoPerfil()
         );
     }
     

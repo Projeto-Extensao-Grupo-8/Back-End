@@ -29,5 +29,6 @@ public class FuncionarioResponse {
     private String formacaoAcademica;
     private String idiomasAtendidos;
     private Modalidade modalidade;
+    private String fotoPerfil;
 
 }

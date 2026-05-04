@@ -60,6 +60,12 @@ public class UsuarioService {
     @Value("${microservico.arquivos.url}")
     private String microservicoArquivosUrl;
 
+    @Value("${aws.s3.bucket}")
+    private String s3Bucket;
+
+    @Value("${aws.s3.region}")
+    private String s3Region;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -313,13 +319,12 @@ public class UsuarioService {
 
             HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
             restTemplate.postForEntity(microservicoArquivosUrl + "/upload", request, String.class);
+            String urlFoto = "https://" + s3Bucket + ".s3." + s3Region + ".amazonaws.com/" + nomeArquivo;
+            usuario.setFotoPerfil(urlFoto);
 
         } catch (IOException e) {
             throw new BadRequestException("Erro ao processar o arquivo de foto");
         }
-
-        String urlFoto = microservicoArquivosUrl + "/arquivos/perfil/" + id;
-        usuario.setFotoPerfil(urlFoto);
         return repository.save(usuario);
     }
 

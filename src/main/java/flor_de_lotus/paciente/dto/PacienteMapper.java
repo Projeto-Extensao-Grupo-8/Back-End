@@ -30,6 +30,7 @@ public class PacienteMapper {
             response.setNomeUsuario(paciente.getFkUsuario().getNome());
             response.setEmailUsuario(paciente.getFkUsuario().getEmail());
             response.setTelefoneUsuario(paciente.getFkUsuario().getTelefone());
+            response.setFotoPerfil(paciente.getFkUsuario().getFotoPerfil());
         }
         return response;
     }
@@ -44,6 +45,7 @@ public class PacienteMapper {
             response.setNomeUsuario(paciente.getFkUsuario().getNome());
             response.setEmailUsuario(paciente.getFkUsuario().getEmail());
             response.setTelefoneUsuario(paciente.getFkUsuario().getTelefone());
+            response.setFotoPerfil(paciente.getFkUsuario().getFotoPerfil());
         }
         return response;
     }
@@ -59,6 +61,7 @@ public class PacienteMapper {
             response.setNomeUsuario(paciente.getFkUsuario().getNome());
             response.setEmailUsuario(paciente.getFkUsuario().getEmail());
             response.setTelefoneUsuario(paciente.getFkUsuario().getTelefone());
+            response.setFotoPerfil(paciente.getFkUsuario().getFotoPerfil());
         }
         return response;
     }
