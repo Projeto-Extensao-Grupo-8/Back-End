@@ -83,6 +83,9 @@ public class FuncionarioMapper {
         dto.setNomeUsuario(entity.getNome());
         dto.setEspecialidades(entity.getEspecialidades());
         dto.setModalidade(entity.getModalidade());
+        if (entity.getFkUsuario() != null) {
+            dto.setFotoPerfil(entity.getFkUsuario().getFotoPerfil());
+        }
         return dto;
     }
 

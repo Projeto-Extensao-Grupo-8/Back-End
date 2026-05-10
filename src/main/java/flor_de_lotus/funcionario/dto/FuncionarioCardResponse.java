@@ -19,6 +19,7 @@ public class FuncionarioCardResponse {
     private String nomeUsuario;
     private List<Especialidade> especialidades;
     private Modalidade modalidade;
+    private String fotoPerfil;
 
     public Integer getIdFuncionario() {
         return idFuncionario;
@@ -50,5 +51,13 @@ public class FuncionarioCardResponse {
 
     public void setModalidade(Modalidade modalidade) {
         this.modalidade = modalidade;
+    }
+
+    public String getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(String fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
     }
 }
