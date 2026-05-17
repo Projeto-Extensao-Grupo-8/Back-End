@@ -1,5 +1,6 @@
 package flor_de_lotus.funcionario;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import flor_de_lotus.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Funcionario {
 
     @Id

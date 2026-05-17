@@ -1,5 +1,6 @@
 package flor_de_lotus.artigo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import flor_de_lotus.artigo.dto.ArtigoMapper;
 import flor_de_lotus.artigo.dto.ArtigoResponse;
 import flor_de_lotus.artigo.Event.ArtigoCreatedEvent;
@@ -7,6 +8,7 @@ import flor_de_lotus.funcionario.Funcionario;
 import flor_de_lotus.funcionario.FuncionarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +44,17 @@ public class ArtigoService {
         return salvo;
     }
 
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public List<Artigo> listarTodos() {
         return artigoRepository.findAll();
+    }
+
+    @Cacheable(value = "artigos", key = "'listarTodos'")
+    public List<ArtigoResponse> listarTodosCacheados() {
+        List<Artigo> artigos = this.listarTodos();
+        // O mapeamento acontece ANTES de salvar no cache.
+        // Isso elimina os proxies do Hibernate!
+        return ArtigoMapper.toResponseList(artigos);
     }
 
     public Optional<Artigo> buscarPorId(Integer id) {

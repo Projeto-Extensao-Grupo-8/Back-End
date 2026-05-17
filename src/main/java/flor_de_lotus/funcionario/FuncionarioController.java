@@ -66,11 +66,11 @@ public class FuncionarioController {
     })
     @GetMapping("/cards")
     public ResponseEntity<List<FuncionarioCardResponse>> listarTodosCards(){
-        List<Funcionario> listaTodos = service.listarTodos();
-        if (listaTodos.isEmpty()){
+        List<FuncionarioCardResponse> listaAtivos = service.listarCardsCacheados();
+        if (listaAtivos.isEmpty()){
             return ResponseEntity.status(204).build();
         }
-        return ResponseEntity.status(200).body(FuncionarioMapper.toCardResponseList(listaTodos));
+        return ResponseEntity.status(200).body(listaAtivos);
     }
 
     @Operation(summary = "Buscar funcionário por ID", description = "Busca um funcionário específico pelo seu ID.")

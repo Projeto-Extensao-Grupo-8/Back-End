@@ -1,5 +1,6 @@
 package flor_de_lotus.artigo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import flor_de_lotus.funcionario.Funcionario;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Artigo {
 
     @Id

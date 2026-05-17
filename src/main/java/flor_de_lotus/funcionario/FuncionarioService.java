@@ -2,14 +2,16 @@ package flor_de_lotus.funcionario;
 
 import flor_de_lotus.endereco.Endereco;
 import flor_de_lotus.endereco.EnderecoRepository;
-import flor_de_lotus.endereco.EnderecoService;
 import flor_de_lotus.exception.EntidadeConflitoException;
 import flor_de_lotus.exception.EntidadeNaoEncontradoException;
+import flor_de_lotus.funcionario.dto.FuncionarioCardResponse;
 import flor_de_lotus.funcionario.dto.FuncionarioPatchRequestBody;
+import flor_de_lotus.funcionario.mapper.FuncionarioMapper;
 import flor_de_lotus.usuario.Usuario;
 import flor_de_lotus.usuario.UsuarioRepository;
 import flor_de_lotus.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -136,6 +138,7 @@ public class FuncionarioService {
         return resultado;
     }
 
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public List<Funcionario> buscarPorStatus(boolean ativo) {
         return repository.findByAtivo(ativo);
     }
@@ -153,4 +156,11 @@ public class FuncionarioService {
         return repository.findAllEspecialidades();
     }
 
+
+
+    @Cacheable(value = "funcionarios_cards", key = "'cardsCacheados:'")
+    public List<FuncionarioCardResponse> listarCardsCacheados() {
+        List<Funcionario> lista = buscarPorStatus(true); // retorna entidades
+        return FuncionarioMapper.toCardResponseList(lista); // converte para DTO antes de cachear
+    }
 }

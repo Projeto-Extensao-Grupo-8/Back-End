@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +28,8 @@ public class ArtigoController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'FUNCIONARIO', 'USUARIO', 'PACIENTE')")
     public ResponseEntity<List<ArtigoResponse>> listarTodos() {
-        return ResponseEntity.ok(ArtigoMapper.toResponseList(artigoService.listarTodos()));
+        // O Service agora é responsável por devolver os DTOs prontos (e cacheados)
+        return ResponseEntity.ok(artigoService.listarTodosCacheados());
     }
 
     @Operation(summary = "Procurar artigo por palavra")
