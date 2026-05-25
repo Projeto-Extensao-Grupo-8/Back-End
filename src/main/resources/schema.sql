@@ -288,15 +288,13 @@ ORDER BY periodo;
 
 CREATE OR REPLACE VIEW grafico_avaliacoes_por_funcionario AS
 SELECT
-    f.nome,
+    u.nome,
     ROUND(AVG(a.estrelas), 2) AS media_estrelas
 FROM avaliacao a
-         JOIN (
-    SELECT f.id_funcionario, u.nome
-    FROM usuario u
-             JOIN funcionario f ON u.id_usuario = f.fk_usuario
-) f ON a.fk_funcionario = f.id_funcionario
-GROUP BY a.fk_funcionario, f.nome;
+    JOIN consulta c ON a.fk_consulta = c.id_consulta
+    JOIN funcionario f ON c.fk_funcionario = f.id_funcionario
+    JOIN usuario u ON f.fk_usuario = u.id_usuario
+GROUP BY f.id_funcionario, u.nome;
 
 CREATE OR REPLACE VIEW grafico_avaliacoes_por_consulta AS
 SELECT
