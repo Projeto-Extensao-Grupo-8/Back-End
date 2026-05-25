@@ -289,12 +289,7 @@ ORDER BY periodo;
 CREATE OR REPLACE VIEW grafico_avaliacoes_por_funcionario AS
 SELECT
     f.nome,
-    SUM(CASE WHEN a.estrelas = 5 THEN 1 ELSE 0 END) AS cinco_estrelas,
-    SUM(CASE WHEN a.estrelas = 4 THEN 1 ELSE 0 END) AS quatro_estrelas,
-    SUM(CASE WHEN a.estrelas = 3 THEN 1 ELSE 0 END) AS tres_estrelas,
-    SUM(CASE WHEN a.estrelas = 2 THEN 1 ELSE 0 END) AS duas_estrelas,
-    SUM(CASE WHEN a.estrelas = 1 THEN 1 ELSE 0 END) AS uma_estrela,
-    SUM(CASE WHEN a.estrelas = 0 THEN 1 ELSE 0 END) AS zero_estrelas
+    ROUND(AVG(a.estrelas), 2) AS media_estrelas
 FROM avaliacao a
          JOIN (
     SELECT f.id_funcionario, u.nome

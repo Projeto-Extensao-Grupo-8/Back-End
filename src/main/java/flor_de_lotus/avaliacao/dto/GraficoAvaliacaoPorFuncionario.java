@@ -7,20 +7,10 @@ import java.math.BigDecimal;
 @Getter
 public class GraficoAvaliacaoPorFuncionario {
     private String nome;
-    private BigDecimal cincoEstrelas;
-    private BigDecimal quatroEstrelas;
-    private BigDecimal tresEstrelas;
-    private BigDecimal duasEstrelas;
-    private BigDecimal umaEstrela;
-    private BigDecimal zeroEstrelas;
+    private BigDecimal mediaEstrelas;
 
-    public GraficoAvaliacaoPorFuncionario(String nome, BigDecimal cincoEstrelas, BigDecimal quatroEstrelas, BigDecimal tresEstrelas, BigDecimal duasEstrelas, BigDecimal umaEstrela, BigDecimal zeroEstrelas) {
+    public GraficoAvaliacaoPorFuncionario(String nome, BigDecimal mediaEstrelas) {
         this.nome = nome;
-        this.cincoEstrelas = cincoEstrelas;
-        this.quatroEstrelas = quatroEstrelas;
-        this.tresEstrelas = tresEstrelas;
-        this.duasEstrelas = duasEstrelas;
-        this.umaEstrela = umaEstrela;
-        this.zeroEstrelas = zeroEstrelas;
+        this.mediaEstrelas = mediaEstrelas;
     }
 }
