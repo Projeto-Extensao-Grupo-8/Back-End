@@ -15,4 +15,5 @@ public class AvaliacaoConsultaResponse {
     private String nomePaciente;
     private LocalDate data;
     private String descricao;
+    private Integer estrelas;
 }

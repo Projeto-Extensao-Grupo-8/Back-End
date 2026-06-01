@@ -79,12 +79,13 @@ public class AvaliacaoMapper {
             LocalDate data = entity.getDataAvaliacao();
             String nomePaciente = null;
             Integer id = entity.getIdAvaliacao();
+            Integer estrelas = entity.getEstrelas();
 
             if (entity.getFkConsulta() != null && entity.getFkConsulta().getFkPaciente() != null) {
                 nomePaciente = entity.getFkConsulta().getFkPaciente().getNome();
             }
 
-            return new AvaliacaoConsultaResponse(id, nomePaciente, data, descricao);
+            return new AvaliacaoConsultaResponse(id, nomePaciente, data, descricao, estrelas);
         }
 
         public static List<AvaliacaoConsultaResponse> toConsultaResponseList(List<Avaliacao> entities) {
